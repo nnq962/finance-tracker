@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
+import { ThemeToggle } from "@/components/theme-toggle"
 
 const pageTitles: Record<string, string> = {
   "/dashboard": "Dashboard",
@@ -28,7 +29,7 @@ export function SiteHeader() {
 
   return (
     <header className="flex h-16 shrink-0 items-center gap-2">
-      <div className="flex min-w-0 items-center gap-2 px-4 md:px-6">
+      <div className="flex min-w-0 flex-1 items-center gap-2 px-4 md:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator
           orientation="vertical"
@@ -47,6 +48,9 @@ export function SiteHeader() {
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
+        <div className="ml-auto shrink-0">
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   )
