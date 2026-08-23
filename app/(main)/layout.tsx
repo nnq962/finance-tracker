@@ -13,7 +13,7 @@ export default function MainLayout({ children }: { children: ReactNode }) {
       <AppSidebar />
       <SidebarInset>
         <SiteHeader />
-        <main className="flex flex-1 flex-col gap-4 p-4 pt-0 md:p-6 md:pt-0">
+        <main className="flex flex-1 flex-col gap-4 p-4 pt-0 md:p-6 md:pt-0 lg:px-20 xl:px-36 2xl:px-56">
           {children}
         </main>
       </SidebarInset>

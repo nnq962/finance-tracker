@@ -19,12 +19,12 @@ const accountGroups: {
   {
     purpose: "spending",
     label: "Chi tiêu",
-    containerClassName: "bg-orange-500/10",
+    containerClassName: "bg-spending/10",
   },
   {
     purpose: "savings",
     label: "Tiết kiệm",
-    containerClassName: "bg-emerald-500/10",
+    containerClassName: "bg-savings/10",
   },
 ]
 
@@ -43,13 +43,13 @@ export function AccountList({ accounts }: AccountListProps) {
         return (
           <Card key={group.purpose}>
             <CardHeader className="flex items-baseline justify-between">
-              <CardTitle className="text-sm leading-6 font-medium">
+              <CardTitle className="text-base leading-6 font-medium">
                 <h2>{group.label}</h2>
               </CardTitle>
               <CardAction className="self-baseline">
                 <button
                   type="button"
-                  className="cursor-pointer text-sm leading-6 font-medium text-primary transition-colors hover:text-primary/80 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 active:translate-y-px"
+                  className="cursor-pointer text-base leading-6 font-medium text-primary transition-colors hover:text-primary/80 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 active:translate-y-px"
                 >
                   <PlusIcon className="mr-1 inline size-4 align-[-0.125em]" />
                   Thêm

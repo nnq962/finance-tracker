@@ -14,7 +14,7 @@ const accounts: Account[] = [
   {
     id: "savings-account",
     name: "Sổ tiết kiệm Techcombank",
-    description: "Kỳ hạn 6 tháng",
+    description: "Đáo hạn 24/12/2028",
     balance: 85_000_000,
     type: "bank",
     purpose: "savings",
@@ -23,7 +23,7 @@ const accounts: Account[] = [
   {
     id: "savings-account2",
     name: "Sổ tiết kiệm Techcombank",
-    description: "Kỳ hạn 6 tháng",
+    description: "Đáo hạn 24/12/2028",
     balance: 15_000_000,
     type: "bank",
     purpose: "savings",
@@ -55,7 +55,7 @@ export default function AccountsPage() {
         </p>
       </div>
 
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] xl:items-start">
+      <div className="grid gap-6">
         <AccountSummary accounts={accounts} />
         <AccountList accounts={accounts} />
       </div>
