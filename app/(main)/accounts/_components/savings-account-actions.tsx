@@ -7,7 +7,7 @@ import {
   Trash2Icon,
 } from "lucide-react"
 
-export function SavingsAccountDetails() {
+export function SavingsAccountActions() {
   return (
     <div className="grid gap-2">
       <Button size="lg" variant="ghost" className="w-full justify-start">

@@ -2,38 +2,43 @@
 
 import type { ReactNode } from "react"
 
-import { SavingsAccountDetails } from "./savings-account-details"
-import { SpendingAccountDetails } from "./spending-account-details"
+import { SavingsAccountActions } from "./savings-account-actions"
+import { SpendingAccountActions } from "./spending-account-actions"
 
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import type { Account } from "@/types/account"
 
-type AccountDetailDrawerProps = {
+type AccountActionsDrawerProps = {
   account: Account | null
   children: ReactNode
   open: boolean
+  onAdjustBalance: () => void
   onOpenChange: (open: boolean) => void
+  onOpenChangeComplete: (open: boolean) => void
 }
 
-export function AccountDetailDrawer({
+export function AccountActionsDrawer({
   account,
   children,
   open,
+  onAdjustBalance,
   onOpenChange,
-}: AccountDetailDrawerProps) {
+  onOpenChangeComplete,
+}: AccountActionsDrawerProps) {
   return (
     <ResponsiveDrawer
       open={open}
       onOpenChange={onOpenChange}
+      onOpenChangeComplete={onOpenChangeComplete}
       title={account?.name ?? "Chi tiết tài khoản"}
       trigger={children}
       bodyClassName="space-y-4"
     >
       {account?.purpose === "spending" && (
-        <SpendingAccountDetails />
+        <SpendingAccountActions onAdjustBalance={onAdjustBalance} />
       )}
       {account?.purpose === "savings" && (
-        <SavingsAccountDetails />
+        <SavingsAccountActions />
       )}
     </ResponsiveDrawer>
   )

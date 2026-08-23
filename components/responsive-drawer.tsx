@@ -21,6 +21,7 @@ type ResponsiveDrawerProps = {
   contentClassName?: string
   description?: ReactNode
   onOpenChange: (open: boolean) => void
+  onOpenChangeComplete?: (open: boolean) => void
   open: boolean
   primaryAction?: ReactNode
   secondaryAction?: ReactNode
@@ -37,6 +38,7 @@ export function ResponsiveDrawer({
   contentClassName,
   description,
   onOpenChange,
+  onOpenChangeComplete,
   open,
   primaryAction,
   secondaryAction,
@@ -62,6 +64,7 @@ export function ResponsiveDrawer({
     <Drawer
       open={open}
       onOpenChange={onOpenChange}
+      onOpenChangeComplete={onOpenChangeComplete}
       showSwipeHandle={showSwipeHandle}
     >
       {trigger}

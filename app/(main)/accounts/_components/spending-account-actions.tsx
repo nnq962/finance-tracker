@@ -6,10 +6,21 @@ import {
   WalletCardsIcon,
 } from "lucide-react"
 
-export function SpendingAccountDetails() {
+type SpendingAccountActionsProps = {
+  onAdjustBalance: () => void
+}
+
+export function SpendingAccountActions({
+  onAdjustBalance,
+}: SpendingAccountActionsProps) {
   return (
     <div className="grid gap-2">
-      <Button size="lg" variant="ghost" className="w-full justify-start">
+      <Button
+        size="lg"
+        variant="ghost"
+        className="w-full justify-start"
+        onClick={onAdjustBalance}
+      >
         <WalletCardsIcon />
         Điều chỉnh số dư
       </Button>
