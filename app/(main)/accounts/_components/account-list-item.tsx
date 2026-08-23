@@ -1,3 +1,6 @@
+import type { ComponentProps } from "react"
+
+import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/formatters/currency"
 import type { Account } from "@/types/account"
 import { BanknoteIcon, WalletCardsIcon } from "lucide-react"
@@ -8,13 +11,24 @@ const accountIconStyles = {
   wallet: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
 } as const
 
-type AccountListItemProps = {
+type AccountListItemProps = Omit<ComponentProps<"button">, "children"> & {
   account: Account
 }
 
-export function AccountListItem({ account }: AccountListItemProps) {
+export function AccountListItem({
+  account,
+  className,
+  ...props
+}: AccountListItemProps) {
   return (
-    <div className="flex items-center gap-3 px-4 py-3 sm:gap-4">
+    <button
+      {...props}
+      type="button"
+      className={cn(
+        "flex w-full items-center gap-3 px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:gap-4",
+        className
+      )}
+    >
       <div
         className={`flex size-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold sm:size-11 sm:text-sm ${accountIconStyles[account.type]}`}
       >
@@ -39,6 +53,6 @@ export function AccountListItem({ account }: AccountListItemProps) {
       <p className="shrink-0 text-right font-semibold tabular-nums sm:text-base">
         {formatCurrency(account.balance)}
       </p>
-    </div>
+    </button>
   )
 }

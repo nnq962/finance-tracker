@@ -1,21 +1,13 @@
-"use client"
-
-import { useState } from "react"
-
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { formatCurrency } from "@/lib/formatters/currency"
 import type { Account } from "@/types/account"
-import { EyeIcon, EyeOffIcon } from "lucide-react"
 
 type AccountSummaryProps = {
   accounts: Account[]
 }
 
 export function AccountSummary({ accounts }: AccountSummaryProps) {
-  const [isBalanceHidden, setIsBalanceHidden] = useState(false)
-
   const spendingBalance = accounts
     .filter((account) => account.purpose === "spending")
     .reduce((total, account) => total + account.balance, 0)
@@ -27,31 +19,14 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
     totalBalance > 0 ? Math.round((spendingBalance / totalBalance) * 100) : 0
   const savingsPercentage = totalBalance > 0 ? 100 - spendingPercentage : 0
 
-  const displayBalance = (balance: number) =>
-    isBalanceHidden ? "••••••••" : formatCurrency(balance)
-
   return (
     <Card>
       <CardContent className="space-y-5">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-base font-medium">
-              Tổng số dư
-            </p>
-            <p className="mt-2 truncate text-3xl font-semibold tracking-tight sm:text-4xl">
-              {displayBalance(totalBalance)}
-            </p>
-          </div>
-
-          <Button
-            variant="secondary"
-            size="icon"
-            type="button"
-            aria-label={isBalanceHidden ? "Hiện số dư" : "Ẩn số dư"}
-            onClick={() => setIsBalanceHidden((hidden) => !hidden)}
-          >
-            {isBalanceHidden ? <EyeOffIcon /> : <EyeIcon />}
-          </Button>
+        <div className="min-w-0">
+          <p className="text-base font-medium">Tổng số dư</p>
+          <p className="mt-2 truncate text-3xl font-semibold tracking-tight sm:text-4xl">
+            {formatCurrency(totalBalance)}
+          </p>
         </div>
 
         <Separator />
@@ -84,7 +59,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
                 <span>Chi tiêu</span>
               </div>
               <p className="mt-2 truncate text-lg font-semibold tracking-tight sm:text-xl">
-                {displayBalance(spendingBalance)}
+                {formatCurrency(spendingBalance)}
               </p>
             </div>
 
@@ -94,7 +69,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
                 <span>Tiết kiệm</span>
               </div>
               <p className="mt-2 truncate text-lg font-semibold tracking-tight sm:text-xl">
-                {displayBalance(savingsBalance)}
+                {formatCurrency(savingsBalance)}
               </p>
             </div>
           </div>
