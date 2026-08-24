@@ -5,9 +5,11 @@ import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
+import { DatePicker } from "@/components/date-picker"
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
   SelectTrigger,
   SelectValue,
@@ -28,10 +30,6 @@ const adjustmentCategories = [
   { value: "an-uong", label: "Ăn uống" },
   { value: "di-chuyen", label: "Di chuyển" },
   { value: "mua-sam", label: "Mua sắm" },
-  { value: "hoa-don", label: "Hóa đơn & Tiện ích" },
-  { value: "giai-tri", label: "Giải trí" },
-  { value: "suc-khoe", label: "Sức khỏe" },
-  { value: "khac", label: "Khác" },
 ] as const
 
 type AdjustBalanceDrawerProps = {
@@ -196,24 +194,21 @@ export function AdjustBalanceDrawer({
             <SelectTrigger id="adjustment-category" className="h-12 w-full">
               <SelectValue placeholder="Chọn hạng mục" />
             </SelectTrigger>
-            <SelectContent>
-              {adjustmentCategories.map((item) => (
-                <SelectItem key={item.value} value={item.value}>
-                  {item.label}
-                </SelectItem>
-              ))}
+            <SelectContent alignItemWithTrigger={false}>
+              <SelectGroup>
+                {adjustmentCategories.map((item) => (
+                  <SelectItem key={item.value} value={item.value}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectGroup>
             </SelectContent>
           </Select>
         </Field>
 
         <Field>
           <FieldLabel htmlFor="adjustment-date">Ngày điều chỉnh</FieldLabel>
-          <Input
-            id="adjustment-date"
-            type="date"
-            value={adjustmentDate}
-            onChange={(event) => setAdjustmentDate(event.target.value)}
-          />
+          <DatePicker label="Ngày điều chỉnh" />
         </Field>
 
         <Field>

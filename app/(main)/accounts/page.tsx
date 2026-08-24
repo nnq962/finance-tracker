@@ -13,7 +13,7 @@ const accounts: Account[] = [
   },
   {
     id: "savings-account",
-    name: "Sổ tiết kiệm Techcombank",
+    name: "Mua xe máy",
     description: "Đáo hạn 24/12/2028",
     balance: 85_000_000,
     type: "bank",
@@ -22,7 +22,7 @@ const accounts: Account[] = [
   },
   {
     id: "savings-account2",
-    name: "Sổ tiết kiệm Techcombank",
+    name: "Sổ 1",
     description: "Đáo hạn 24/12/2028",
     balance: 15_000_000,
     type: "bank",
