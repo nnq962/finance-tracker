@@ -37,6 +37,7 @@ export type TimePickerProps = {
   defaultValue?: string
   onValueChange?: (time: string) => void
   minuteStep?: number
+  popoverSide?: React.ComponentProps<typeof PopoverContent>["side"]
   disabled?: boolean
   className?: string
 }
@@ -59,12 +60,14 @@ function formatTime(hour: number, minute: number) {
 }
 
 function TimeSelect({
+  id,
   ariaLabel,
   placeholder,
   value,
   options,
   onValueChange,
 }: {
+  id: string
   ariaLabel: string
   placeholder: string
   value: number | null
@@ -83,8 +86,9 @@ function TimeSelect({
       }}
     >
       <SelectTrigger
+        id={id}
         aria-label={ariaLabel}
-        className="w-20 rounded-xl border-border bg-background px-3 tabular-nums shadow-xs"
+        className="w-full"
       >
         <SelectValue />
       </SelectTrigger>
@@ -114,6 +118,7 @@ export function TimePicker(props: TimePickerProps) {
     defaultValue,
     onValueChange,
     minuteStep = 1,
+    popoverSide = "bottom",
     disabled = false,
     className,
   } = props
@@ -171,13 +176,16 @@ export function TimePicker(props: TimePickerProps) {
             </Button>
           }
         />
-        <PopoverContent className="w-56 gap-3 p-3" align="center">
-          <div className="grid grid-cols-2 justify-items-center gap-3">
-            <div className="w-20 space-y-1.5">
-              <span className="text-xs font-medium text-muted-foreground">
-                Hour
-              </span>
+        <PopoverContent
+          side={popoverSide}
+          className="w-56 p-4 text-sm"
+          align="center"
+        >
+          <div className="grid grid-cols-2 gap-4">
+            <Field>
+              <FieldLabel htmlFor={`${fieldId}-hour`}>Giờ</FieldLabel>
               <TimeSelect
+                id={`${fieldId}-hour`}
                 ariaLabel="Choose the Hour"
                 placeholder="HH"
                 value={selectedTime?.hour ?? null}
@@ -186,12 +194,11 @@ export function TimePicker(props: TimePickerProps) {
                   updateValue(hour, selectedTime?.minute ?? 0)
                 }
               />
-            </div>
-            <div className="w-20 space-y-1.5">
-              <span className="text-xs font-medium text-muted-foreground">
-                Minute
-              </span>
+            </Field>
+            <Field>
+              <FieldLabel htmlFor={`${fieldId}-minute`}>Phút</FieldLabel>
               <TimeSelect
+                id={`${fieldId}-minute`}
                 ariaLabel="Choose the Minute"
                 placeholder="MM"
                 value={selectedTime?.minute ?? null}
@@ -200,10 +207,10 @@ export function TimePicker(props: TimePickerProps) {
                   updateValue(selectedTime?.hour ?? 0, minute)
                 }
               />
-            </div>
+            </Field>
           </div>
           <Button size="sm" className="w-full" onClick={() => setOpen(false)}>
-            Done
+            Xong
           </Button>
         </PopoverContent>
       </Popover>

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Field, FieldLabel } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import { DatePicker } from "@/components/date-picker"
+import { TimePicker } from "@/components/time-picker"
 import {
   Select,
   SelectContent,
@@ -32,6 +33,14 @@ const adjustmentCategories = [
   { value: "mua-sam", label: "Mua sắm" },
 ] as const
 
+function getCurrentTime() {
+  const now = new Date()
+
+  return `${String(now.getHours()).padStart(2, "0")}:${String(
+    now.getMinutes()
+  ).padStart(2, "0")}`
+}
+
 type AdjustBalanceDrawerProps = {
   account: Account | null
   open: boolean
@@ -44,9 +53,10 @@ export function AdjustBalanceDrawer({
   onOpenChange,
 }: AdjustBalanceDrawerProps) {
   const [actualBalance, setActualBalance] = useState("")
-  const [adjustmentDate, setAdjustmentDate] = useState(() =>
-    new Date().toLocaleDateString("en-CA")
+  const [adjustmentDate, setAdjustmentDate] = useState<Date | undefined>(() =>
+    new Date()
   )
+  const [adjustmentTime, setAdjustmentTime] = useState(getCurrentTime)
   const [category, setCategory] = useState<string | null>(null)
   const [note, setNote] = useState("Điều chỉnh số dư tài khoản")
 
@@ -57,7 +67,8 @@ export function AdjustBalanceDrawer({
 
   const resetForm = () => {
     setActualBalance("")
-    setAdjustmentDate(new Date().toLocaleDateString("en-CA"))
+    setAdjustmentDate(new Date())
+    setAdjustmentTime(getCurrentTime())
     setCategory(null)
     setNote("Điều chỉnh số dư tài khoản")
   }
@@ -129,7 +140,7 @@ export function AdjustBalanceDrawer({
               <p className="mb-1 text-sm font-semibold text-spending">
                 Hiện tại
               </p>
-              <p className="truncate text-base font-bold tracking-tight text-spending tabular-nums sm:text-lg">
+              <p className="truncate text-base font-bold tracking-tight text-spending tabular-nums">
                 {formatCurrency(account?.balance ?? 0)}
               </p>
             </div>
@@ -153,10 +164,10 @@ export function AdjustBalanceDrawer({
                     onChange={(event) =>
                       handleActualBalanceChange(event.target.value)
                     }
-                    className="h-auto rounded-none border-0 bg-transparent p-0 pr-4 text-base font-bold shadow-none ring-0 tabular-nums placeholder:font-semibold focus-visible:border-transparent focus-visible:ring-0 sm:text-lg md:text-lg"
+                    className="h-auto rounded-none border-0 bg-transparent p-0 pr-4 text-base font-bold shadow-none ring-0 tabular-nums placeholder:font-semibold focus-visible:border-transparent focus-visible:ring-0"
                   />
                   {actualBalance && (
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-base font-bold text-muted-foreground sm:text-lg">
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-base font-bold text-muted-foreground">
                       ₫
                     </span>
                   )}
@@ -206,10 +217,23 @@ export function AdjustBalanceDrawer({
           </Select>
         </Field>
 
-        <Field>
-          <FieldLabel htmlFor="adjustment-date">Ngày điều chỉnh</FieldLabel>
-          <DatePicker label="Ngày điều chỉnh" />
-        </Field>
+        <div className="grid grid-cols-2 gap-3">
+          <DatePicker
+            id="adjustment-date"
+            label="Ngày điều chỉnh"
+            value={adjustmentDate}
+            onValueChange={setAdjustmentDate}
+            className="w-full"
+          />
+          <TimePicker
+            id="adjustment-time"
+            label="Giờ điều chỉnh"
+            value={adjustmentTime}
+            onValueChange={setAdjustmentTime}
+            popoverSide="top"
+            className="w-full"
+          />
+        </div>
 
         <Field>
           <FieldLabel htmlFor="adjustment-note">Ghi chú</FieldLabel>
