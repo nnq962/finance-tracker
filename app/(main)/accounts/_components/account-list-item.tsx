@@ -1,13 +1,19 @@
 import type { ComponentProps } from "react"
 
+import { InstitutionLogo } from "@/components/institution-logo"
+import { getInstitution } from "@/lib/financial-institutions"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/formatters/currency"
 import type { Account } from "@/types/account"
-import { BanknoteIcon, WalletCardsIcon } from "lucide-react"
+import {
+  BanknoteIcon,
+  Building2Icon,
+  WalletCardsIcon,
+} from "lucide-react"
 
 const accountIconStyles = {
   bank: "bg-sky-500/10 text-sky-700 dark:text-sky-300",
-  cash: "bg-amber-400/20 text-amber-700 dark:text-amber-300",
+  cash: "text-amber-600 dark:text-amber-400",
   wallet: "bg-rose-500/10 text-rose-700 dark:text-rose-300",
 } as const
 
@@ -20,6 +26,18 @@ export function AccountListItem({
   className,
   ...props
 }: AccountListItemProps) {
+  const institutionType = account.type === "wallet" ? "e-wallet" : "bank"
+  const institution =
+    account.type !== "cash" && account.institutionId
+      ? getInstitution(institutionType, account.institutionId)
+      : undefined
+  const FallbackIcon =
+    account.type === "cash"
+      ? BanknoteIcon
+      : account.type === "bank"
+        ? Building2Icon
+        : WalletCardsIcon
+
   return (
     <button
       {...props}
@@ -30,14 +48,18 @@ export function AccountListItem({
       )}
     >
       <div
-        className={`flex size-10 shrink-0 items-center justify-center rounded-xl text-xs font-bold sm:size-11 sm:text-sm ${accountIconStyles[account.type]}`}
+        className={cn(
+          "flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-background shadow-xs sm:size-11",
+          !institution && accountIconStyles[account.type]
+        )}
       >
-        {account.type === "bank" ? (
-          account.institutionCode ?? "BANK"
-        ) : account.type === "cash" ? (
-          <BanknoteIcon className="size-5" />
+        {institution ? (
+          <InstitutionLogo
+            institution={institution}
+            className="size-7 rounded-lg sm:size-8"
+          />
         ) : (
-          <WalletCardsIcon className="size-5" />
+          <FallbackIcon className="size-4.5" aria-hidden="true" />
         )}
       </div>
 

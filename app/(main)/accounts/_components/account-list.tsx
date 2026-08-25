@@ -99,20 +99,21 @@ export function AccountList({ accounts }: AccountListProps) {
                   <CardTitle className="text-base leading-6 font-medium">
                     <h2>{group.label}</h2>
                   </CardTitle>
-                  {group.purpose === "spending" && (
-                    <CardAction className="self-baseline">
-                      <Button
-                        type="button"
-                        variant="link"
-                        size="sm"
-                        className="-mr-3 h-6 text-base no-underline"
-                        onClick={() => setIsAddSpendingAccountDrawerOpen(true)}
-                      >
-                        <PlusIcon data-icon="inline-start" />
-                        Thêm
-                      </Button>
-                    </CardAction>
-                  )}
+                  <CardAction className="self-baseline">
+                    <Button
+                      type="button"
+                      variant="link"
+                      className="h-auto cursor-pointer gap-0 p-0 text-base leading-6 font-medium text-primary no-underline hover:text-primary/80 hover:no-underline focus-visible:rounded-sm active:translate-y-px"
+                      onClick={
+                        group.purpose === "spending"
+                          ? () => setIsAddSpendingAccountDrawerOpen(true)
+                          : undefined
+                      }
+                    >
+                      <PlusIcon className="mr-1 size-4" />
+                      Thêm
+                    </Button>
+                  </CardAction>
                 </CardHeader>
 
                 <CardContent>

@@ -9,6 +9,7 @@ const accounts: Account[] = [
     balance: 28_450_000,
     type: "bank",
     purpose: "spending",
+    institutionId: "vietcombank",
     institutionCode: "VCB",
   },
   {
@@ -18,6 +19,7 @@ const accounts: Account[] = [
     balance: 85_000_000,
     type: "bank",
     purpose: "savings",
+    institutionId: "techcombank",
     institutionCode: "TCB",
   },
   {
@@ -27,6 +29,7 @@ const accounts: Account[] = [
     balance: 15_000_000,
     type: "bank",
     purpose: "savings",
+    institutionId: "techcombank",
     institutionCode: "TCB",
   },
   {
@@ -42,6 +45,7 @@ const accounts: Account[] = [
     balance: 12_850_000,
     type: "wallet",
     purpose: "spending",
+    institutionId: "momo",
   },
 ];
 

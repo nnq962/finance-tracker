@@ -1,22 +1,18 @@
 "use client"
 
-import { useId, useMemo, useRef, useState } from "react"
-import { ChevronsUpDown, Plus } from "lucide-react"
+import { useId, useMemo, useState } from "react"
+import { Plus } from "lucide-react"
 
 import { InstitutionLogo } from "@/components/institution-logo"
-import { Button } from "@/components/ui/button"
 import {
-  Command,
-  CommandDialog,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command"
+  Combobox,
+  ComboboxContent,
+  ComboboxEmpty,
+  ComboboxInput,
+  ComboboxItem,
+  ComboboxList,
+} from "@/components/ui/combobox"
 import {
-  getInstitution,
   getInstitutionsByType,
   type FinancialInstitution,
   type InstitutionType,
@@ -52,31 +48,54 @@ function scoreInstitution(
 
   if (!search) return 1
 
-  const shortName = normalizeSearchValue(
-    institution.shortName ?? institution.name
-  )
-  const id = normalizeSearchValue(institution.id)
-  const name = normalizeSearchValue(institution.name)
+  const shortName = normalizeSearchValue(institution.shortName ?? "")
   const keywords = (institution.keywords ?? []).map(normalizeSearchValue)
+  const compactSearch = search.replaceAll(" ", "")
+  const compactShortName = shortName.replaceAll(" ", "")
+  const compactKeywords = keywords.map((keyword) =>
+    keyword.replaceAll(" ", "")
+  )
 
-  if (shortName === search || id === search) return 100
-  if (keywords.some((keyword) => keyword === search)) return 95
-  if (shortName.startsWith(search)) return 90
+  if (compactShortName === compactSearch) return 100
+  if (compactShortName.startsWith(compactSearch)) return 90
   if (startsWithWord(shortName, search)) return 85
-  if (id.startsWith(search)) return 80
-  if (keywords.some((keyword) => keyword.startsWith(search))) return 75
-  if (keywords.some((keyword) => startsWithWord(keyword, search))) return 70
-  if (name.startsWith(search)) return 60
-  if (startsWithWord(name, search)) return 40
-  if (shortName.includes(search) || id.includes(search)) return 30
+  if (compactShortName.includes(compactSearch)) return 70
   if (
-    name.includes(search) ||
-    keywords.some((keyword) => keyword.includes(search))
+    keywords.some((keyword) => keyword === search) ||
+    compactKeywords.some((keyword) => keyword === compactSearch)
   ) {
-    return 20
+    return 60
+  }
+  if (
+    keywords.some(
+      (keyword) =>
+        keyword.startsWith(search) || startsWithWord(keyword, search)
+    ) ||
+    compactKeywords.some((keyword) => keyword.startsWith(compactSearch))
+  ) {
+    return 50
+  }
+  if (
+    keywords.some((keyword) => keyword.includes(search)) ||
+    compactKeywords.some((keyword) => keyword.includes(compactSearch))
+  ) {
+    return 30
   }
 
   return 0
+}
+
+function getCustomInstitution(type: InstitutionType): FinancialInstitution {
+  const isBank = type === "bank"
+
+  return {
+    id: CUSTOM_INSTITUTION_VALUE,
+    name: isBank ? "Ngân hàng khác" : "Ví điện tử khác",
+    shortName: isBank ? "Ngân hàng khác" : "Ví điện tử khác",
+    type,
+    logo: "",
+    keywords: ["khác", "other", "custom"],
+  }
 }
 
 type InstitutionSelectProps = {
@@ -106,21 +125,24 @@ export function InstitutionSelect({
   allowCustom = false,
   className,
 }: InstitutionSelectProps) {
-  const [open, setOpen] = useState(false)
   const [search, setSearch] = useState("")
   const generatedId = useId()
-  const triggerRef = useRef<HTMLButtonElement>(null)
-  const commandListRef = useRef<HTMLDivElement>(null)
-  const institutions = useMemo(
-    () =>
-      [...getInstitutionsByType(type)].sort((first, second) =>
+  const typeLabel = type === "bank" ? "ngân hàng" : "ví điện tử"
+  const institutions = useMemo(() => {
+    const sortedInstitutions = [...getInstitutionsByType(type)].sort(
+      (first, second) =>
         institutionNameCollator.compare(
           first.shortName ?? first.name,
           second.shortName ?? second.name
         )
-      ),
-    [type]
-  )
+    )
+
+    return allowCustom
+      ? [...sortedInstitutions, getCustomInstitution(type)]
+      : sortedInstitutions
+  }, [allowCustom, type])
+  const selectedInstitution =
+    institutions.find((institution) => institution.id === value) ?? null
   const visibleInstitutions = useMemo(() => {
     if (!normalizeSearchValue(search)) return institutions
 
@@ -140,154 +162,70 @@ export function InstitutionSelect({
       )
       .map(({ institution }) => institution)
   }, [institutions, search])
-  const selectedInstitution = getInstitution(type, value)
-  const isCustom = allowCustom && value === CUSTOM_INSTITUTION_VALUE
-  const typeLabel = type === "bank" ? "ngân hàng" : "ví điện tử"
-  const normalizedSearch = normalizeSearchValue(search)
-  const customSearchValue = normalizeSearchValue(
-    type === "bank"
-      ? "khác other custom ngân hàng"
-      : "khác other custom ví điện tử"
-  )
-  const showCustomOption =
-    allowCustom &&
-    (!normalizedSearch || customSearchValue.includes(normalizedSearch))
-  const selectedLabel = isCustom
-    ? type === "bank"
-      ? "Ngân hàng khác"
-      : "Ví điện tử khác"
-    : selectedInstitution?.shortName ?? selectedInstitution?.name
-
-  function selectValue(nextValue: string) {
-    onValueChange(nextValue)
-    setSearch("")
-    setOpen(false)
-  }
-
-  function handleOpenChange(nextOpen: boolean) {
-    setOpen(nextOpen)
-
-    if (!nextOpen) {
-      setSearch("")
-      return
-    }
-
-    requestAnimationFrame(() => commandListRef.current?.scrollTo({ top: 0 }))
-  }
-
-  function handleSearchChange(nextSearch: string) {
-    setSearch(nextSearch)
-    requestAnimationFrame(() => commandListRef.current?.scrollTo({ top: 0 }))
-  }
 
   return (
-    <div className={cn("relative min-w-0", className)}>
-      <Button
-        ref={triggerRef}
+    <Combobox
+      items={institutions}
+      filteredItems={visibleInstitutions}
+      value={selectedInstitution}
+      onValueChange={(institution) =>
+        onValueChange(institution?.id ?? "")
+      }
+      itemToStringLabel={(institution) =>
+        institution.shortName ?? institution.name
+      }
+      itemToStringValue={(institution) => institution.id}
+      isItemEqualToValue={(institution, selectedValue) =>
+        institution.id === selectedValue.id
+      }
+      filter={null}
+      onInputValueChange={(inputValue, eventDetails) => {
+        if (eventDetails.reason === "input-change") {
+          setSearch(inputValue)
+        }
+      }}
+      onOpenChange={(open) => {
+        if (!open) setSearch("")
+      }}
+      name={name}
+      required={required}
+      disabled={disabled}
+    >
+      <ComboboxInput
         id={id ?? generatedId}
-        type="button"
-        variant="outline"
-        role="combobox"
-        aria-haspopup="dialog"
-        aria-expanded={open}
-        aria-required={required}
-        disabled={disabled}
-        className="w-full min-w-0 justify-between font-normal"
-        onClick={() => setOpen(true)}
-      >
-        <span className="flex min-w-0 items-center gap-2">
-          {selectedInstitution && (
-            <InstitutionLogo
-              institution={selectedInstitution}
-              className="size-5"
-            />
-          )}
-          <span
-            className={cn(
-              "truncate",
-              !selectedLabel && "text-muted-foreground"
-            )}
-          >
-            {selectedLabel ?? placeholder ?? `Chọn ${typeLabel}`}
-          </span>
-        </span>
-        <ChevronsUpDown className="ml-2 size-4 shrink-0 opacity-50" />
-      </Button>
-
-      <CommandDialog
-        open={open}
-        onOpenChange={handleOpenChange}
-        title={type === "bank" ? "Chọn ngân hàng" : "Chọn ví điện tử"}
-        description={`Tìm kiếm và chọn ${typeLabel} cho tài khoản.`}
-        className="sm:max-w-lg"
-      >
-          <Command shouldFilter={false}>
-            <CommandInput
-              placeholder={searchPlaceholder ?? `Tìm ${typeLabel}...`}
-              value={search}
-              onValueChange={handleSearchChange}
-            />
-            <CommandList ref={commandListRef}>
-              <CommandEmpty>Không tìm thấy {typeLabel}.</CommandEmpty>
-              <CommandGroup
-                heading={type === "bank" ? "Ngân hàng" : "Ví điện tử"}
-              >
-                {visibleInstitutions.map((institution) => (
-                  <CommandItem
-                    key={institution.id}
-                    value={institution.id}
-                    data-checked={value === institution.id}
-                    onSelect={() => selectValue(institution.id)}
-                  >
-                    <InstitutionLogo institution={institution} />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate font-medium">
-                        {institution.shortName ?? institution.name}
-                      </span>
-                      {institution.shortName && (
-                        <span className="block truncate text-xs text-muted-foreground">
-                          {institution.name}
-                        </span>
-                      )}
-                    </span>
-                  </CommandItem>
-                ))}
-              </CommandGroup>
-              {showCustomOption && (
-                <>
-                  <CommandSeparator />
-                  <CommandGroup>
-                    <CommandItem
-                      value={CUSTOM_INSTITUTION_VALUE}
-                      data-checked={isCustom}
-                      onSelect={() => selectValue(CUSTOM_INSTITUTION_VALUE)}
-                    >
-                      <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted">
-                        <Plus className="size-4" />
-                      </span>
-                      {type === "bank"
-                        ? "Ngân hàng khác"
-                        : "Ví điện tử khác"}
-                    </CommandItem>
-                  </CommandGroup>
-                </>
+        placeholder={
+          searchPlaceholder ?? placeholder ?? `Tìm và chọn ${typeLabel}`
+        }
+        aria-label={placeholder ?? `Chọn ${typeLabel}`}
+        className={cn("w-full", className)}
+      />
+      <ComboboxContent>
+        <ComboboxEmpty>Không tìm thấy {typeLabel}.</ComboboxEmpty>
+        <ComboboxList>
+          {(institution: FinancialInstitution) => (
+            <ComboboxItem key={institution.id} value={institution}>
+              {institution.id === CUSTOM_INSTITUTION_VALUE ? (
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted">
+                  <Plus className="size-4" aria-hidden="true" />
+                </span>
+              ) : (
+                <InstitutionLogo institution={institution} />
               )}
-            </CommandList>
-          </Command>
-      </CommandDialog>
-
-      {name && (
-        <input
-          className="pointer-events-none absolute size-px opacity-0"
-          tabIndex={-1}
-          aria-label={`Giá trị ${typeLabel} đã chọn`}
-          name={name}
-          value={value}
-          required={required}
-          onChange={() => undefined}
-          onInvalid={() => triggerRef.current?.focus()}
-        />
-      )}
-    </div>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate">
+                  {institution.shortName ?? institution.name}
+                </span>
+                {institution.shortName &&
+                  institution.shortName !== institution.name && (
+                    <span className="block truncate text-xs font-normal text-muted-foreground">
+                      {institution.name}
+                    </span>
+                  )}
+              </span>
+            </ComboboxItem>
+          )}
+        </ComboboxList>
+      </ComboboxContent>
+    </Combobox>
   )
 }

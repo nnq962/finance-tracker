@@ -8,5 +8,6 @@ export type Account = {
   balance: number
   type: AccountType
   purpose: AccountPurpose
+  institutionId?: string
   institutionCode?: string
 }

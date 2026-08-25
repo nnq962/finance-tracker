@@ -2,6 +2,7 @@
 
 import { useState, type SubmitEvent } from "react"
 
+import { InstitutionSelect } from "@/components/institution-select"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import { Button } from "@/components/ui/button"
 import {
@@ -39,12 +40,14 @@ export function AddSpendingAccountDrawer({
 }: AddSpendingAccountDrawerProps) {
   const [name, setName] = useState("")
   const [accountType, setAccountType] = useState<AccountType | null>(null)
+  const [institutionId, setInstitutionId] = useState("")
   const [initialBalance, setInitialBalance] = useState("")
   const [excludeFromReports, setExcludeFromReports] = useState(false)
 
   const resetForm = () => {
     setName("")
     setAccountType(null)
+    setInstitutionId("")
     setInitialBalance("")
     setExcludeFromReports(false)
   }
@@ -62,6 +65,11 @@ export function AddSpendingAccountDrawer({
     setInitialBalance(digits ? Number(digits).toLocaleString("vi-VN") : "")
   }
 
+  const handleAccountTypeChange = (nextAccountType: AccountType | null) => {
+    setAccountType(nextAccountType)
+    setInstitutionId("")
+  }
+
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     handleOpenChange(false)
@@ -71,6 +79,8 @@ export function AddSpendingAccountDrawer({
     accountType === "bank" ? "Ngân hàng" : "Ví điện tử"
   const institutionPlaceholder =
     accountType === "bank" ? "Chọn ngân hàng" : "Chọn ví điện tử"
+  const requiresInstitution =
+    accountType === "bank" || accountType === "wallet"
 
   return (
     <ResponsiveDrawer
@@ -85,7 +95,11 @@ export function AddSpendingAccountDrawer({
           type="submit"
           size="lg"
           form="add-spending-account-form"
-          disabled={!name.trim() || accountType === null}
+          disabled={
+            !name.trim() ||
+            accountType === null ||
+            (requiresInstitution && !institutionId)
+          }
         >
           Thêm tài khoản
         </Button>
@@ -116,7 +130,7 @@ export function AddSpendingAccountDrawer({
           <Select
             items={accountTypes}
             value={accountType}
-            onValueChange={setAccountType}
+            onValueChange={handleAccountTypeChange}
           >
             <SelectTrigger
               id="new-spending-account-type"
@@ -141,21 +155,15 @@ export function AddSpendingAccountDrawer({
             <FieldLabel htmlFor="new-spending-account-institution">
               {institutionLabel}
             </FieldLabel>
-            <Select>
-              <SelectTrigger
-                id="new-spending-account-institution"
-                className="w-full"
-              >
-                <SelectValue placeholder={institutionPlaceholder} />
-              </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false}>
-                <SelectGroup>
-                  <SelectItem value="not-available" disabled>
-                    Danh sách sẽ được bổ sung ở bước tiếp theo
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
+            <InstitutionSelect
+              id="new-spending-account-institution"
+              type={accountType === "bank" ? "bank" : "e-wallet"}
+              value={institutionId}
+              onValueChange={setInstitutionId}
+              placeholder={institutionPlaceholder}
+              required
+              className="w-full"
+            />
           </Field>
         )}
 
