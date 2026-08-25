@@ -1,10 +1,16 @@
 "use client"
 
-import { useState } from "react"
+import { useState, type SubmitEvent } from "react"
 
+import { InstitutionSelect } from "@/components/institution-select"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import { Button } from "@/components/ui/button"
-import { Field, FieldLabel } from "@/components/ui/field"
+import {
+  Field,
+  FieldContent,
+  FieldDescription,
+  FieldLabel,
+} from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -14,12 +20,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import type { Account, AccountType } from "@/types/account"
 
 const accountTypes: { label: string; value: AccountType }[] = [
-  { label: "Tài khoản ngân hàng", value: "bank" },
   { label: "Tiền mặt", value: "cash" },
+  { label: "Tài khoản ngân hàng", value: "bank" },
   { label: "Ví điện tử", value: "wallet" },
 ]
 
@@ -38,16 +45,20 @@ export function EditSpendingAccountDrawer({
   const [accountType, setAccountType] = useState<AccountType>(
     account?.type ?? "bank"
   )
-  const [institutionCode, setInstitutionCode] = useState(
-    account?.institutionCode ?? ""
+  const [institutionId, setInstitutionId] = useState(
+    account?.institutionId ?? ""
   )
-  const [description, setDescription] = useState(account?.description ?? "")
+  const [note, setNote] = useState(account?.description ?? "")
+  const [excludeFromReports, setExcludeFromReports] = useState(
+    account?.excludeFromReports ?? false
+  )
 
   const resetForm = () => {
     setName(account?.name ?? "")
     setAccountType(account?.type ?? "bank")
-    setInstitutionCode(account?.institutionCode ?? "")
-    setDescription(account?.description ?? "")
+    setInstitutionId(account?.institutionId ?? "")
+    setNote(account?.description ?? "")
+    setExcludeFromReports(account?.excludeFromReports ?? false)
   }
 
   const handleOpenChange = (nextOpen: boolean) => {
@@ -58,18 +69,30 @@ export function EditSpendingAccountDrawer({
     onOpenChange(nextOpen)
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleAccountTypeChange = (nextAccountType: AccountType | null) => {
+    if (nextAccountType === null) return
+
+    setAccountType(nextAccountType)
+    setInstitutionId("")
+  }
+
+  const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     handleOpenChange(false)
   }
+
+  const institutionLabel =
+    accountType === "bank" ? "Ngân hàng" : "Ví điện tử"
+  const institutionPlaceholder =
+    accountType === "bank" ? "Chọn ngân hàng" : "Chọn ví điện tử"
+  const requiresInstitution =
+    accountType === "bank" || accountType === "wallet"
 
   return (
     <ResponsiveDrawer
       open={open}
       onOpenChange={handleOpenChange}
       title="Chỉnh sửa tài khoản"
-      description={account?.name}
-      bodyClassName="space-y-5"
       closeLabel="Hủy"
       showCloseButton
       primaryAction={
@@ -77,7 +100,9 @@ export function EditSpendingAccountDrawer({
           size="lg"
           type="submit"
           form="edit-spending-account-form"
-          disabled={!name.trim()}
+          disabled={
+            !name.trim() || (requiresInstitution && !institutionId)
+          }
         >
           Lưu thay đổi
         </Button>
@@ -99,7 +124,6 @@ export function EditSpendingAccountDrawer({
             placeholder="Nhập tên tài khoản"
             autoComplete="off"
             autoFocus
-            className="h-12"
           />
         </Field>
 
@@ -108,14 +132,11 @@ export function EditSpendingAccountDrawer({
             Loại tài khoản
           </FieldLabel>
           <Select
+            items={accountTypes}
             value={accountType}
-            onValueChange={(nextType) => {
-              if (nextType !== null) {
-                setAccountType(nextType)
-              }
-            }}
+            onValueChange={handleAccountTypeChange}
           >
-            <SelectTrigger id="spending-account-type" className="h-12 w-full">
+            <SelectTrigger id="spending-account-type" className="w-full">
               <SelectValue />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
@@ -130,34 +151,54 @@ export function EditSpendingAccountDrawer({
           </Select>
         </Field>
 
-        {accountType === "bank" ? (
+        {(accountType === "bank" || accountType === "wallet") && (
           <Field>
-            <FieldLabel htmlFor="spending-account-institution-code">
-              Mã ngân hàng
+            <FieldLabel htmlFor="spending-account-institution">
+              {institutionLabel}
             </FieldLabel>
-            <Input
-              id="spending-account-institution-code"
-              value={institutionCode}
-              onChange={(event) =>
-                setInstitutionCode(event.target.value.toUpperCase())
-              }
-              placeholder="Ví dụ: VCB"
-              autoComplete="off"
-              className="h-12 uppercase"
+            <InstitutionSelect
+              id="spending-account-institution"
+              type={accountType === "bank" ? "bank" : "e-wallet"}
+              value={institutionId}
+              onValueChange={setInstitutionId}
+              placeholder={institutionPlaceholder}
+              required
+              className="w-full"
             />
           </Field>
-        ) : null}
+        )}
 
         <Field>
-          <FieldLabel htmlFor="spending-account-description">
-            Mô tả
+          <FieldLabel htmlFor="spending-account-note">
+            Ghi chú
           </FieldLabel>
           <Textarea
-            id="spending-account-description"
-            value={description}
-            onChange={(event) => setDescription(event.target.value)}
-            placeholder="Thêm mô tả..."
+            id="spending-account-note"
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+            placeholder="Thêm ghi chú..."
             rows={3}
+          />
+        </Field>
+
+        <Field
+          orientation="horizontal"
+          className="rounded-2xl border bg-muted/30 p-4"
+        >
+          <FieldContent>
+            <FieldLabel htmlFor="exclude-edited-spending-account-from-reports">
+              Không tính vào báo cáo
+            </FieldLabel>
+            <FieldDescription>
+              Số dư và giao dịch của tài khoản này sẽ không ảnh hưởng đến báo
+              cáo tài chính.
+            </FieldDescription>
+          </FieldContent>
+          <Switch
+            id="exclude-edited-spending-account-from-reports"
+            checked={excludeFromReports}
+            onCheckedChange={setExcludeFromReports}
+            aria-label="Không tính tài khoản này vào báo cáo"
           />
         </Field>
       </form>

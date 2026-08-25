@@ -196,7 +196,7 @@ export function InstitutionSelect({
         placeholder={
           searchPlaceholder ?? placeholder ?? `Tìm và chọn ${typeLabel}`
         }
-        aria-label={placeholder ?? `Chọn ${typeLabel}`}
+        aria-label={id ? undefined : placeholder ?? `Chọn ${typeLabel}`}
         className={cn("w-full", className)}
       />
       <ComboboxContent>

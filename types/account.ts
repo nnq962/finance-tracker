@@ -10,4 +10,5 @@ export type Account = {
   purpose: AccountPurpose
   institutionId?: string
   institutionCode?: string
+  excludeFromReports?: boolean
 }
