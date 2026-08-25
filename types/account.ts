@@ -1,5 +1,6 @@
 export type AccountType = "bank" | "cash" | "wallet"
 export type AccountPurpose = "spending" | "savings"
+export type AccountStatus = "active" | "inactive"
 
 export type Account = {
   id: string
@@ -8,6 +9,7 @@ export type Account = {
   balance: number
   type: AccountType
   purpose: AccountPurpose
+  status?: AccountStatus
   institutionId?: string
   institutionCode?: string
   excludeFromReports?: boolean

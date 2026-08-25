@@ -21,6 +21,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import { Switch } from "@/components/ui/switch"
+import { Textarea } from "@/components/ui/textarea"
 import type { AccountType } from "@/types/account"
 
 const accountTypes: { label: string; value: AccountType }[] = [
@@ -42,6 +43,7 @@ export function AddSpendingAccountDrawer({
   const [accountType, setAccountType] = useState<AccountType | null>(null)
   const [institutionId, setInstitutionId] = useState("")
   const [initialBalance, setInitialBalance] = useState("")
+  const [note, setNote] = useState("")
   const [excludeFromReports, setExcludeFromReports] = useState(false)
 
   const resetForm = () => {
@@ -49,6 +51,7 @@ export function AddSpendingAccountDrawer({
     setAccountType(null)
     setInstitutionId("")
     setInitialBalance("")
+    setNote("")
     setExcludeFromReports(false)
   }
 
@@ -187,6 +190,19 @@ export function AddSpendingAccountDrawer({
               ₫
             </span>
           </div>
+        </Field>
+
+        <Field>
+          <FieldLabel htmlFor="new-spending-account-note">
+            Ghi chú
+          </FieldLabel>
+          <Textarea
+            id="new-spending-account-note"
+            placeholder="Thêm ghi chú..."
+            value={note}
+            onChange={(event) => setNote(event.target.value)}
+            rows={3}
+          />
         </Field>
 
         <Field

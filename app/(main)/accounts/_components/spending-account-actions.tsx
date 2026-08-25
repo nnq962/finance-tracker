@@ -7,15 +7,19 @@ import {
 } from "lucide-react"
 
 type SpendingAccountActionsProps = {
+  isInactive: boolean
   onAdjustBalance: () => void
   onDelete: () => void
   onEdit: () => void
+  onStopUsing: () => void
 }
 
 export function SpendingAccountActions({
+  isInactive,
   onAdjustBalance,
   onDelete,
   onEdit,
+  onStopUsing,
 }: SpendingAccountActionsProps) {
   return (
     <div className="grid gap-2">
@@ -37,9 +41,15 @@ export function SpendingAccountActions({
         <PencilIcon />
         Chỉnh sửa
       </Button>
-      <Button size="lg" variant="ghost" className="w-full justify-start">
+      <Button
+        size="lg"
+        variant="ghost"
+        className="w-full justify-start"
+        disabled={isInactive}
+        onClick={onStopUsing}
+      >
         <PauseIcon />
-        Ngưng sử dụng
+        {isInactive ? "Đã ngừng sử dụng" : "Ngừng sử dụng"}
       </Button>
       <Button
         size="lg"

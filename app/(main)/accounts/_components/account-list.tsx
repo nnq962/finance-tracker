@@ -4,6 +4,7 @@ import { useState } from "react"
 
 import { AccountActionsDrawer } from "./account-actions-drawer"
 import { AccountListItem } from "./account-list-item"
+import { AddSavingsAccountDrawer } from "./add-savings-account-drawer"
 import { AddSpendingAccountDrawer } from "./add-spending-account-drawer"
 import { AdjustBalanceDrawer } from "./adjust-balance-drawer"
 import { DeleteAccountAlertDialog } from "./delete-account-alert-dialog"
@@ -44,8 +45,11 @@ type AccountListProps = {
 }
 
 export function AccountList({ accounts }: AccountListProps) {
+  const [accountItems, setAccountItems] = useState(accounts)
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
   const [isAddSpendingAccountDrawerOpen, setIsAddSpendingAccountDrawerOpen] =
+    useState(false)
+  const [isAddSavingsAccountDrawerOpen, setIsAddSavingsAccountDrawerOpen] =
     useState(false)
   const [isActionsDrawerOpen, setIsActionsDrawerOpen] = useState(false)
   const [isAdjustBalanceDrawerOpen, setIsAdjustBalanceDrawerOpen] =
@@ -70,6 +74,29 @@ export function AccountList({ accounts }: AccountListProps) {
 
   const openDeleteAccountAlert = () => {
     setPendingDrawer("delete-account")
+    setIsActionsDrawerOpen(false)
+  }
+
+  const stopUsingSelectedSpendingAccount = () => {
+    if (
+      !selectedAccount ||
+      selectedAccount.purpose !== "spending" ||
+      selectedAccount.status === "inactive"
+    ) {
+      return
+    }
+
+    const inactiveAccount: Account = {
+      ...selectedAccount,
+      status: "inactive",
+    }
+
+    setAccountItems((currentAccounts) =>
+      currentAccounts.map((account) =>
+        account.id === inactiveAccount.id ? inactiveAccount : account
+      )
+    )
+    setSelectedAccount(inactiveAccount)
     setIsActionsDrawerOpen(false)
   }
 
@@ -98,12 +125,13 @@ export function AccountList({ accounts }: AccountListProps) {
         onAdjustBalance={openAdjustBalanceDrawer}
         onDeleteAccount={openDeleteAccountAlert}
         onEditSpendingAccount={openEditSpendingAccountDrawer}
+        onStopUsingSpendingAccount={stopUsingSelectedSpendingAccount}
         onOpenChange={setIsActionsDrawerOpen}
         onOpenChangeComplete={handleActionsDrawerChangeComplete}
       >
         <div className="min-w-0 space-y-6">
           {accountGroups.map((group) => {
-            const groupAccounts = accounts.filter(
+            const groupAccounts = accountItems.filter(
               (account) => account.purpose === group.purpose
             )
 
@@ -121,7 +149,7 @@ export function AccountList({ accounts }: AccountListProps) {
                       onClick={
                         group.purpose === "spending"
                           ? () => setIsAddSpendingAccountDrawerOpen(true)
-                          : undefined
+                          : () => setIsAddSavingsAccountDrawerOpen(true)
                       }
                     >
                       <PlusIcon className="mr-1 size-4" />
@@ -160,6 +188,12 @@ export function AccountList({ accounts }: AccountListProps) {
       <AddSpendingAccountDrawer
         open={isAddSpendingAccountDrawerOpen}
         onOpenChange={setIsAddSpendingAccountDrawerOpen}
+      />
+
+      <AddSavingsAccountDrawer
+        accounts={accountItems}
+        open={isAddSavingsAccountDrawerOpen}
+        onOpenChange={setIsAddSavingsAccountDrawerOpen}
       />
 
       <AdjustBalanceDrawer

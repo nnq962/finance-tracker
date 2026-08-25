@@ -15,6 +15,7 @@ type AccountActionsDrawerProps = {
   onAdjustBalance: () => void
   onDeleteAccount: () => void
   onEditSpendingAccount: () => void
+  onStopUsingSpendingAccount: () => void
   onOpenChange: (open: boolean) => void
   onOpenChangeComplete: (open: boolean) => void
 }
@@ -26,6 +27,7 @@ export function AccountActionsDrawer({
   onAdjustBalance,
   onDeleteAccount,
   onEditSpendingAccount,
+  onStopUsingSpendingAccount,
   onOpenChange,
   onOpenChangeComplete,
 }: AccountActionsDrawerProps) {
@@ -40,9 +42,11 @@ export function AccountActionsDrawer({
     >
       {account?.purpose === "spending" && (
         <SpendingAccountActions
+          isInactive={account.status === "inactive"}
           onAdjustBalance={onAdjustBalance}
           onDelete={onDeleteAccount}
           onEdit={onEditSpendingAccount}
+          onStopUsing={onStopUsingSpendingAccount}
         />
       )}
       {account?.purpose === "savings" && (
