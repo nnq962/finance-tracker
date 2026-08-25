@@ -13,6 +13,7 @@ type AccountActionsDrawerProps = {
   children: ReactNode
   open: boolean
   onAdjustBalance: () => void
+  onEditSpendingAccount: () => void
   onOpenChange: (open: boolean) => void
   onOpenChangeComplete: (open: boolean) => void
 }
@@ -22,6 +23,7 @@ export function AccountActionsDrawer({
   children,
   open,
   onAdjustBalance,
+  onEditSpendingAccount,
   onOpenChange,
   onOpenChangeComplete,
 }: AccountActionsDrawerProps) {
@@ -35,7 +37,10 @@ export function AccountActionsDrawer({
       bodyClassName="space-y-4"
     >
       {account?.purpose === "spending" && (
-        <SpendingAccountActions onAdjustBalance={onAdjustBalance} />
+        <SpendingAccountActions
+          onAdjustBalance={onAdjustBalance}
+          onEdit={onEditSpendingAccount}
+        />
       )}
       {account?.purpose === "savings" && (
         <SavingsAccountActions />

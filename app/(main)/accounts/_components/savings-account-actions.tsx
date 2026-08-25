@@ -29,7 +29,7 @@ export function SavingsAccountActions() {
       <Button
         size="lg"
         variant="destructive"
-        className="w-full justify-start"
+        className="w-full justify-start bg-transparent dark:bg-transparent"
       >
         <Trash2Icon />
         Xóa sổ tiết kiệm

@@ -5,6 +5,7 @@ import { useState } from "react"
 import { AccountActionsDrawer } from "./account-actions-drawer"
 import { AccountListItem } from "./account-list-item"
 import { AdjustBalanceDrawer } from "./adjust-balance-drawer"
+import { EditSpendingAccountDrawer } from "./edit-spending-account-drawer"
 
 import {
   Card,
@@ -44,12 +45,19 @@ export function AccountList({ accounts }: AccountListProps) {
   const [isActionsDrawerOpen, setIsActionsDrawerOpen] = useState(false)
   const [isAdjustBalanceDrawerOpen, setIsAdjustBalanceDrawerOpen] =
     useState(false)
-  const [pendingDrawer, setPendingDrawer] = useState<"adjust-balance" | null>(
-    null
-  )
+  const [isEditSpendingAccountDrawerOpen, setIsEditSpendingAccountDrawerOpen] =
+    useState(false)
+  const [pendingDrawer, setPendingDrawer] = useState<
+    "adjust-balance" | "edit-spending-account" | null
+  >(null)
 
   const openAdjustBalanceDrawer = () => {
     setPendingDrawer("adjust-balance")
+    setIsActionsDrawerOpen(false)
+  }
+
+  const openEditSpendingAccountDrawer = () => {
+    setPendingDrawer("edit-spending-account")
     setIsActionsDrawerOpen(false)
   }
 
@@ -57,6 +65,11 @@ export function AccountList({ accounts }: AccountListProps) {
     if (!open && pendingDrawer === "adjust-balance") {
       setPendingDrawer(null)
       setIsAdjustBalanceDrawerOpen(true)
+    }
+
+    if (!open && pendingDrawer === "edit-spending-account") {
+      setPendingDrawer(null)
+      setIsEditSpendingAccountDrawerOpen(true)
     }
   }
 
@@ -66,6 +79,7 @@ export function AccountList({ accounts }: AccountListProps) {
         account={selectedAccount}
         open={isActionsDrawerOpen}
         onAdjustBalance={openAdjustBalanceDrawer}
+        onEditSpendingAccount={openEditSpendingAccountDrawer}
         onOpenChange={setIsActionsDrawerOpen}
         onOpenChangeComplete={handleActionsDrawerChangeComplete}
       >
@@ -123,6 +137,13 @@ export function AccountList({ accounts }: AccountListProps) {
         account={selectedAccount}
         open={isAdjustBalanceDrawerOpen}
         onOpenChange={setIsAdjustBalanceDrawerOpen}
+      />
+
+      <EditSpendingAccountDrawer
+        key={selectedAccount?.id ?? "no-account"}
+        account={selectedAccount}
+        open={isEditSpendingAccountDrawerOpen}
+        onOpenChange={setIsEditSpendingAccountDrawerOpen}
       />
     </>
   )

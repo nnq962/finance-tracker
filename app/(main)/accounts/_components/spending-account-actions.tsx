@@ -8,10 +8,12 @@ import {
 
 type SpendingAccountActionsProps = {
   onAdjustBalance: () => void
+  onEdit: () => void
 }
 
 export function SpendingAccountActions({
   onAdjustBalance,
+  onEdit,
 }: SpendingAccountActionsProps) {
   return (
     <div className="grid gap-2">
@@ -24,7 +26,12 @@ export function SpendingAccountActions({
         <WalletCardsIcon />
         Điều chỉnh số dư
       </Button>
-      <Button size="lg" variant="ghost" className="w-full justify-start">
+      <Button
+        size="lg"
+        variant="ghost"
+        className="w-full justify-start"
+        onClick={onEdit}
+      >
         <PencilIcon />
         Chỉnh sửa
       </Button>
@@ -35,7 +42,7 @@ export function SpendingAccountActions({
       <Button
         size="lg"
         variant="destructive"
-        className="w-full justify-start"
+        className="w-full justify-start bg-transparent dark:bg-transparent"
       >
         <Trash2Icon />
         Xóa tài khoản chi tiêu
