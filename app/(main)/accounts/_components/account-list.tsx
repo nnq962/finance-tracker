@@ -6,6 +6,7 @@ import { AccountActionsDrawer } from "./account-actions-drawer"
 import { AccountListItem } from "./account-list-item"
 import { AddSpendingAccountDrawer } from "./add-spending-account-drawer"
 import { AdjustBalanceDrawer } from "./adjust-balance-drawer"
+import { DeleteAccountAlertDialog } from "./delete-account-alert-dialog"
 import { EditSpendingAccountDrawer } from "./edit-spending-account-drawer"
 
 import { Button } from "@/components/ui/button"
@@ -51,8 +52,10 @@ export function AccountList({ accounts }: AccountListProps) {
     useState(false)
   const [isEditSpendingAccountDrawerOpen, setIsEditSpendingAccountDrawerOpen] =
     useState(false)
+  const [isDeleteAccountAlertOpen, setIsDeleteAccountAlertOpen] =
+    useState(false)
   const [pendingDrawer, setPendingDrawer] = useState<
-    "adjust-balance" | "edit-spending-account" | null
+    "adjust-balance" | "delete-account" | "edit-spending-account" | null
   >(null)
 
   const openAdjustBalanceDrawer = () => {
@@ -62,6 +65,11 @@ export function AccountList({ accounts }: AccountListProps) {
 
   const openEditSpendingAccountDrawer = () => {
     setPendingDrawer("edit-spending-account")
+    setIsActionsDrawerOpen(false)
+  }
+
+  const openDeleteAccountAlert = () => {
+    setPendingDrawer("delete-account")
     setIsActionsDrawerOpen(false)
   }
 
@@ -75,6 +83,11 @@ export function AccountList({ accounts }: AccountListProps) {
       setPendingDrawer(null)
       setIsEditSpendingAccountDrawerOpen(true)
     }
+
+    if (!open && pendingDrawer === "delete-account") {
+      setPendingDrawer(null)
+      setIsDeleteAccountAlertOpen(true)
+    }
   }
 
   return (
@@ -83,6 +96,7 @@ export function AccountList({ accounts }: AccountListProps) {
         account={selectedAccount}
         open={isActionsDrawerOpen}
         onAdjustBalance={openAdjustBalanceDrawer}
+        onDeleteAccount={openDeleteAccountAlert}
         onEditSpendingAccount={openEditSpendingAccountDrawer}
         onOpenChange={setIsActionsDrawerOpen}
         onOpenChangeComplete={handleActionsDrawerChangeComplete}
@@ -159,6 +173,12 @@ export function AccountList({ accounts }: AccountListProps) {
         account={selectedAccount}
         open={isEditSpendingAccountDrawerOpen}
         onOpenChange={setIsEditSpendingAccountDrawerOpen}
+      />
+
+      <DeleteAccountAlertDialog
+        account={selectedAccount}
+        open={isDeleteAccountAlertOpen}
+        onOpenChange={setIsDeleteAccountAlertOpen}
       />
     </>
   )

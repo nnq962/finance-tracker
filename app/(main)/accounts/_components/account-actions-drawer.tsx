@@ -13,6 +13,7 @@ type AccountActionsDrawerProps = {
   children: ReactNode
   open: boolean
   onAdjustBalance: () => void
+  onDeleteAccount: () => void
   onEditSpendingAccount: () => void
   onOpenChange: (open: boolean) => void
   onOpenChangeComplete: (open: boolean) => void
@@ -23,6 +24,7 @@ export function AccountActionsDrawer({
   children,
   open,
   onAdjustBalance,
+  onDeleteAccount,
   onEditSpendingAccount,
   onOpenChange,
   onOpenChangeComplete,
@@ -39,11 +41,12 @@ export function AccountActionsDrawer({
       {account?.purpose === "spending" && (
         <SpendingAccountActions
           onAdjustBalance={onAdjustBalance}
+          onDelete={onDeleteAccount}
           onEdit={onEditSpendingAccount}
         />
       )}
       {account?.purpose === "savings" && (
-        <SavingsAccountActions />
+        <SavingsAccountActions onDelete={onDeleteAccount} />
       )}
     </ResponsiveDrawer>
   )

@@ -7,7 +7,13 @@ import {
   Trash2Icon,
 } from "lucide-react"
 
-export function SavingsAccountActions() {
+type SavingsAccountActionsProps = {
+  onDelete: () => void
+}
+
+export function SavingsAccountActions({
+  onDelete,
+}: SavingsAccountActionsProps) {
   return (
     <div className="grid gap-2">
       <Button size="lg" variant="ghost" className="w-full justify-start">
@@ -30,6 +36,7 @@ export function SavingsAccountActions() {
         size="lg"
         variant="destructive"
         className="w-full justify-start bg-transparent dark:bg-transparent"
+        onClick={onDelete}
       >
         <Trash2Icon />
         Xóa sổ tiết kiệm

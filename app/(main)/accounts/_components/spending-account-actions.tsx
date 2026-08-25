@@ -8,11 +8,13 @@ import {
 
 type SpendingAccountActionsProps = {
   onAdjustBalance: () => void
+  onDelete: () => void
   onEdit: () => void
 }
 
 export function SpendingAccountActions({
   onAdjustBalance,
+  onDelete,
   onEdit,
 }: SpendingAccountActionsProps) {
   return (
@@ -43,6 +45,7 @@ export function SpendingAccountActions({
         size="lg"
         variant="destructive"
         className="w-full justify-start bg-transparent dark:bg-transparent"
+        onClick={onDelete}
       >
         <Trash2Icon />
         Xóa tài khoản chi tiêu
