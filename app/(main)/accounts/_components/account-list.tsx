@@ -4,9 +4,11 @@ import { useState } from "react"
 
 import { AccountActionsDrawer } from "./account-actions-drawer"
 import { AccountListItem } from "./account-list-item"
+import { AddSpendingAccountDrawer } from "./add-spending-account-drawer"
 import { AdjustBalanceDrawer } from "./adjust-balance-drawer"
 import { EditSpendingAccountDrawer } from "./edit-spending-account-drawer"
 
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardAction,
@@ -42,6 +44,8 @@ type AccountListProps = {
 
 export function AccountList({ accounts }: AccountListProps) {
   const [selectedAccount, setSelectedAccount] = useState<Account | null>(null)
+  const [isAddSpendingAccountDrawerOpen, setIsAddSpendingAccountDrawerOpen] =
+    useState(false)
   const [isActionsDrawerOpen, setIsActionsDrawerOpen] = useState(false)
   const [isAdjustBalanceDrawerOpen, setIsAdjustBalanceDrawerOpen] =
     useState(false)
@@ -95,15 +99,20 @@ export function AccountList({ accounts }: AccountListProps) {
                   <CardTitle className="text-base leading-6 font-medium">
                     <h2>{group.label}</h2>
                   </CardTitle>
-                  <CardAction className="self-baseline">
-                    <button
-                      type="button"
-                      className="cursor-pointer text-base leading-6 font-medium text-primary transition-colors hover:text-primary/80 focus-visible:rounded-sm focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/30 active:translate-y-px"
-                    >
-                      <PlusIcon className="mr-1 inline size-4 align-[-0.125em]" />
-                      Thêm
-                    </button>
-                  </CardAction>
+                  {group.purpose === "spending" && (
+                    <CardAction className="self-baseline">
+                      <Button
+                        type="button"
+                        variant="link"
+                        size="sm"
+                        className="-mr-3 h-6 text-base no-underline"
+                        onClick={() => setIsAddSpendingAccountDrawerOpen(true)}
+                      >
+                        <PlusIcon data-icon="inline-start" />
+                        Thêm
+                      </Button>
+                    </CardAction>
+                  )}
                 </CardHeader>
 
                 <CardContent>
@@ -132,6 +141,11 @@ export function AccountList({ accounts }: AccountListProps) {
           })}
         </div>
       </AccountActionsDrawer>
+
+      <AddSpendingAccountDrawer
+        open={isAddSpendingAccountDrawerOpen}
+        onOpenChange={setIsAddSpendingAccountDrawerOpen}
+      />
 
       <AdjustBalanceDrawer
         account={selectedAccount}

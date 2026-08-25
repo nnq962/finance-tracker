@@ -87,7 +87,7 @@ export function AdjustBalanceDrawer({
     )
   }
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
     handleOpenChange(false)
   }
@@ -115,7 +115,6 @@ export function AdjustBalanceDrawer({
       open={open}
       onOpenChange={handleOpenChange}
       title="Điều chỉnh số dư"
-      bodyClassName="space-y-5"
       closeLabel="Hủy"
       showCloseButton
       primaryAction={
@@ -164,7 +163,7 @@ export function AdjustBalanceDrawer({
                     onChange={(event) =>
                       handleActualBalanceChange(event.target.value)
                     }
-                    className="h-auto rounded-none border-0 bg-transparent p-0 pr-4 text-base font-bold shadow-none ring-0 tabular-nums placeholder:font-semibold focus-visible:border-transparent focus-visible:ring-0"
+                    className="h-auto rounded-none border-0 bg-transparent p-0 pr-4 text-base font-bold tabular-nums placeholder:font-semibold focus-visible:border-transparent focus-visible:ring-0"
                   />
                   {actualBalance && (
                     <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center text-base font-bold text-muted-foreground">
@@ -187,7 +186,7 @@ export function AdjustBalanceDrawer({
           >
             <div className="flex min-w-0 items-center gap-2">
               <DifferenceIcon className="size-5 shrink-0" aria-hidden="true" />
-              <span className="truncate text-sm font-semibold sm:text-sm">
+              <span className="truncate text-sm font-semibold">
                 {differenceLabel}
               </span>
             </div>
@@ -202,7 +201,7 @@ export function AdjustBalanceDrawer({
         <Field>
           <FieldLabel htmlFor="adjustment-category">Hạng mục</FieldLabel>
           <Select value={category} onValueChange={setCategory}>
-            <SelectTrigger id="adjustment-category" className="h-12 w-full">
+            <SelectTrigger id="adjustment-category" className="w-full">
               <SelectValue placeholder="Chọn hạng mục" />
             </SelectTrigger>
             <SelectContent alignItemWithTrigger={false}>
