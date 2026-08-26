@@ -237,7 +237,7 @@ export function AddSavingsAccountDrawer({
             Thông tin chung
           </FieldLegend>
 
-          <Card className="gap-0 py-0 shadow-sm">
+          <Card className="gap-0 py-0">
             <CardContent className="px-0">
               <FieldGroup className="gap-0">
                 <Field className={groupedFieldClassName}>
@@ -378,7 +378,7 @@ export function AddSavingsAccountDrawer({
             Kỳ hạn & lãi suất
           </FieldLegend>
 
-          <Card className="gap-0 py-0 shadow-sm">
+          <Card className="gap-0 py-0">
             <CardContent className="px-0">
               <FieldGroup className="gap-0">
                 <Field className={groupedFieldClassName}>
@@ -537,7 +537,7 @@ export function AddSavingsAccountDrawer({
             Lãi & đáo hạn
           </FieldLegend>
 
-          <Card className="gap-0 py-0 shadow-sm">
+          <Card className="gap-0 py-0">
             <CardContent className="px-0">
               <Field
                 className="gap-3 px-4 py-4"
@@ -627,7 +627,7 @@ export function AddSavingsAccountDrawer({
             Thông tin bổ sung
           </FieldLegend>
 
-          <Card className="gap-0 py-0 shadow-sm">
+          <Card className="gap-0 py-0">
             <CardContent className="px-0">
               <Field className="gap-2 px-4 py-4">
                 <FieldLabel

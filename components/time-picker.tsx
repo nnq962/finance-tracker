@@ -39,6 +39,7 @@ export type TimePickerProps = {
   minuteStep?: number
   popoverSide?: React.ComponentProps<typeof PopoverContent>["side"]
   disabled?: boolean
+  variant?: "default" | "inline"
   className?: string
 }
 
@@ -85,11 +86,7 @@ function TimeSelect({
         onValueChange(nextValue)
       }}
     >
-      <SelectTrigger
-        id={id}
-        aria-label={ariaLabel}
-        className="w-full"
-      >
+      <SelectTrigger id={id} aria-label={ariaLabel} className="w-full">
         <SelectValue />
       </SelectTrigger>
       <SelectContent
@@ -120,6 +117,7 @@ export function TimePicker(props: TimePickerProps) {
     minuteStep = 1,
     popoverSide = "bottom",
     disabled = false,
+    variant = "default",
     className,
   } = props
   const generatedId = React.useId()
@@ -129,10 +127,7 @@ export function TimePicker(props: TimePickerProps) {
   const selectedValue = isControlled ? value : internalValue
   const selectedTime = parseTime(selectedValue)
   const [open, setOpen] = React.useState(false)
-  const normalizedMinuteStep = Math.min(
-    59,
-    Math.max(1, Math.floor(minuteStep))
-  )
+  const normalizedMinuteStep = Math.min(59, Math.max(1, Math.floor(minuteStep)))
   const minuteOptions = React.useMemo(
     () =>
       Array.from(
@@ -159,16 +154,26 @@ export function TimePicker(props: TimePickerProps) {
   }
 
   return (
-    <Field className={cn("w-44", className)}>
+    <Field
+      className={cn(
+        variant === "inline" ? "w-full min-w-0" : "w-44",
+        className
+      )}
+    >
       {label ? <FieldLabel htmlFor={fieldId}>{label}</FieldLabel> : null}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
           render={
             <Button
-              variant="outline"
+              variant={variant === "inline" ? "ghost" : "outline"}
               id={fieldId}
               disabled={disabled}
-              className="justify-start font-normal tabular-nums"
+              className={cn(
+                "font-normal",
+                variant === "inline"
+                  ? "h-auto min-h-0 w-full justify-end rounded-none border-0 bg-transparent px-0 py-0 text-right text-base shadow-none hover:bg-transparent aria-expanded:bg-transparent focus-visible:border-transparent focus-visible:ring-0 dark:hover:bg-transparent"
+                  : "justify-start tabular-nums"
+              )}
             >
               {selectedTime
                 ? formatTime(selectedTime.hour, selectedTime.minute)
@@ -179,7 +184,7 @@ export function TimePicker(props: TimePickerProps) {
         <PopoverContent
           side={popoverSide}
           className="w-56 p-4 text-sm"
-          align="center"
+          align={variant === "inline" ? "end" : "center"}
         >
           <div className="grid grid-cols-2 gap-4">
             <Field>
