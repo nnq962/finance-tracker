@@ -51,7 +51,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
                   {spendingPercentage}%
                 </span>
               </div>
-              <p className="mt-2 truncate text-base font-semibold tracking-tight">
+              <p className="mt-2 truncate text-sm font-semibold tracking-tight">
                 {formatCurrency(spendingBalance)}
               </p>
             </div>
@@ -66,7 +66,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
                   {savingsPercentage}%
                 </span>
               </div>
-              <p className="mt-2 truncate text-base font-semibold tracking-tight">
+              <p className="mt-2 truncate text-sm font-semibold tracking-tight">
                 {formatCurrency(savingsBalance)}
               </p>
             </div>
