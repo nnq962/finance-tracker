@@ -11,13 +11,7 @@ import { DeleteAccountAlertDialog } from "./delete-account-alert-dialog"
 import { EditSpendingAccountDrawer } from "./edit-spending-account-drawer"
 
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { DrawerTrigger } from "@/components/ui/drawer"
 import { Separator } from "@/components/ui/separator"
 import type { Account, AccountPurpose } from "@/types/account"
@@ -26,17 +20,14 @@ import { PlusIcon } from "lucide-react"
 const accountGroups: {
   purpose: AccountPurpose
   label: string
-  containerClassName: string
 }[] = [
   {
     purpose: "spending",
     label: "Chi tiêu",
-    containerClassName: "bg-spending/10",
   },
   {
     purpose: "savings",
     label: "Tiết kiệm",
-    containerClassName: "bg-savings/10",
   },
 ]
 
@@ -136,36 +127,32 @@ export function AccountList({ accounts }: AccountListProps) {
             )
 
             return (
-              <Card key={group.purpose}>
-                <CardHeader className="flex items-baseline justify-between">
-                  <CardTitle className="text-base leading-6 font-medium">
-                    <h2>{group.label}</h2>
-                  </CardTitle>
-                  <CardAction className="self-baseline">
-                    <Button
-                      type="button"
-                      variant="link"
-                      className="h-auto cursor-pointer gap-0 p-0 text-base leading-6 font-medium text-primary no-underline hover:text-primary/80 hover:no-underline focus-visible:rounded-sm active:translate-y-px"
-                      onClick={
-                        group.purpose === "spending"
-                          ? () => setIsAddSpendingAccountDrawerOpen(true)
-                          : () => setIsAddSavingsAccountDrawerOpen(true)
-                      }
-                    >
-                      <PlusIcon className="mr-1 size-4" />
-                      Thêm
-                    </Button>
-                  </CardAction>
-                </CardHeader>
-
-                <CardContent>
-                  <div
-                    className={`overflow-hidden rounded-2xl ${group.containerClassName}`}
+              <section key={group.purpose} className="space-y-3">
+                <div className="flex items-center justify-between gap-3 px-1">
+                  <h2 className="text-base font-semibold">
+                    {group.label}
+                  </h2>
+                  <Button
+                    type="button"
+                    variant="default"
+                    size="sm"
+                    onClick={
+                      group.purpose === "spending"
+                        ? () => setIsAddSpendingAccountDrawerOpen(true)
+                        : () => setIsAddSavingsAccountDrawerOpen(true)
+                    }
                   >
+                    <PlusIcon data-icon="inline-start" />
+                    Thêm
+                  </Button>
+                </div>
+
+                <Card className="gap-0 py-0">
+                  <CardContent className="px-0">
                     {groupAccounts.map((account, accountIndex) => (
                       <div key={account.id}>
                         {accountIndex > 0 && (
-                          <Separator className="mx-4 w-auto bg-foreground/5" />
+                          <Separator className="mx-4 bg-foreground/5 data-horizontal:w-auto" />
                         )}
                         <DrawerTrigger
                           render={
@@ -177,9 +164,9 @@ export function AccountList({ accounts }: AccountListProps) {
                         />
                       </div>
                     ))}
-                  </div>
-                </CardContent>
-              </Card>
+                  </CardContent>
+                </Card>
+              </section>
             )
           })}
         </div>

@@ -15,8 +15,8 @@ const accounts: Account[] = [
   {
     id: "savings-account",
     name: "Mua xe máy",
-    description: "Đáo hạn 24/12/2028",
     balance: 85_000_000,
+    progress: 85,
     type: "bank",
     purpose: "savings",
     institutionId: "techcombank",
@@ -25,8 +25,8 @@ const accounts: Account[] = [
   {
     id: "savings-account2",
     name: "Sổ 1",
-    description: "Đáo hạn 24/12/2028",
     balance: 15_000_000,
+    progress: 60,
     type: "bank",
     purpose: "savings",
     institutionId: "techcombank",

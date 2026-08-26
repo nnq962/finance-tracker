@@ -1,5 +1,4 @@
 import { Card, CardContent } from "@/components/ui/card"
-import { Separator } from "@/components/ui/separator"
 import { formatCurrency } from "@/lib/formatters/currency"
 import type { Account } from "@/types/account"
 
@@ -24,19 +23,13 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
       <CardContent className="space-y-5">
         <div className="min-w-0">
           <p className="text-base font-medium">Tổng số dư</p>
-          <p className="mt-2 truncate text-3xl font-semibold tracking-tight sm:text-4xl">
+          <p className="mt-2 truncate text-xl font-semibold tracking-tight">
             {formatCurrency(totalBalance)}
           </p>
         </div>
 
-        <Separator />
-
         <div>
-          <p className="text-sm font-medium">
-            Phân bổ tài sản
-          </p>
-
-          <div className="mt-3 flex h-2 gap-1">
+          <div className="flex h-2 gap-1">
             <div
               className="rounded-full bg-spending transition-[width] duration-500"
               style={{ width: `${spendingPercentage}%` }}
@@ -47,34 +40,38 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
             />
           </div>
 
-          <div className="mt-2 flex justify-between text-sm font-semibold">
-            <span className="text-spending">{spendingPercentage}%</span>
-            <span className="text-savings">{savingsPercentage}%</span>
-          </div>
-
           <div className="mt-4 grid grid-cols-2 gap-3">
             <div className="min-w-0 rounded-2xl bg-spending/10 px-4 py-3">
-              <div className="flex items-center gap-2 text-xs font-semibold tracking-wide text-spending uppercase">
-                <span className="size-2 shrink-0 rounded-full bg-spending" />
-                <span>Chi tiêu</span>
+              <div className="flex items-center justify-between gap-3 text-spending">
+                <div className="flex min-w-0 items-center gap-2 text-xs font-semibold tracking-wide">
+                  <span className="size-2 shrink-0 rounded-full bg-spending" />
+                  <span>Chi tiêu</span>
+                </div>
+                <span className="shrink-0 text-sm font-semibold">
+                  {spendingPercentage}%
+                </span>
               </div>
-              <p className="mt-2 truncate text-lg font-semibold tracking-tight sm:text-xl">
+              <p className="mt-2 truncate text-base font-semibold tracking-tight">
                 {formatCurrency(spendingBalance)}
               </p>
             </div>
 
             <div className="min-w-0 rounded-2xl bg-savings/10 px-4 py-3">
-              <div className="flex items-center gap-2 text-xs font-semibold tracking-wide text-savings uppercase">
-                <span className="size-2 shrink-0 rounded-full bg-savings" />
-                <span>Tiết kiệm</span>
+              <div className="flex items-center justify-between gap-3 text-savings">
+                <div className="flex min-w-0 items-center gap-2 text-xs font-semibold tracking-wide">
+                  <span className="size-2 shrink-0 rounded-full bg-savings" />
+                  <span>Tiết kiệm</span>
+                </div>
+                <span className="shrink-0 text-sm font-semibold">
+                  {savingsPercentage}%
+                </span>
               </div>
-              <p className="mt-2 truncate text-lg font-semibold tracking-tight sm:text-xl">
+              <p className="mt-2 truncate text-base font-semibold tracking-tight">
                 {formatCurrency(savingsBalance)}
               </p>
             </div>
           </div>
         </div>
-
       </CardContent>
     </Card>
   )

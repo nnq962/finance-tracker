@@ -12,5 +12,6 @@ export type Account = {
   status?: AccountStatus
   institutionId?: string
   institutionCode?: string
+  progress?: number
   excludeFromReports?: boolean
 }

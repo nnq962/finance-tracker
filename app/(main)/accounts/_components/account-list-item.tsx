@@ -1,6 +1,7 @@
 import type { ComponentProps } from "react"
 
 import { InstitutionLogo } from "@/components/institution-logo"
+import { Progress } from "@/components/ui/progress"
 import { getInstitution } from "@/lib/financial-institutions"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/formatters/currency"
@@ -8,6 +9,7 @@ import type { Account } from "@/types/account"
 import {
   BanknoteIcon,
   Building2Icon,
+  ChevronRightIcon,
   LockKeyholeIcon,
   WalletCardsIcon,
 } from "lucide-react"
@@ -28,6 +30,8 @@ export function AccountListItem({
   ...props
 }: AccountListItemProps) {
   const isInactive = account.status === "inactive"
+  const isSavings = account.purpose === "savings"
+  const progress = Math.min(Math.max(account.progress ?? 0, 0), 100)
   const institutionType = account.type === "wallet" ? "e-wallet" : "bank"
   const institution =
     account.type !== "cash" && account.institutionId
@@ -45,65 +49,85 @@ export function AccountListItem({
       {...props}
       type="button"
       className={cn(
-        "flex w-full items-center gap-3 px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:gap-4",
+        "block w-full px-4 py-3 text-left focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30",
         className
       )}
     >
-      <div
-        className={cn(
-          "relative flex size-10 shrink-0 items-center justify-center rounded-xl border border-black/5 bg-white shadow-xs sm:size-11",
-          !institution && accountIconStyles[account.type]
-        )}
-      >
-        {institution ? (
-          <InstitutionLogo
-            institution={institution}
-            className={cn(
-              "size-7 rounded-lg sm:size-8",
-              isInactive && "opacity-60 grayscale-[0.35]"
-            )}
-          />
-        ) : (
-          <FallbackIcon
-            className={cn("size-4.5", isInactive && "opacity-60")}
-            aria-hidden="true"
-          />
-        )}
-        {isInactive && (
-          <span
-            className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full border-2 border-background bg-muted text-muted-foreground shadow-xs"
-            aria-hidden="true"
-          >
-            <LockKeyholeIcon className="size-2.5" />
-          </span>
-        )}
-      </div>
+      <div className="flex items-center gap-3 sm:gap-4">
+        <div
+          className={cn(
+            "relative flex size-10 shrink-0 items-center justify-center rounded-xl border border-border/70 bg-white/40 shadow-xs dark:bg-white/5 sm:size-11",
+            !institution && accountIconStyles[account.type]
+          )}
+        >
+          {institution ? (
+            <InstitutionLogo
+              institution={institution}
+              className={cn(
+                "size-7 overflow-visible rounded-none bg-transparent dark:bg-transparent sm:size-8",
+                isInactive && "opacity-60 grayscale-[0.35]"
+              )}
+            />
+          ) : (
+            <FallbackIcon
+              className={cn("size-4.5", isInactive && "opacity-60")}
+              aria-hidden="true"
+            />
+          )}
+          {isInactive && (
+            <span
+              className="absolute -right-1 -bottom-1 flex size-5 items-center justify-center rounded-full border-2 border-background bg-muted text-muted-foreground shadow-xs"
+              aria-hidden="true"
+            >
+              <LockKeyholeIcon className="size-2.5" />
+            </span>
+          )}
+        </div>
 
-      <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1">
+          <p
+            className={cn(
+              "truncate text-sm font-medium",
+              isInactive && "text-muted-foreground"
+            )}
+          >
+            {account.name}
+          </p>
+          {isInactive && <span className="sr-only">Đã ngừng sử dụng</span>}
+          {!isSavings && account.description && (
+            <p className="mt-0.5 truncate text-xs text-muted-foreground">
+              {account.description}
+            </p>
+          )}
+        </div>
+
         <p
           className={cn(
-            "truncate font-medium sm:text-base",
+            "shrink-0 text-right text-sm font-semibold tabular-nums",
             isInactive && "text-muted-foreground"
           )}
         >
-          {account.name}
+          {formatCurrency(account.balance)}
         </p>
-        {isInactive && <span className="sr-only">Đã ngừng sử dụng</span>}
-        {account.description && (
-          <p className="mt-0.5 truncate text-xs text-muted-foreground sm:text-sm">
-            {account.description}
-          </p>
-        )}
+
+        <ChevronRightIcon
+          className="size-4.5 shrink-0 text-muted-foreground/70"
+          aria-hidden="true"
+        />
       </div>
 
-      <p
-        className={cn(
-          "shrink-0 text-right font-semibold tabular-nums sm:text-base",
-          isInactive && "text-muted-foreground"
-        )}
-      >
-        {formatCurrency(account.balance)}
-      </p>
+      {isSavings && (
+        <div className="mt-2 flex items-center gap-3 pl-13 sm:pl-15">
+          <Progress
+            value={progress}
+            aria-label={`Tiến độ ${account.name}: ${progress}%`}
+            className="min-w-0 flex-1 gap-0 [&_[data-slot=progress-indicator]]:bg-chart-2 [&_[data-slot=progress-track]]:h-1.5 [&_[data-slot=progress-track]]:bg-chart-2/15"
+          />
+          <span className="w-9 shrink-0 text-right text-xs font-semibold text-chart-2 tabular-nums">
+            {progress}%
+          </span>
+        </div>
+      )}
     </button>
   )
 }
