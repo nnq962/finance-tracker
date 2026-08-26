@@ -34,6 +34,8 @@ export type DatePickerProps = {
   startMonth?: Date
   dateFormat?: string
   disabled?: boolean
+  variant?: "default" | "inline"
+  popoverAlign?: "start" | "center" | "end"
   className?: string
 }
 
@@ -108,6 +110,8 @@ export function DatePicker(props: DatePickerProps) {
     startMonth = DEFAULT_START_MONTH,
     dateFormat = "dd/MM/yyyy",
     disabled = false,
+    variant = "default",
+    popoverAlign,
     className,
   } = props
   const generatedId = React.useId()
@@ -127,16 +131,26 @@ export function DatePicker(props: DatePickerProps) {
   }
 
   return (
-    <Field className={cn("w-44", className)}>
+    <Field
+      className={cn(
+        variant === "inline" ? "w-full min-w-0" : "w-44",
+        className
+      )}
+    >
       {label ? <FieldLabel htmlFor={fieldId}>{label}</FieldLabel> : null}
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger
           render={
             <Button
-              variant="outline"
+              variant={variant === "inline" ? "ghost" : "outline"}
               id={fieldId}
               disabled={disabled}
-              className="justify-start font-normal"
+              className={cn(
+                "font-normal",
+                variant === "inline"
+                  ? "h-auto min-h-0 w-full justify-end rounded-none border-0 bg-transparent px-0 py-0 text-right text-base shadow-none hover:bg-transparent aria-expanded:bg-transparent focus-visible:border-transparent focus-visible:ring-0 dark:hover:bg-transparent"
+                  : "justify-start"
+              )}
             >
               {selectedDate
                 ? format(selectedDate, dateFormat)
@@ -144,7 +158,10 @@ export function DatePicker(props: DatePickerProps) {
             </Button>
           }
         />
-        <PopoverContent className="w-auto overflow-hidden p-0" align="center">
+        <PopoverContent
+          className="w-auto overflow-hidden p-0"
+          align={popoverAlign ?? (variant === "inline" ? "start" : "center")}
+        >
           <Calendar
             mode="single"
             selected={selectedDate}

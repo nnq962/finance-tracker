@@ -6,13 +6,16 @@ import { DatePicker } from "@/components/date-picker"
 import { InstitutionSelect } from "@/components/institution-select"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import {
   Field,
   FieldContent,
   FieldDescription,
+  FieldGroup,
   FieldLabel,
   FieldLegend,
   FieldSet,
+  FieldTitle,
 } from "@/components/ui/field"
 import { Input } from "@/components/ui/input"
 import {
@@ -29,6 +32,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { Separator } from "@/components/ui/separator"
 import { Switch } from "@/components/ui/switch"
 import { Textarea } from "@/components/ui/textarea"
 import {
@@ -86,6 +90,27 @@ const maturityOptions = [
       "Kết thúc sổ và chuyển toàn bộ gốc, lãi về tài khoản nguồn.",
   },
 ] as const
+
+const groupedFieldClassName =
+  "grid min-h-15 grid-cols-[minmax(7.5rem,0.9fr)_minmax(0,1.1fr)] items-center gap-4 px-4 py-3"
+
+const groupedRateFieldClassName =
+  "grid min-h-15 grid-cols-[minmax(10rem,1.25fr)_minmax(0,0.75fr)] items-center gap-4 px-4 py-3"
+
+const groupedLabelClassName =
+  "transition-colors group-has-[:focus-visible]/field:text-primary"
+
+const groupedInputClassName =
+  "h-auto min-w-0 rounded-none border-0 bg-transparent pr-px pl-0 text-right text-base shadow-none focus-visible:border-transparent focus-visible:ring-0 md:text-base"
+
+const groupedInputGroupClassName =
+  "h-auto min-w-0 rounded-none border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0"
+
+const groupedSelectTriggerClassName =
+  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right [&_svg]:hidden"
+
+const groupedSeparatorClassName =
+  "mx-4 bg-border/70 data-horizontal:w-auto"
 
 type TermValue = (typeof termOptions)[number]["value"]
 type InterestPaymentValue =
@@ -207,292 +232,449 @@ export function AddSavingsAccountDrawer({
         className="space-y-5"
         onSubmit={handleSubmit}
       >
-        <div className="grid gap-5 sm:grid-cols-2">
-          <Field>
-            <FieldLabel htmlFor="new-savings-account-name">
-              Tên sổ tiết kiệm
-            </FieldLabel>
-            <Input
-              id="new-savings-account-name"
-              value={name}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Sổ tiết kiệm của bạn"
-              autoComplete="off"
-            />
-          </Field>
+        <FieldSet className="gap-3">
+          <FieldLegend variant="legend" className="px-1">
+            Thông tin chung
+          </FieldLegend>
 
-          <Field>
-            <FieldLabel htmlFor="new-savings-account-institution">
-              Ngân hàng
-            </FieldLabel>
-            <InstitutionSelect
-              id="new-savings-account-institution"
-              type="bank"
-              value={institutionId}
-              onValueChange={setInstitutionId}
-              placeholder="Chọn ngân hàng"
-              required
-              className="w-full"
-            />
-          </Field>
-        </div>
+          <Card className="gap-0 py-0 shadow-sm">
+            <CardContent className="px-0">
+              <FieldGroup className="gap-0">
+                <Field className={groupedFieldClassName}>
+                  <FieldLabel
+                    htmlFor="savings-preview-name"
+                    className={groupedLabelClassName}
+                  >
+                    Tên sổ tiết kiệm
+                  </FieldLabel>
+                  <Input
+                    id="savings-preview-name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    placeholder="Nhập tên sổ"
+                    autoComplete="off"
+                    className={groupedInputClassName}
+                  />
+                </Field>
 
-        <div className="grid gap-5 sm:grid-cols-2">
-          <DatePicker
-            id="new-savings-account-date"
-            label="Ngày gửi"
-            placeholder="Chọn ngày gửi"
-            value={depositDate}
-            onValueChange={setDepositDate}
-            className="w-full"
-          />
+                <Separator className={groupedSeparatorClassName} />
 
-          <Field>
-            <FieldLabel htmlFor="new-savings-account-balance">
-              Số dư ban đầu
-            </FieldLabel>
-            <InputGroup>
-              <InputGroupInput
-                id="new-savings-account-balance"
-                inputMode="numeric"
-                autoComplete="off"
-                placeholder="0"
-                value={initialBalance}
-                onChange={(event) =>
-                  handleInitialBalanceChange(event.target.value)
-                }
-                className="text-right font-semibold tabular-nums"
-              />
-              <InputGroupAddon align="inline-end">
-                <InputGroupText>₫</InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
-        </div>
+                <Field className={groupedFieldClassName}>
+                  <FieldLabel
+                    htmlFor="savings-preview-institution"
+                    className={groupedLabelClassName}
+                  >
+                    Ngân hàng
+                  </FieldLabel>
+                  <InstitutionSelect
+                    id="savings-preview-institution"
+                    type="bank"
+                    variant="inline"
+                    value={institutionId}
+                    onValueChange={setInstitutionId}
+                    placeholder="Chọn ngân hàng"
+                    required
+                  />
+                </Field>
 
-        <div className="grid grid-cols-2 gap-3">
-          <Field className={term === "custom" ? undefined : "col-span-2"}>
-            <FieldLabel htmlFor="new-savings-account-term">
-              Kỳ hạn
-            </FieldLabel>
-            <Select
-              items={termOptions}
-              value={term}
-              onValueChange={handleTermChange}
-            >
-              <SelectTrigger id="new-savings-account-term" className="w-full">
-                <SelectValue placeholder="Chọn kỳ hạn" />
-              </SelectTrigger>
-              <SelectContent alignItemWithTrigger={false}>
-                <SelectGroup>
-                  {termOptions.map((option) => (
-                    <SelectItem key={option.value} value={option.value}>
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </Field>
+                <Separator className={groupedSeparatorClassName} />
 
-          {term === "custom" ? (
-            <Field>
-              <FieldLabel htmlFor="new-savings-custom-term">
-                Kỳ hạn tùy chỉnh
-              </FieldLabel>
-              <InputGroup>
-                <InputGroupInput
-                  id="new-savings-custom-term"
-                  inputMode="numeric"
-                  placeholder="0"
-                  value={customTermMonths}
-                  onChange={(event) =>
-                    handleCustomTermChange(event.target.value)
+                <Field className={groupedFieldClassName}>
+                  <FieldLabel
+                    htmlFor="savings-preview-date"
+                    className={groupedLabelClassName}
+                  >
+                    Ngày gửi
+                  </FieldLabel>
+                  <DatePicker
+                    id="savings-preview-date"
+                    label={null}
+                    variant="inline"
+                    value={depositDate}
+                    onValueChange={setDepositDate}
+                    placeholder="Chọn ngày gửi"
+                    popoverAlign="end"
+                  />
+                </Field>
+
+                <Separator className={groupedSeparatorClassName} />
+
+                <Field className={groupedFieldClassName}>
+                  <FieldLabel
+                    htmlFor="savings-preview-balance"
+                    className={groupedLabelClassName}
+                  >
+                    Số dư ban đầu
+                  </FieldLabel>
+                  <InputGroup className={groupedInputGroupClassName}>
+                    <InputGroupInput
+                      id="savings-preview-balance"
+                      inputMode="numeric"
+                      autoComplete="off"
+                      placeholder="0"
+                      value={initialBalance}
+                      onChange={(event) =>
+                        handleInitialBalanceChange(event.target.value)
+                      }
+                      className="px-0 text-right text-base font-semibold tabular-nums md:text-base"
+                    />
+                    <InputGroupAddon align="inline-end" className="pr-0">
+                      <InputGroupText className="text-base font-normal">
+                        ₫
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </Field>
+
+                <Separator className={groupedSeparatorClassName} />
+
+                <Field className={groupedFieldClassName}>
+                  <FieldLabel
+                    htmlFor="new-savings-source-account"
+                    className={groupedLabelClassName}
+                  >
+                    Tài khoản nguồn
+                  </FieldLabel>
+                  <Select
+                    items={sourceAccountOptions}
+                    value={sourceAccountId}
+                    onValueChange={setSourceAccountId}
+                  >
+                    <SelectTrigger
+                      id="new-savings-source-account"
+                      className={groupedSelectTriggerClassName}
+                      disabled={sourceAccountOptions.length === 0}
+                    >
+                      <SelectValue
+                        placeholder={
+                          sourceAccountOptions.length > 0
+                            ? "Chọn tài khoản"
+                            : "Không có tài khoản"
+                        }
+                      />
+                    </SelectTrigger>
+                    <SelectContent
+                      align="end"
+                      alignItemWithTrigger={false}
+                      className="min-w-64"
+                    >
+                      <SelectGroup>
+                        {sourceAccountOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </FieldGroup>
+            </CardContent>
+          </Card>
+        </FieldSet>
+
+        <FieldSet className="gap-3">
+          <FieldLegend variant="legend" className="px-1">
+            Kỳ hạn & lãi suất
+          </FieldLegend>
+
+          <Card className="gap-0 py-0 shadow-sm">
+            <CardContent className="px-0">
+              <FieldGroup className="gap-0">
+                <Field className={groupedFieldClassName}>
+                  <FieldLabel
+                    htmlFor="new-savings-account-term"
+                    className={groupedLabelClassName}
+                  >
+                    Kỳ hạn
+                  </FieldLabel>
+                  <Select
+                    items={termOptions}
+                    value={term}
+                    onValueChange={handleTermChange}
+                  >
+                    <SelectTrigger
+                      id="new-savings-account-term"
+                      className={groupedSelectTriggerClassName}
+                    >
+                      <SelectValue placeholder="Chọn kỳ hạn" />
+                    </SelectTrigger>
+                    <SelectContent
+                      align="end"
+                      alignItemWithTrigger={false}
+                      className="min-w-48"
+                    >
+                      <SelectGroup>
+                        {termOptions.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </Field>
+
+                {term === "custom" ? (
+                  <>
+                    <Separator className={groupedSeparatorClassName} />
+                    <Field className={groupedFieldClassName}>
+                      <FieldLabel
+                        htmlFor="new-savings-custom-term"
+                        className={groupedLabelClassName}
+                      >
+                        Kỳ hạn tùy chỉnh
+                      </FieldLabel>
+                      <InputGroup className={groupedInputGroupClassName}>
+                        <InputGroupInput
+                          id="new-savings-custom-term"
+                          inputMode="numeric"
+                          placeholder="0"
+                          value={customTermMonths}
+                          onChange={(event) =>
+                            handleCustomTermChange(event.target.value)
+                          }
+                          className="px-0 text-right text-base md:text-base"
+                        />
+                        <InputGroupAddon
+                          align="inline-end"
+                          className="pr-0"
+                        >
+                          <InputGroupText className="text-base font-normal">
+                            tháng
+                          </InputGroupText>
+                        </InputGroupAddon>
+                      </InputGroup>
+                    </Field>
+                  </>
+                ) : null}
+
+                <Separator className={groupedSeparatorClassName} />
+
+                <Field className={groupedRateFieldClassName}>
+                  <FieldLabel
+                    htmlFor="new-savings-interest-rate"
+                    className={groupedLabelClassName}
+                  >
+                    Lãi suất
+                  </FieldLabel>
+                  <InputGroup className={groupedInputGroupClassName}>
+                    <InputGroupInput
+                      id="new-savings-interest-rate"
+                      inputMode="decimal"
+                      placeholder="0"
+                      value={interestRate}
+                      onChange={(event) => setInterestRate(event.target.value)}
+                      className="px-0 text-right text-base md:text-base"
+                    />
+                    <InputGroupAddon align="inline-end" className="pr-0">
+                      <InputGroupText className="text-base font-normal">
+                        %/năm
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </Field>
+
+                <Separator className={groupedSeparatorClassName} />
+
+                <Field className={groupedRateFieldClassName}>
+                  <FieldLabel
+                    htmlFor="new-savings-non-term-interest-rate"
+                    className={`${groupedLabelClassName} whitespace-nowrap`}
+                  >
+                    Lãi suất không kỳ hạn
+                  </FieldLabel>
+                  <InputGroup className={groupedInputGroupClassName}>
+                    <InputGroupInput
+                      id="new-savings-non-term-interest-rate"
+                      inputMode="decimal"
+                      placeholder="0"
+                      value={nonTermInterestRate}
+                      onChange={(event) =>
+                        setNonTermInterestRate(event.target.value)
+                      }
+                      className="px-0 text-right text-base md:text-base"
+                    />
+                    <InputGroupAddon align="inline-end" className="pr-0">
+                      <InputGroupText className="text-base font-normal">
+                        %/năm
+                      </InputGroupText>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </Field>
+
+                <Separator className={groupedSeparatorClassName} />
+
+                <Field className={groupedFieldClassName}>
+                  <FieldTitle className={groupedLabelClassName}>
+                    Số ngày tính lãi/năm
+                  </FieldTitle>
+                  <Tabs
+                    value={daysPerYear}
+                    onValueChange={(value) => {
+                      if (value === "365" || value === "360") {
+                        setDaysPerYear(value)
+                      }
+                    }}
+                    className="w-full max-w-44 justify-self-end"
+                  >
+                    <TabsList
+                      className="w-full"
+                      aria-label="Số ngày tính lãi trong một năm"
+                    >
+                      <TabsTrigger value="365">365</TabsTrigger>
+                      <TabsTrigger value="360">360</TabsTrigger>
+                    </TabsList>
+                  </Tabs>
+                </Field>
+              </FieldGroup>
+            </CardContent>
+          </Card>
+        </FieldSet>
+
+        <FieldSet className="gap-3">
+          <FieldLegend variant="legend" className="px-1">
+            Lãi & đáo hạn
+          </FieldLegend>
+
+          <Card className="gap-0 py-0 shadow-sm">
+            <CardContent className="px-0">
+              <Field
+                className="gap-3 px-4 py-4"
+                aria-labelledby="interest-payment-title"
+              >
+                <FieldTitle id="interest-payment-title">
+                  Trả lãi
+                </FieldTitle>
+                <Tabs
+                  value={interestPayment}
+                  onValueChange={(value) =>
+                    setInterestPayment(value as InterestPaymentValue)
                   }
+                >
+                  <TabsList
+                    className="w-full"
+                    aria-label="Thời điểm trả lãi"
+                  >
+                    {interestPaymentOptions.map((option) => (
+                      <TabsTrigger
+                        key={option.value}
+                        value={option.value}
+                        className="min-w-0 px-1 text-sm"
+                      >
+                        {option.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                  {interestPaymentOptions.map((option) => (
+                    <TabsContent
+                      key={option.value}
+                      value={option.value}
+                      className="min-h-8 text-xs text-muted-foreground"
+                    >
+                      {option.description}
+                    </TabsContent>
+                  ))}
+                </Tabs>
+              </Field>
+
+              <Separator className={groupedSeparatorClassName} />
+
+              <Field
+                className="gap-3 px-4 py-4"
+                aria-labelledby="maturity-action-title"
+              >
+                <FieldTitle id="maturity-action-title">
+                  Khi đến hạn
+                </FieldTitle>
+                <Tabs
+                  value={maturityAction}
+                  onValueChange={(value) =>
+                    setMaturityAction(value as MaturityValue)
+                  }
+                >
+                  <TabsList
+                    className="w-full"
+                    aria-label="Cách xử lý khi đến hạn"
+                  >
+                    {maturityOptions.map((option) => (
+                      <TabsTrigger
+                        key={option.value}
+                        value={option.value}
+                        className="min-w-0 px-1 text-sm"
+                      >
+                        {option.label}
+                      </TabsTrigger>
+                    ))}
+                  </TabsList>
+                  {maturityOptions.map((option) => (
+                    <TabsContent
+                      key={option.value}
+                      value={option.value}
+                      className="min-h-8 text-xs text-muted-foreground"
+                    >
+                      {option.description}
+                    </TabsContent>
+                  ))}
+                </Tabs>
+              </Field>
+            </CardContent>
+          </Card>
+        </FieldSet>
+
+        <FieldSet className="gap-3">
+          <FieldLegend variant="legend" className="px-1">
+            Thông tin bổ sung
+          </FieldLegend>
+
+          <Card className="gap-0 py-0 shadow-sm">
+            <CardContent className="px-0">
+              <Field className="gap-2 px-4 py-4">
+                <FieldLabel
+                  htmlFor="new-savings-account-note"
+                  className={groupedLabelClassName}
+                >
+                  Ghi chú
+                </FieldLabel>
+                <Textarea
+                  id="new-savings-account-note"
+                  placeholder="Thêm ghi chú..."
+                  value={note}
+                  onChange={(event) => setNote(event.target.value)}
+                  rows={3}
+                  className="text-base md:text-base"
                 />
-                <InputGroupAddon align="inline-end">
-                  <InputGroupText>tháng</InputGroupText>
-                </InputGroupAddon>
-              </InputGroup>
-            </Field>
-          ) : null}
-        </div>
+              </Field>
 
-        <div className="grid grid-cols-2 gap-3">
-          <Field>
-            <FieldLabel htmlFor="new-savings-interest-rate">
-              Lãi suất
-            </FieldLabel>
-            <InputGroup>
-              <InputGroupInput
-                id="new-savings-interest-rate"
-                inputMode="decimal"
-                placeholder="0"
-                value={interestRate}
-                onChange={(event) => setInterestRate(event.target.value)}
-                className="text-right tabular-nums"
-              />
-              <InputGroupAddon align="inline-end">
-                <InputGroupText>%/năm</InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
+              <Separator className={groupedSeparatorClassName} />
 
-          <Field>
-            <FieldLabel htmlFor="new-savings-non-term-interest-rate">
-              Lãi suất không kỳ hạn
-            </FieldLabel>
-            <InputGroup>
-              <InputGroupInput
-                id="new-savings-non-term-interest-rate"
-                inputMode="decimal"
-                placeholder="0"
-                value={nonTermInterestRate}
-                onChange={(event) =>
-                  setNonTermInterestRate(event.target.value)
-                }
-                className="text-right tabular-nums"
-              />
-              <InputGroupAddon align="inline-end">
-                <InputGroupText>%/năm</InputGroupText>
-              </InputGroupAddon>
-            </InputGroup>
-          </Field>
-        </div>
-
-        <Field>
-          <FieldLabel>Số ngày tính lãi/năm</FieldLabel>
-          <Tabs
-            value={daysPerYear}
-            onValueChange={(value) => {
-              if (value === "365" || value === "360") {
-                setDaysPerYear(value)
-              }
-            }}
-          >
-            <TabsList
-              className="w-full"
-              aria-label="Số ngày tính lãi trong một năm"
-            >
-              <TabsTrigger value="365">365 ngày</TabsTrigger>
-              <TabsTrigger value="360">360 ngày</TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </Field>
-
-        <FieldSet className="gap-3">
-          <FieldLegend variant="label">Trả lãi</FieldLegend>
-          <Tabs
-            value={interestPayment}
-            onValueChange={(value) =>
-              setInterestPayment(value as InterestPaymentValue)
-            }
-          >
-            <TabsList className="w-full">
-              {interestPaymentOptions.map((option) => (
-                <TabsTrigger key={option.value} value={option.value}>
-                  {option.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {interestPaymentOptions.map((option) => (
-              <TabsContent
-                key={option.value}
-                value={option.value}
-                className="text-xs text-muted-foreground"
+              <Field
+                orientation="horizontal"
+                className="items-center gap-4 px-4 py-4"
               >
-                {option.description}
-              </TabsContent>
-            ))}
-          </Tabs>
+                <FieldContent>
+                  <FieldLabel htmlFor="exclude-savings-account-from-reports">
+                    Không tính vào báo cáo
+                  </FieldLabel>
+                  <FieldDescription
+                    id="exclude-savings-account-from-reports-description"
+                    className="text-xs"
+                  >
+                    Số dư và lãi của sổ này sẽ không ảnh hưởng đến báo cáo tài
+                    chính.
+                  </FieldDescription>
+                </FieldContent>
+                <Switch
+                  id="exclude-savings-account-from-reports"
+                  checked={excludeFromReports}
+                  onCheckedChange={setExcludeFromReports}
+                  aria-label="Không tính sổ tiết kiệm này vào báo cáo"
+                  aria-describedby="exclude-savings-account-from-reports-description"
+                />
+              </Field>
+            </CardContent>
+          </Card>
         </FieldSet>
-
-        <FieldSet className="gap-3">
-          <FieldLegend variant="label">Khi đến hạn</FieldLegend>
-          <Tabs
-            value={maturityAction}
-            onValueChange={(value) =>
-              setMaturityAction(value as MaturityValue)
-            }
-          >
-            <TabsList className="w-full">
-              {maturityOptions.map((option) => (
-                <TabsTrigger key={option.value} value={option.value}>
-                  {option.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {maturityOptions.map((option) => (
-              <TabsContent
-                key={option.value}
-                value={option.value}
-                className="text-xs text-muted-foreground"
-              >
-                {option.description}
-              </TabsContent>
-            ))}
-          </Tabs>
-        </FieldSet>
-
-        <Field>
-          <FieldLabel htmlFor="new-savings-source-account">
-            Tiền gửi được chuyển từ tài khoản
-          </FieldLabel>
-          <Select
-            items={sourceAccountOptions}
-            value={sourceAccountId}
-            onValueChange={setSourceAccountId}
-          >
-            <SelectTrigger
-              id="new-savings-source-account"
-              className="w-full"
-            >
-              <SelectValue placeholder="Chọn tài khoản nguồn" />
-            </SelectTrigger>
-            <SelectContent alignItemWithTrigger={false}>
-              <SelectGroup>
-                {sourceAccountOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectGroup>
-            </SelectContent>
-          </Select>
-        </Field>
-
-        <Field>
-          <FieldLabel htmlFor="new-savings-account-note">
-            Ghi chú
-          </FieldLabel>
-          <Textarea
-            id="new-savings-account-note"
-            placeholder="Thêm ghi chú..."
-            value={note}
-            onChange={(event) => setNote(event.target.value)}
-            rows={3}
-          />
-        </Field>
-
-        <Field
-          orientation="horizontal"
-          className="rounded-2xl border bg-muted/30 p-4"
-        >
-          <FieldContent>
-            <FieldLabel htmlFor="exclude-savings-account-from-reports">
-              Không tính vào báo cáo
-            </FieldLabel>
-            <FieldDescription>
-              Số dư và lãi của sổ này sẽ không ảnh hưởng đến báo cáo tài chính.
-            </FieldDescription>
-          </FieldContent>
-          <Switch
-            id="exclude-savings-account-from-reports"
-            checked={excludeFromReports}
-            onCheckedChange={setExcludeFromReports}
-            aria-label="Không tính sổ tiết kiệm này vào báo cáo"
-          />
-        </Field>
       </form>
     </ResponsiveDrawer>
   )

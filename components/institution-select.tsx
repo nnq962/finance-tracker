@@ -109,6 +109,9 @@ type InstitutionSelectProps = {
   disabled?: boolean
   required?: boolean
   allowCustom?: boolean
+  variant?: "default" | "inline"
+  popoverAlign?: "start" | "center" | "end"
+  popoverClassName?: string
   className?: string
 }
 
@@ -123,6 +126,9 @@ export function InstitutionSelect({
   disabled = false,
   required = false,
   allowCustom = false,
+  variant = "default",
+  popoverAlign,
+  popoverClassName,
   className,
 }: InstitutionSelectProps) {
   const [search, setSearch] = useState("")
@@ -197,9 +203,21 @@ export function InstitutionSelect({
           searchPlaceholder ?? placeholder ?? `Tìm và chọn ${typeLabel}`
         }
         aria-label={id ? undefined : placeholder ?? `Chọn ${typeLabel}`}
-        className={cn("w-full", className)}
+        showTrigger={variant !== "inline"}
+        className={cn(
+          "w-full",
+          variant === "inline" &&
+            "h-auto min-w-0 border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0 [&_[data-slot=input-group-control]]:pr-px [&_[data-slot=input-group-control]]:pl-0 [&_[data-slot=input-group-control]]:text-right [&_[data-slot=input-group-control]]:text-base md:[&_[data-slot=input-group-control]]:text-base",
+          className
+        )}
       />
-      <ComboboxContent>
+      <ComboboxContent
+        align={popoverAlign ?? (variant === "inline" ? "end" : "start")}
+        className={cn(
+          variant === "inline" && "w-72 min-w-64",
+          popoverClassName
+        )}
+      >
         <ComboboxEmpty>Không tìm thấy {typeLabel}.</ComboboxEmpty>
         <ComboboxList>
           {(institution: FinancialInstitution) => (

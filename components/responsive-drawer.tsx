@@ -12,7 +12,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@/components/ui/drawer"
-import { ScrollArea } from "@/components/ui/scroll-area"
 import { cn } from "@/lib/utils"
 
 type ResponsiveDrawerProps = {
@@ -73,20 +72,27 @@ export function ResponsiveDrawer({
       <DrawerContent
         className={cn("md:mx-auto md:max-w-2xl", contentClassName)}
       >
-        <DrawerHeader>
+        <DrawerHeader className="pb-4">
           <DrawerTitle>{title}</DrawerTitle>
           {description && (
             <DrawerDescription>{description}</DrawerDescription>
           )}
         </DrawerHeader>
 
-        <ScrollArea className="flex min-h-0 flex-1 overflow-hidden [&>[data-slot=scroll-area-viewport]]:h-auto [&>[data-slot=scroll-area-viewport]]:min-h-0 [&>[data-slot=scroll-area-viewport]]:flex-auto [&>[data-slot=scroll-area-viewport]]:overscroll-contain">
-          <div className={cn("p-4", bodyClassName)}>{children}</div>
-        </ScrollArea>
+        <div
+          className={cn(
+            "flex-1 overflow-y-auto px-4 pb-2",
+            !hasFooter && "pb-4",
+            bodyClassName
+          )}
+        >
+          {children}
+        </div>
 
         {hasFooter && (
           <DrawerFooter
             className={cn(
+              "pt-4",
               hasTwoActions && "grid grid-cols-2 gap-2 [&>*]:w-full"
             )}
           >
