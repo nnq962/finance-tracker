@@ -1,16 +1,18 @@
 import { Button } from "@/components/ui/button"
-import { Field } from "@/components/ui/field"
+import { Field, FieldLabel } from "@/components/ui/field"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
+import { cn } from "@/lib/utils"
 
 const quickAmounts = [10_000, 50_000, 100_000, 500_000]
 
 type TransactionAmountInputProps = {
   value: number | null
+  accentTextClassName: string
   onValueChange: (value: number | null) => void
 }
 
@@ -20,45 +22,58 @@ function formatQuickAmount(amount: number) {
 
 export function TransactionAmountInput({
   value,
+  accentTextClassName,
   onValueChange,
 }: TransactionAmountInputProps) {
+  const formattedValue = value === null ? "" : value.toLocaleString("vi-VN")
+
   const handleInputChange = (inputValue: string) => {
     const digits = inputValue.replace(/\D/g, "")
 
     onValueChange(digits ? Number(digits) : null)
   }
 
-  const handleQuickAmount = (amount: number) => {
-    onValueChange((value ?? 0) + amount)
-  }
-
   return (
-    <Field className="gap-4">
-      <InputGroup className="h-auto border-0 bg-transparent shadow-none has-[>[data-align=inline-end]]:[&>input]:pr-10 has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0">
+    <Field className="gap-5">
+      <FieldLabel
+        htmlFor="transaction-amount"
+        className="text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase"
+      >
+        Số tiền
+      </FieldLabel>
+
+      <InputGroup className="mx-auto h-auto w-full max-w-xl border-0 bg-transparent shadow-none has-[>[data-align=inline-end]]:[&>input]:pr-0 has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0">
         <InputGroupInput
           id="transaction-amount"
-          aria-label="Số tiền"
+          aria-label="Số tiền giao dịch"
           inputMode="numeric"
           autoComplete="off"
           placeholder="0"
-          value={value ? value.toLocaleString("vi-VN") : ""}
+          value={formattedValue}
           onChange={(event) => handleInputChange(event.target.value)}
-          className="h-auto px-10 text-center text-5xl font-semibold tracking-tight tabular-nums md:text-6xl"
+          className="h-auto min-w-0 px-0 text-right text-5xl font-bold tracking-tight tabular-nums sm:text-6xl md:text-7xl"
         />
         <InputGroupAddon
           align="inline-end"
-          className="absolute right-0 pr-0 pl-0"
+          className="pr-0 pl-2"
         >
-          <InputGroupText className="text-2xl font-medium">₫</InputGroupText>
+          <InputGroupText
+            className={cn("text-xl font-semibold sm:text-2xl", accentTextClassName)}
+          >
+            ₫
+          </InputGroupText>
         </InputGroupAddon>
       </InputGroup>
 
-      <div className="grid grid-cols-4 gap-2">
+      <div className="grid grid-cols-4 gap-2 sm:gap-3">
         {quickAmounts.map((amount) => (
           <Button
             key={amount}
             type="button"
-            onClick={() => handleQuickAmount(amount)}
+            variant="outline"
+            size="lg"
+            onClick={() => onValueChange((value ?? 0) + amount)}
+            className="min-w-0 px-2 text-muted-foreground tabular-nums sm:px-4"
           >
             {formatQuickAmount(amount)}
           </Button>
