@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 import {
@@ -18,10 +18,6 @@ export function ExpenseCategoryCard({
 }: ExpenseCategoryCardProps) {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Hạng mục</CardTitle>
-      </CardHeader>
-
       <CardContent>
         <ToggleGroup
           value={value ? [value] : []}
@@ -44,10 +40,10 @@ export function ExpenseCategoryCard({
                 value={category.value}
                 variant="outline"
                 aria-label={category.label}
-                className="h-20 min-w-0 flex-col gap-2 bg-muted/40 px-1 text-muted-foreground hover:bg-muted aria-pressed:border-[#FF5B7F] aria-pressed:bg-[#FF5B7F]/[0.07] aria-pressed:text-[#FF5B7F] sm:h-24"
+                className="h-16 min-w-0 flex-col gap-2 bg-muted/40 px-1 text-muted-foreground hover:bg-muted aria-pressed:border-[#FF5B7F] aria-pressed:bg-[#FF5B7F]/[0.07] aria-pressed:text-[#FF5B7F] sm:h-20"
               >
                 <Icon className="size-5" aria-hidden="true" />
-                <span className="w-full truncate text-[11px] sm:text-xs">
+                <span className="w-full truncate text-[11px] text-foreground group-aria-pressed/toggle:text-[#FF5B7F] sm:text-xs">
                   {category.label}
                 </span>
               </ToggleGroupItem>

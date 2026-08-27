@@ -28,7 +28,7 @@ export function SiteHeader() {
   const title = pageTitles[pathname] ?? "Finance Tracker"
 
   return (
-    <header className="flex h-16 shrink-0 items-center gap-2">
+    <header className="hidden h-16 shrink-0 items-center gap-2 md:flex">
       <div className="flex min-w-0 flex-1 items-center gap-2 px-4 md:px-6">
         <SidebarTrigger className="-ml-1" />
         <Separator

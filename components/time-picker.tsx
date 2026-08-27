@@ -37,6 +37,7 @@ export type TimePickerProps = {
   defaultValue?: string
   onValueChange?: (time: string) => void
   minuteStep?: number
+  displayValue?: React.ReactNode
   popoverSide?: React.ComponentProps<typeof PopoverContent>["side"]
   disabled?: boolean
   variant?: "default" | "inline"
@@ -115,6 +116,7 @@ export function TimePicker(props: TimePickerProps) {
     defaultValue,
     onValueChange,
     minuteStep = 1,
+    displayValue,
     popoverSide = "bottom",
     disabled = false,
     variant = "default",
@@ -175,9 +177,10 @@ export function TimePicker(props: TimePickerProps) {
                   : "justify-start tabular-nums"
               )}
             >
-              {selectedTime
-                ? formatTime(selectedTime.hour, selectedTime.minute)
-                : placeholder}
+              {displayValue ??
+                (selectedTime
+                  ? formatTime(selectedTime.hour, selectedTime.minute)
+                  : placeholder)}
             </Button>
           }
         />

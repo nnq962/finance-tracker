@@ -33,6 +33,7 @@ export type DatePickerProps = {
   onValueChange?: (date: Date | undefined) => void
   startMonth?: Date
   dateFormat?: string
+  displayValue?: React.ReactNode
   disabled?: boolean
   variant?: "default" | "inline"
   popoverAlign?: "start" | "center" | "end"
@@ -109,6 +110,7 @@ export function DatePicker(props: DatePickerProps) {
     onValueChange,
     startMonth = DEFAULT_START_MONTH,
     dateFormat = "dd/MM/yyyy",
+    displayValue,
     disabled = false,
     variant = "default",
     popoverAlign,
@@ -152,9 +154,10 @@ export function DatePicker(props: DatePickerProps) {
                   : "justify-start"
               )}
             >
-              {selectedDate
-                ? format(selectedDate, dateFormat)
-                : placeholder}
+              {displayValue ??
+                (selectedDate
+                  ? format(selectedDate, dateFormat)
+                  : placeholder)}
             </Button>
           }
         />
@@ -168,6 +171,7 @@ export function DatePicker(props: DatePickerProps) {
             defaultMonth={selectedDate}
             captionLayout="dropdown"
             startMonth={startMonth}
+            weekStartsOn={1}
             components={{ Dropdown: CalendarDropdown }}
             onSelect={handleSelect}
           />

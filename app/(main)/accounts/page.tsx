@@ -24,7 +24,7 @@ const accounts: Account[] = [
     name: "Ví MoMo",
     balance: 12_850_000,
     type: "wallet",
-    purpose: "spending",
+    purpose: "savings",
     status: "inactive",
     institutionId: "momo",
   },

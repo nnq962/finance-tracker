@@ -32,6 +32,10 @@ import { Textarea } from "@/components/ui/textarea"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import { cn } from "@/lib/utils"
 import { formatCurrency } from "@/lib/formatters/currency"
+import {
+  combineDateAndTime,
+  formatDateTime,
+} from "@/lib/formatters/date-time"
 import type { Account } from "@/types/account"
 import {
   CircleCheckIcon,
@@ -91,6 +95,9 @@ export function AdjustBalanceDrawer({
   const difference = actualBalance
     ? actualBalanceValue - (account?.balance ?? 0)
     : null
+  const formattedAdjustmentDateTime = adjustmentDate
+    ? formatDateTime(combineDateAndTime(adjustmentDate, adjustmentTime))
+    : { label: "Chọn ngày", time: adjustmentTime || "--:--" }
 
   const resetForm = () => {
     setActualBalance("")
@@ -289,35 +296,38 @@ export function AdjustBalanceDrawer({
                     htmlFor="adjustment-date"
                     className={groupedLabelClassName}
                   >
-                    Ngày điều chỉnh
+                    Thời gian
                   </FieldLabel>
-                  <DatePicker
-                    id="adjustment-date"
-                    label={null}
-                    value={adjustmentDate}
-                    onValueChange={setAdjustmentDate}
-                    variant="inline"
-                    popoverAlign="end"
-                  />
-                </Field>
-
-                <Separator className={groupedSeparatorClassName} />
-
-                <Field className={groupedFieldClassName}>
-                  <FieldLabel
-                    htmlFor="adjustment-time"
-                    className={groupedLabelClassName}
-                  >
-                    Giờ điều chỉnh
-                  </FieldLabel>
-                  <TimePicker
-                    id="adjustment-time"
-                    label={null}
-                    value={adjustmentTime}
-                    onValueChange={setAdjustmentTime}
-                    popoverSide="top"
-                    variant="inline"
-                  />
+                  <div className="flex min-w-0 items-center justify-end whitespace-nowrap">
+                    <DatePicker
+                      id="adjustment-date"
+                      label={null}
+                      value={adjustmentDate}
+                      onValueChange={setAdjustmentDate}
+                      variant="inline"
+                      popoverAlign="end"
+                      className="w-auto"
+                      displayValue={
+                        <span className="text-foreground">
+                          {formattedAdjustmentDateTime.label},{"\u00A0"}
+                        </span>
+                      }
+                    />
+                    <TimePicker
+                      id="adjustment-time"
+                      label={null}
+                      value={adjustmentTime}
+                      onValueChange={setAdjustmentTime}
+                      popoverSide="top"
+                      variant="inline"
+                      className="w-auto"
+                      displayValue={
+                        <span className="text-foreground">
+                          {formattedAdjustmentDateTime.time}
+                        </span>
+                      }
+                    />
+                  </div>
                 </Field>
               </FieldGroup>
             </CardContent>

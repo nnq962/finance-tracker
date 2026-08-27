@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button"
-import { Field, FieldLabel } from "@/components/ui/field"
+import { Field } from "@/components/ui/field"
 import {
   InputGroup,
   InputGroupAddon,
@@ -34,14 +34,7 @@ export function TransactionAmountInput({
   }
 
   return (
-    <Field className="gap-5">
-      <FieldLabel
-        htmlFor="transaction-amount"
-        className="text-xs font-semibold tracking-[0.16em] text-muted-foreground uppercase"
-      >
-        Số tiền
-      </FieldLabel>
-
+    <Field className="mx-auto w-full max-w-xl gap-3">
       <InputGroup className="mx-auto h-auto w-full max-w-xl border-0 bg-transparent shadow-none has-[>[data-align=inline-end]]:[&>input]:pr-0 has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0">
         <InputGroupInput
           id="transaction-amount"
@@ -51,7 +44,7 @@ export function TransactionAmountInput({
           placeholder="0"
           value={formattedValue}
           onChange={(event) => handleInputChange(event.target.value)}
-          className="h-auto min-w-0 px-0 text-right text-5xl font-bold tracking-tight tabular-nums sm:text-6xl md:text-7xl"
+          className="h-auto min-w-0 p-0 text-right text-5xl font-bold tracking-tight tabular-nums sm:text-6xl md:text-7xl"
         />
         <InputGroupAddon
           align="inline-end"
@@ -70,10 +63,8 @@ export function TransactionAmountInput({
           <Button
             key={amount}
             type="button"
-            variant="outline"
-            size="lg"
+            variant="default"
             onClick={() => onValueChange((value ?? 0) + amount)}
-            className="min-w-0 px-2 text-muted-foreground tabular-nums sm:px-4"
           >
             {formatQuickAmount(amount)}
           </Button>
