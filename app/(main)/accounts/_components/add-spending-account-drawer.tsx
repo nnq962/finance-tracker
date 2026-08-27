@@ -275,7 +275,7 @@ export function AddSpendingAccountDrawer({
                 </FieldLabel>
                 <Textarea
                   id="new-spending-account-note"
-                  placeholder="Thêm ghi chú..."
+                  placeholder="Thêm ghi chú"
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
                   rows={3}

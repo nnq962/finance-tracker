@@ -241,7 +241,7 @@ export function EditSpendingAccountDrawer({
                   id="spending-account-note"
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
-                  placeholder="Thêm ghi chú..."
+                  placeholder="Thêm ghi chú"
                   rows={3}
                   className="text-base md:text-base"
                 />

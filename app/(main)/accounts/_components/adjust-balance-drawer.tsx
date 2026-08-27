@@ -340,7 +340,7 @@ export function AdjustBalanceDrawer({
                 </FieldLabel>
                 <Textarea
                   id="adjustment-note"
-                  placeholder="Thêm ghi chú..."
+                  placeholder="Thêm ghi chú"
                   value={note}
                   onChange={(event) => setNote(event.target.value)}
                   rows={3}
