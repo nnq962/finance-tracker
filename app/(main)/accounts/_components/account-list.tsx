@@ -15,19 +15,35 @@ import { Card, CardContent } from "@/components/ui/card"
 import { DrawerTrigger } from "@/components/ui/drawer"
 import { Separator } from "@/components/ui/separator"
 import type { Account, AccountPurpose } from "@/types/account"
-import { PlusIcon } from "lucide-react"
+import {
+  PiggyBankIcon,
+  PlusIcon,
+  type LucideIcon,
+  WalletCardsIcon,
+} from "lucide-react"
 
 const accountGroups: {
   purpose: AccountPurpose
   label: string
+  emptyTitle: string
+  emptyDescription: string
+  emptyIcon: LucideIcon
 }[] = [
   {
     purpose: "spending",
     label: "Chi tiêu",
+    emptyTitle: "Chưa có tài khoản chi tiêu",
+    emptyDescription:
+      "Thêm tài khoản ngân hàng, ví điện tử hoặc tiền mặt để bắt đầu theo dõi chi tiêu.",
+    emptyIcon: WalletCardsIcon,
   },
   {
     purpose: "savings",
     label: "Tiết kiệm",
+    emptyTitle: "Chưa có tài khoản tiết kiệm",
+    emptyDescription:
+      "Tạo tài khoản tiết kiệm để theo dõi mục tiêu và tiến độ tích lũy của bạn.",
+    emptyIcon: PiggyBankIcon,
   },
 ]
 
@@ -125,6 +141,15 @@ export function AccountList({ accounts }: AccountListProps) {
             const groupAccounts = accountItems.filter(
               (account) => account.purpose === group.purpose
             )
+            const EmptyIcon = group.emptyIcon
+            const openAddAccountDrawer = () => {
+              if (group.purpose === "spending") {
+                setIsAddSpendingAccountDrawerOpen(true)
+                return
+              }
+
+              setIsAddSavingsAccountDrawerOpen(true)
+            }
 
             return (
               <section key={group.purpose} className="space-y-3">
@@ -136,36 +161,48 @@ export function AccountList({ accounts }: AccountListProps) {
                     type="button"
                     variant="default"
                     size="sm"
-                    onClick={
-                      group.purpose === "spending"
-                        ? () => setIsAddSpendingAccountDrawerOpen(true)
-                        : () => setIsAddSavingsAccountDrawerOpen(true)
-                    }
+                    onClick={openAddAccountDrawer}
                   >
                     <PlusIcon data-icon="inline-start" />
                     Thêm
                   </Button>
                 </div>
 
-                <Card className="gap-0 py-0">
-                  <CardContent className="px-0">
-                    {groupAccounts.map((account, accountIndex) => (
-                      <div key={account.id}>
-                        {accountIndex > 0 && (
-                          <Separator className="mx-4 bg-foreground/5 data-horizontal:w-auto" />
-                        )}
-                        <DrawerTrigger
-                          render={
-                            <AccountListItem
-                              account={account}
-                              onClick={() => setSelectedAccount(account)}
-                            />
-                          }
-                        />
+                {groupAccounts.length > 0 ? (
+                  <Card className="gap-0 py-0">
+                    <CardContent className="px-0">
+                      {groupAccounts.map((account, accountIndex) => (
+                        <div key={account.id}>
+                          {accountIndex > 0 && (
+                            <Separator className="mx-4 bg-foreground/5 data-horizontal:w-auto" />
+                          )}
+                          <DrawerTrigger
+                            render={
+                              <AccountListItem
+                                account={account}
+                                onClick={() => setSelectedAccount(account)}
+                              />
+                            }
+                          />
+                        </div>
+                      ))}
+                    </CardContent>
+                  </Card>
+                ) : (
+                  <Card className="border-dashed py-0">
+                    <CardContent className="flex min-h-40 flex-col items-center justify-center px-5 py-8 text-center sm:px-8">
+                      <div className="flex size-11 items-center justify-center rounded-2xl border bg-background text-muted-foreground shadow-xs">
+                        <EmptyIcon className="size-5" aria-hidden="true" />
                       </div>
-                    ))}
-                  </CardContent>
-                </Card>
+                      <p className="mt-4 text-sm font-semibold">
+                        {group.emptyTitle}
+                      </p>
+                      <p className="mt-1.5 max-w-sm text-sm text-pretty text-muted-foreground">
+                        {group.emptyDescription}
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
               </section>
             )
           })}

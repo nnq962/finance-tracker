@@ -196,13 +196,14 @@ export function AdjustBalanceDrawer({
                         }
                         className="px-0 text-base font-bold tabular-nums placeholder:font-semibold md:text-base"
                       />
-                      {actualBalance && (
-                        <InputGroupAddon align="inline-end" className="pr-0">
-                          <InputGroupText className="text-base font-normal">
-                            ₫
-                          </InputGroupText>
-                        </InputGroupAddon>
-                      )}
+                      <InputGroupAddon
+                        align="inline-end"
+                        className={cn("pr-0", !actualBalance && "invisible")}
+                      >
+                        <InputGroupText className="text-base font-normal">
+                          ₫
+                        </InputGroupText>
+                      </InputGroupAddon>
                     </InputGroup>
                   </Field>
                 </div>
@@ -210,7 +211,7 @@ export function AdjustBalanceDrawer({
 
               <div
                 className={cn(
-                  "flex min-h-16 items-center justify-between gap-3 border-t px-4 py-2.5 transition-colors",
+                  "flex h-16 items-center justify-between gap-3 overflow-hidden border-t px-4 py-2.5 transition-colors",
                   difference === null && "bg-muted/50 text-muted-foreground",
                   difference !== null &&
                     difference >= 0 &&
