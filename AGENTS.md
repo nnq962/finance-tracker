@@ -13,6 +13,20 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 * Every page and component MUST be fully responsive across Mobile, Tablet, and Desktop.
 * Use Tailwind CSS responsive utility classes (e.g. `grid-cols-1 md:grid-cols-2 lg:grid-cols-3`) to implement responsive layouts.
 
+### Typography
+
+* Preserve Tailwind CSS's default type scale. **Do not globally remap semantic utilities** such as `text-sm` to another size.
+* Primary body copy and user-facing form controls (Button, Input, Select, Textarea, and similar controls) MUST use `text-base` (16px). Mobile text inputs MUST remain at least 16px to avoid browser auto-zoom.
+* Supporting descriptions, helper text, timestamps, metadata, and secondary labels SHOULD use `text-sm` (14px), usually with `text-muted-foreground`.
+* `text-xs` (12px) MAY be used only for compact UI such as badges or bottom-navigation labels. Do not use text smaller than 12px, including arbitrary values such as `text-[10px]` or `text-[11px]`.
+* Card titles SHOULD use `text-lg font-semibold` (18px).
+* Section, dialog, and drawer titles SHOULD use `text-xl font-semibold` (20px).
+* Page titles MUST use `text-2xl font-semibold tracking-tight` (24px). Use a larger responsive size only when the page hierarchy requires it.
+* Regular monetary values in lists SHOULD use `text-lg` or `text-xl` with `font-semibold tabular-nums`.
+* KPI and balance highlights SHOULD use `text-3xl md:text-4xl font-semibold tabular-nums`.
+* Primary transaction amount inputs SHOULD use `text-5xl sm:text-6xl md:text-7xl font-bold tracking-tight tabular-nums`.
+* Prefer `font-normal` for body text, `font-medium` for controls and labels, and `font-semibold` for headings. Reserve `font-bold` for primary monetary displays or similarly high-emphasis values.
+
 ### shadcn/ui Usage
 
 * **MUST use shadcn/ui components as the default and primary UI building blocks.** Do not implement equivalent UI components from scratch when a shadcn/ui component exists.
