@@ -25,12 +25,8 @@ import {
   combineDateAndTime,
   formatDateTime,
 } from "@/lib/formatters/date-time"
-
-const accountOptions = [
-  { value: "vietcombank", label: "Vietcombank" },
-  { value: "cash", label: "Tiền mặt" },
-  { value: "momo", label: "Ví MoMo" },
-] as const
+import { cn } from "@/lib/utils"
+import { transactionAccounts } from "../_config/transaction-accounts"
 
 const groupedFieldClassName =
   "grid min-h-15 grid-cols-[minmax(7.5rem,0.9fr)_minmax(0,1.1fr)] items-center gap-4 px-4 py-3"
@@ -39,7 +35,7 @@ const informationLabelClassName =
   "flex min-w-0 items-center gap-2 transition-colors group-has-[:focus-visible]/field:text-primary"
 
 const informationIconClassName =
-  "flex size-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground"
+  "flex size-8 shrink-0 items-center justify-center rounded-lg"
 
 const groupedSelectTriggerClassName =
   "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right [&_svg]:hidden"
@@ -48,10 +44,11 @@ const groupedInputClassName =
   "h-auto min-w-0 rounded-none border-0 bg-transparent pr-px pl-0 text-right text-base shadow-none focus-visible:border-transparent focus-visible:ring-0 md:text-base"
 
 const groupedSeparatorClassName =
-  "mr-4 ml-13 bg-border/70 data-horizontal:w-auto"
+  "mr-4 ml-14 bg-border/70 data-horizontal:w-auto"
 
 type TransactionDetailsCardProps = {
   showAccount?: boolean
+  accentIconClassName: string
   account: string | null
   date: Date | undefined
   time: string
@@ -66,6 +63,7 @@ type TransactionDetailsCardProps = {
 
 export function TransactionDetailsCard({
   showAccount = true,
+  accentIconClassName,
   account,
   date,
   time,
@@ -96,13 +94,18 @@ export function TransactionDetailsCard({
                   htmlFor="transaction-account"
                   className={informationLabelClassName}
                 >
-                  <span className={informationIconClassName}>
+                  <span
+                    className={cn(
+                      informationIconClassName,
+                      accentIconClassName
+                    )}
+                  >
                     <CreditCardIcon className="size-4.5" />
                   </span>
                   <span className="truncate">Tài khoản</span>
                 </FieldLabel>
                 <Select
-                  items={accountOptions}
+                  items={transactionAccounts}
                   value={account}
                   onValueChange={onAccountChange}
                 >
@@ -114,7 +117,7 @@ export function TransactionDetailsCard({
                   </SelectTrigger>
                   <SelectContent align="end" alignItemWithTrigger={false}>
                     <SelectGroup>
-                      {accountOptions.map((option) => (
+                      {transactionAccounts.map((option) => (
                         <SelectItem key={option.value} value={option.value}>
                           {option.label}
                         </SelectItem>
@@ -133,7 +136,12 @@ export function TransactionDetailsCard({
               htmlFor="transaction-date"
               className={informationLabelClassName}
             >
-              <span className={informationIconClassName}>
+              <span
+                className={cn(
+                  informationIconClassName,
+                  accentIconClassName
+                )}
+              >
                 <Clock3Icon className="size-4.5" />
               </span>
               <span className="truncate">Thời gian</span>
@@ -176,7 +184,12 @@ export function TransactionDetailsCard({
               htmlFor="transaction-note"
               className={informationLabelClassName}
             >
-              <span className={informationIconClassName}>
+              <span
+                className={cn(
+                  informationIconClassName,
+                  accentIconClassName
+                )}
+              >
                 <PencilLineIcon className="size-4.5" />
               </span>
               <span className="truncate">Ghi chú</span>
@@ -197,7 +210,12 @@ export function TransactionDetailsCard({
             className={`${groupedFieldClassName} cursor-pointer`}
           >
             <span className={informationLabelClassName}>
-              <span className={informationIconClassName}>
+              <span
+                className={cn(
+                  informationIconClassName,
+                  accentIconClassName
+                )}
+              >
                 <ImageIcon className="size-4.5" />
               </span>
               <span className="shrink-0 whitespace-nowrap">Đính kèm ảnh</span>
@@ -210,7 +228,12 @@ export function TransactionDetailsCard({
               }`}
             >
               {attachments.length === 0 ? (
-                <span className="ml-auto flex size-7 items-center justify-center rounded-md bg-muted">
+                <span
+                  className={cn(
+                    "ml-auto flex size-8 items-center justify-center rounded-lg",
+                    accentIconClassName
+                  )}
+                >
                   <ImagePlusIcon className="size-4" aria-hidden="true" />
                 </span>
               ) : (

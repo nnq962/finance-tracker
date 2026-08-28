@@ -174,7 +174,7 @@ export function AccountList({ accounts }: AccountListProps) {
                       {groupAccounts.map((account, accountIndex) => (
                         <div key={account.id}>
                           {accountIndex > 0 && (
-                            <Separator className="mx-4 bg-foreground/5 data-horizontal:w-auto" />
+                            <Separator className="mr-4 ml-17 bg-foreground/5 data-horizontal:w-auto sm:ml-19" />
                           )}
                           <DrawerTrigger
                             render={

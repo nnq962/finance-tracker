@@ -64,6 +64,7 @@ export function TransactionAmountInput({
             key={amount}
             type="button"
             variant="default"
+            className="border-border bg-white text-black hover:bg-neutral-100 dark:bg-card dark:text-card-foreground dark:hover:bg-accent"
             onClick={() => onValueChange((value ?? 0) + amount)}
           >
             {formatQuickAmount(amount)}
