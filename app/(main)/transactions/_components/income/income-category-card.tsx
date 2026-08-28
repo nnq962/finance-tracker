@@ -38,11 +38,13 @@ export function IncomeCategoryCard({
               <ToggleGroupItem
                 key={category.value}
                 value={category.value}
-                variant="outline"
+                variant="default"
                 aria-label={category.label}
-                className="h-16 min-w-0 flex-col gap-2 bg-muted/40 px-1 text-muted-foreground hover:bg-muted aria-pressed:border-emerald-500 aria-pressed:bg-emerald-500/[0.07] aria-pressed:text-emerald-600 sm:h-20 dark:aria-pressed:border-emerald-400 dark:aria-pressed:bg-emerald-400/[0.07] dark:aria-pressed:text-emerald-400"
+                className="h-16 min-w-0 flex-col gap-2 bg-transparent px-1 text-muted-foreground hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 aria-pressed:bg-transparent aria-pressed:text-emerald-600 data-[state=on]:bg-transparent sm:h-20 dark:aria-pressed:text-emerald-400"
               >
-                <Icon className="size-5" aria-hidden="true" />
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted transition-colors group-focus-visible/toggle:ring-3 group-focus-visible/toggle:ring-ring/30 group-aria-pressed/toggle:bg-emerald-500/[0.07] dark:group-aria-pressed/toggle:bg-emerald-400/[0.07]">
+                  <Icon className="size-5" aria-hidden="true" />
+                </span>
                 <span className="w-full truncate text-[11px] text-foreground group-aria-pressed/toggle:text-emerald-600 sm:text-xs dark:group-aria-pressed/toggle:text-emerald-400">
                   {category.label}
                 </span>

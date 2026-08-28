@@ -1,8 +1,10 @@
 "use client"
 
+import { XIcon } from "lucide-react"
 import { useState, type SubmitEvent } from "react"
 
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import type { ExpenseCategory } from "../_config/expense-categories"
 import type { IncomeCategory } from "../_config/income-categories"
 import type { LoanContact } from "../_config/loan-contacts"
@@ -52,22 +54,39 @@ export function TransactionEditor() {
 
   return (
     <form
-      className="mx-auto flex w-full max-w-3xl flex-col gap-6 pt-2 sm:pt-4"
+      className="mx-auto flex w-full max-w-3xl flex-col gap-6 pt-4"
       onSubmit={handleSubmit}
     >
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-center">
-          <TransactionTypeSelect
-            value={transactionType}
-            onValueChange={setTransactionType}
-          />
-        </div>
+      <div className="mx-auto w-full max-w-xl">
+        <Card>
+          <CardContent className="relative flex flex-col gap-4">
+            {amount !== null ? (
+              <Button
+                type="button"
+                variant="secondary"
+                size="icon-sm"
+                aria-label="Xóa số tiền"
+                className="absolute top-0 right-4"
+                onClick={() => setAmount(null)}
+              >
+                <XIcon aria-hidden="true" />
+              </Button>
+            ) : null}
 
-        <TransactionAmountInput
-          value={amount}
-          accentTextClassName={selectedType.accentTextClassName}
-          onValueChange={setAmount}
-        />
+            <div className="flex justify-center">
+              <TransactionTypeSelect
+                value={transactionType}
+                onValueChange={setTransactionType}
+              />
+            </div>
+
+            <TransactionAmountInput
+              value={amount}
+              accentTextClassName={selectedType.accentTextClassName}
+              onValueChange={setAmount}
+            />
+          </CardContent>
+        </Card>
       </div>
 
       {transactionType === "expense" ? (

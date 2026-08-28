@@ -11,7 +11,6 @@ import {
   transactionTypes,
   type TransactionType,
 } from "../_config/transaction-types"
-import { cn } from "@/lib/utils"
 
 type TransactionTypeSelectProps = {
   value: TransactionType
@@ -35,7 +34,7 @@ export function TransactionTypeSelect({
     >
       <SelectTrigger
         aria-label="Chọn loại giao dịch"
-        className={cn("mt-2", selectedType.triggerClassName)}
+        className={selectedType.triggerClassName}
       >
         <SelectedIcon className="size-4" aria-hidden="true" />
         <span className="font-semibold">{selectedType.label}</span>
