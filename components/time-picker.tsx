@@ -186,7 +186,7 @@ export function TimePicker(props: TimePickerProps) {
         />
         <PopoverContent
           side={popoverSide}
-          className="w-56 p-4 text-sm"
+          className="w-56 p-4 text-base"
           align={variant === "inline" ? "end" : "center"}
         >
           <div className="grid grid-cols-2 gap-4">

@@ -23,7 +23,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
       <CardContent className="space-y-5">
         <div className="min-w-0">
           <p className="text-base font-medium">Tổng số dư</p>
-          <p className="mt-2 truncate text-xl font-semibold tracking-tight">
+          <p className="mt-2 truncate text-3xl font-semibold tracking-tight md:text-4xl">
             {formatCurrency(totalBalance)}
           </p>
         </div>
@@ -43,7 +43,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
           <div className="mt-4 grid grid-cols-2 gap-3">
             <div className="min-w-0 rounded-2xl bg-spending/10 px-4 py-3">
               <div className="flex items-center justify-between gap-3 text-spending">
-                <div className="flex min-w-0 items-center gap-2 text-xs font-semibold tracking-wide">
+                <div className="flex min-w-0 items-center gap-2 text-sm font-semibold tracking-wide">
                   <span className="size-2 shrink-0 rounded-full bg-spending" />
                   <span>Chi tiêu</span>
                 </div>
@@ -51,14 +51,14 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
                   {spendingPercentage}%
                 </span>
               </div>
-              <p className="mt-2 truncate text-sm font-semibold tracking-tight">
+              <p className="mt-2 truncate text-base font-semibold tracking-tight">
                 {formatCurrency(spendingBalance)}
               </p>
             </div>
 
             <div className="min-w-0 rounded-2xl bg-savings/10 px-4 py-3">
               <div className="flex items-center justify-between gap-3 text-savings">
-                <div className="flex min-w-0 items-center gap-2 text-xs font-semibold tracking-wide">
+                <div className="flex min-w-0 items-center gap-2 text-sm font-semibold tracking-wide">
                   <span className="size-2 shrink-0 rounded-full bg-savings" />
                   <span>Tiết kiệm</span>
                 </div>
@@ -66,7 +66,7 @@ export function AccountSummary({ accounts }: AccountSummaryProps) {
                   {savingsPercentage}%
                 </span>
               </div>
-              <p className="mt-2 truncate text-sm font-semibold tracking-tight">
+              <p className="mt-2 truncate text-base font-semibold tracking-tight">
                 {formatCurrency(savingsBalance)}
               </p>
             </div>

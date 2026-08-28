@@ -259,7 +259,7 @@ export function EditSpendingAccountDrawer({
                   </FieldLabel>
                   <FieldDescription
                     id="exclude-edited-spending-account-from-reports-description"
-                    className="text-xs"
+                    className="text-sm"
                   >
                     Số dư và giao dịch của tài khoản này sẽ không ảnh hưởng đến
                     báo cáo tài chính.

@@ -162,6 +162,7 @@ export function AccountList({ accounts }: AccountListProps) {
                     variant="default"
                     size="sm"
                     onClick={openAddAccountDrawer}
+                    className="text-sm"
                   >
                     <PlusIcon data-icon="inline-start" />
                     Thêm
@@ -194,7 +195,7 @@ export function AccountList({ accounts }: AccountListProps) {
                       <div className="flex size-11 items-center justify-center rounded-2xl border bg-background text-muted-foreground shadow-xs">
                         <EmptyIcon className="size-5" aria-hidden="true" />
                       </div>
-                      <p className="mt-4 text-sm font-semibold">
+                      <p className="mt-4 text-base font-semibold">
                         {group.emptyTitle}
                       </p>
                       <p className="mt-1.5 max-w-sm text-sm text-pretty text-muted-foreground">

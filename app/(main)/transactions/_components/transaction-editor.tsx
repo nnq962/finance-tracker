@@ -158,7 +158,7 @@ export function TransactionEditor() {
       <div className="mx-auto grid w-full max-w-xl">
         <Button
           type="submit"
-          size="lg"
+          size="xl"
           className={selectedType.actionClassName}
         >
           Lưu giao dịch

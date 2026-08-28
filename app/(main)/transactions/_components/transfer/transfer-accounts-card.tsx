@@ -23,7 +23,7 @@ const accountRowClassName =
   "grid min-h-18 grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-3 px-4 py-3"
 
 const accountTriggerClassName =
-  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-sm shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto sm:text-base [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right"
+  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right"
 
 type TransferAccountRowProps = {
   id: string
@@ -51,7 +51,7 @@ function TransferAccountRow({
         <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-blue-500/[0.07] text-blue-600 dark:text-blue-400">
           <DirectionIcon className="size-4.5" aria-hidden="true" />
         </span>
-        <span className="truncate text-sm font-medium sm:text-base">
+        <span className="truncate text-base font-medium">
           {label}
         </span>
       </Label>

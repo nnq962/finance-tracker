@@ -17,8 +17,8 @@ export function ExpenseCategoryCard({
   onValueChange,
 }: ExpenseCategoryCardProps) {
   return (
-    <Card>
-      <CardContent>
+    <Card className="py-0">
+      <CardContent className="p-4">
         <ToggleGroup
           value={value ? [value] : []}
           onValueChange={(values) => {
@@ -45,7 +45,7 @@ export function ExpenseCategoryCard({
                 <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-muted transition-colors group-focus-visible/toggle:ring-3 group-focus-visible/toggle:ring-ring/30 group-aria-pressed/toggle:bg-[#FF5B7F]/[0.07]">
                   <Icon className="size-5" aria-hidden="true" />
                 </span>
-                <span className="w-full truncate text-[11px] text-foreground group-aria-pressed/toggle:text-[#FF5B7F] sm:text-xs">
+                <span className="w-full truncate text-sm text-foreground group-aria-pressed/toggle:text-[#FF5B7F]">
                   {category.label}
                 </span>
               </ToggleGroupItem>

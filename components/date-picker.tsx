@@ -75,7 +75,7 @@ function CalendarDropdown({
       <SelectTrigger
         size="sm"
         aria-label={ariaLabel}
-        className="relative z-20 h-auto min-w-0 gap-1 rounded-(--cell-radius) border-0 bg-transparent px-0 py-0 text-sm font-medium shadow-none hover:bg-transparent focus-visible:border-0 focus-visible:ring-0 data-[size=sm]:h-auto"
+        className="relative z-20 h-auto min-w-0 gap-1 rounded-(--cell-radius) border-0 bg-transparent px-0 py-0 text-base font-medium shadow-none hover:bg-transparent focus-visible:border-0 focus-visible:ring-0 data-[size=sm]:h-auto"
       >
         <SelectValue />
       </SelectTrigger>

@@ -49,7 +49,7 @@ export function LoanContactCard({
               }}
               aria-label={contact.label}
               className={cn(
-                "h-10 w-auto min-w-0 gap-2 rounded-2xl bg-muted/40 px-3 text-foreground hover:bg-muted",
+                "h-10 w-auto min-w-0 gap-2 rounded-2xl bg-muted/40 px-3 text-sm text-foreground hover:bg-muted",
                 toneClassNames[tone]
               )}
             >
@@ -62,7 +62,7 @@ export function LoanContactCard({
             type="button"
             variant="dash"
             onClick={onAddContact}
-            className="h-10 rounded-2xl px-3"
+            className="h-10 rounded-2xl px-3 text-sm"
           >
             <PlusIcon data-icon="inline-start" aria-hidden="true" />
             Thêm

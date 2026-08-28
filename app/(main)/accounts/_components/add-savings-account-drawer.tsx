@@ -560,7 +560,7 @@ export function AddSavingsAccountDrawer({
                       <TabsTrigger
                         key={option.value}
                         value={option.value}
-                        className="min-w-0 px-1 text-sm"
+                        className="min-w-0 px-1 text-base"
                       >
                         {option.label}
                       </TabsTrigger>
@@ -570,7 +570,7 @@ export function AddSavingsAccountDrawer({
                     <TabsContent
                       key={option.value}
                       value={option.value}
-                      className="min-h-8 text-xs text-muted-foreground"
+                      className="min-h-8 text-sm text-muted-foreground"
                     >
                       {option.description}
                     </TabsContent>
@@ -601,7 +601,7 @@ export function AddSavingsAccountDrawer({
                       <TabsTrigger
                         key={option.value}
                         value={option.value}
-                        className="min-w-0 px-1 text-sm"
+                        className="min-w-0 px-1 text-base"
                       >
                         {option.label}
                       </TabsTrigger>
@@ -611,7 +611,7 @@ export function AddSavingsAccountDrawer({
                     <TabsContent
                       key={option.value}
                       value={option.value}
-                      className="min-h-8 text-xs text-muted-foreground"
+                      className="min-h-8 text-sm text-muted-foreground"
                     >
                       {option.description}
                     </TabsContent>
@@ -658,7 +658,7 @@ export function AddSavingsAccountDrawer({
                   </FieldLabel>
                   <FieldDescription
                     id="exclude-savings-account-from-reports-description"
-                    className="text-xs"
+                    className="text-sm"
                   >
                     Số dư và lãi của sổ này sẽ không ảnh hưởng đến báo cáo tài
                     chính.

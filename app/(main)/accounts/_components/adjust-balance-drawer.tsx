@@ -126,12 +126,12 @@ export function AdjustBalanceDrawer({
 
   const differenceLabel =
     difference === null
-      ? "Chưa nhập số dư thực tế"
+      ? "Chưa nhập số dư"
       : difference === 0
-        ? "Số dư khớp chính xác"
+        ? "Số dư khớp"
         : difference > 0
-          ? "Dư hơn số dư hiện tại"
-          : "Thiếu hụt so với hiện tại"
+          ? "Dư hơn"
+          : "Thiếu hụt"
 
   const DifferenceIcon =
     difference === null
@@ -165,25 +165,25 @@ export function AdjustBalanceDrawer({
         className="space-y-5"
         onSubmit={handleSubmit}
       >
-        <FieldSet className="gap-3">
+        <FieldSet className="min-w-0 gap-3">
           <FieldLegend variant="legend" className="px-1">
             Số dư
           </FieldLegend>
 
-          <Card className="gap-0 overflow-hidden py-0">
-            <CardContent className="px-0">
-              <div className="grid min-h-16 grid-cols-2">
-                <div className="flex min-w-0 flex-col justify-center bg-spending/10 px-4 py-2.5">
+          <Card className="w-full min-w-0 gap-0 overflow-hidden py-0">
+            <CardContent className="min-w-0 px-0">
+              <div className="grid min-h-14 w-full min-w-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+                <div className="flex min-w-0 flex-col justify-center bg-spending/10 px-4 py-2">
                   <p className="mb-1 text-sm font-semibold text-spending">
                     Hiện tại
                   </p>
-                  <p className="truncate text-base font-bold tracking-tight text-spending tabular-nums">
+                  <p className="truncate text-lg font-bold tracking-tight text-spending tabular-nums">
                     {formatCurrency(account?.balance ?? 0)}
                   </p>
                 </div>
 
-                <div className="flex min-w-0 flex-col justify-center border-l bg-background px-4 py-2.5">
-                  <Field className="gap-1">
+                <div className="flex min-w-0 flex-col justify-center border-l bg-background px-4 py-2">
+                  <Field className="min-w-0 gap-1">
                     <FieldLabel
                       htmlFor="actual-balance"
                       className="text-sm font-semibold text-muted-foreground"
@@ -201,13 +201,13 @@ export function AdjustBalanceDrawer({
                         onChange={(event) =>
                           handleActualBalanceChange(event.target.value)
                         }
-                        className="px-0 text-base font-bold tabular-nums placeholder:font-semibold md:text-base"
+                        className="w-0 min-w-0 flex-1 px-0 text-lg font-bold tabular-nums placeholder:font-semibold md:text-lg"
                       />
                       <InputGroupAddon
                         align="inline-end"
                         className={cn("pr-0", !actualBalance && "invisible")}
                       >
-                        <InputGroupText className="text-base font-normal">
+                        <InputGroupText className="text-lg font-bold text-foreground">
                           ₫
                         </InputGroupText>
                       </InputGroupAddon>
@@ -233,12 +233,12 @@ export function AdjustBalanceDrawer({
                     className="size-5 shrink-0"
                     aria-hidden="true"
                   />
-                  <span className="truncate text-sm font-semibold">
+                  <span className="truncate text-base font-semibold">
                     {differenceLabel}
                   </span>
                 </div>
                 {difference !== null && difference !== 0 && (
-                  <span className="shrink-0 text-sm tabular-nums font-semibold">
+                  <span className="min-w-0 max-w-1/2 truncate text-right text-lg tabular-nums font-semibold">
                     {`${difference > 0 ? "+" : ""}${formatCurrency(difference)}`}
                   </span>
                 )}

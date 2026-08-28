@@ -87,7 +87,7 @@ export function AccountListItem({
         <div className="min-w-0 flex-1">
           <p
             className={cn(
-              "truncate text-sm font-medium",
+              "truncate text-base font-medium",
               isInactive && "text-muted-foreground"
             )}
           >
@@ -95,7 +95,7 @@ export function AccountListItem({
           </p>
           {isInactive && <span className="sr-only">Đã ngừng sử dụng</span>}
           {!isSavings && account.description && (
-            <p className="mt-0.5 truncate text-xs text-muted-foreground">
+            <p className="mt-0.5 truncate text-sm text-muted-foreground">
               {account.description}
             </p>
           )}
@@ -103,7 +103,7 @@ export function AccountListItem({
 
         <p
           className={cn(
-            "shrink-0 text-right text-sm font-semibold tabular-nums",
+            "shrink-0 text-right text-base font-semibold tabular-nums",
             isInactive && "text-muted-foreground"
           )}
         >
