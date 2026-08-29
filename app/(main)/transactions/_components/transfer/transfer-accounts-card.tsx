@@ -4,28 +4,18 @@ import {
   ArrowUpRightIcon,
 } from "lucide-react"
 
+import { AccountSelect } from "@/components/account-select"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
-
-import { transactionAccounts } from "../../_config/transaction-accounts"
+import type { Account } from "@/types/account"
 
 const accountRowClassName =
   "grid min-h-18 grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-center gap-3 px-4 py-3"
 
-const accountTriggerClassName =
-  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right"
-
 type TransferAccountRowProps = {
+  accounts: Account[]
   id: string
   label: string
   direction: "from" | "to"
@@ -35,6 +25,7 @@ type TransferAccountRowProps = {
 }
 
 function TransferAccountRow({
+  accounts,
   id,
   label,
   direction,
@@ -56,33 +47,21 @@ function TransferAccountRow({
         </span>
       </Label>
 
-      <Select
-        items={transactionAccounts}
+      <AccountSelect
+        id={id}
+        accounts={accounts}
         value={value}
         onValueChange={onValueChange}
-      >
-        <SelectTrigger id={id} className={accountTriggerClassName}>
-          <SelectValue placeholder="Chọn tài khoản" />
-        </SelectTrigger>
-        <SelectContent align="end" alignItemWithTrigger={false}>
-          <SelectGroup>
-            {transactionAccounts.map((account) => (
-              <SelectItem
-                key={account.value}
-                value={account.value}
-                disabled={account.value === disabledValue}
-              >
-                {account.label}
-              </SelectItem>
-            ))}
-          </SelectGroup>
-        </SelectContent>
-      </Select>
+        disabledAccountIds={disabledValue ? [disabledValue] : []}
+        variant="inline"
+        popoverAlign="end"
+      />
     </div>
   )
 }
 
 type TransferAccountsCardProps = {
+  accounts: Account[]
   fromAccount: string | null
   toAccount: string | null
   onFromAccountChange: (value: string | null) => void
@@ -90,6 +69,7 @@ type TransferAccountsCardProps = {
 }
 
 export function TransferAccountsCard({
+  accounts,
   fromAccount,
   toAccount,
   onFromAccountChange,
@@ -104,6 +84,7 @@ export function TransferAccountsCard({
     <Card className="gap-0 py-0">
       <CardContent className="px-0">
         <TransferAccountRow
+          accounts={accounts}
           id="transfer-from-account"
           label="Từ tài khoản"
           direction="from"
@@ -114,20 +95,23 @@ export function TransferAccountsCard({
 
         <div className="relative h-px">
           <Separator className="mr-4 ml-14 data-horizontal:w-auto" />
-          <Button
-            type="button"
-            variant="outline"
-            size="icon-sm"
-            aria-label="Đổi chiều chuyển khoản"
-            disabled={!fromAccount && !toAccount}
-            onClick={handleSwapAccounts}
-            className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2 rounded-full bg-card text-blue-600 shadow-sm hover:bg-blue-500/[0.07] hover:text-blue-600 dark:bg-card dark:text-blue-400 dark:hover:bg-blue-400/[0.07] dark:hover:text-blue-400"
-          >
-            <ArrowUpDownIcon className="size-4" aria-hidden="true" />
-          </Button>
+          <div className="absolute top-1/2 left-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+            <Button
+              type="button"
+              variant="outline"
+              size="icon-lg"
+              aria-label="Đổi chiều chuyển khoản"
+              disabled={!fromAccount && !toAccount}
+              onClick={handleSwapAccounts}
+              className="rounded-full bg-card text-blue-600 shadow-sm hover:bg-blue-500/[0.07] hover:text-blue-600 dark:bg-card dark:text-blue-400 dark:hover:bg-blue-400/[0.07] dark:hover:text-blue-400"
+            >
+              <ArrowUpDownIcon className="size-4" aria-hidden="true" />
+            </Button>
+          </div>
         </div>
 
         <TransferAccountRow
+          accounts={accounts}
           id="transfer-to-account"
           label="Đến tài khoản"
           direction="to"

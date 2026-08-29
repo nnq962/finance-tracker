@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from "react"
 
 import { InstitutionSelect } from "@/components/institution-select"
+import { AccountTypeIcon } from "@/components/account-type-icon"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -45,7 +46,7 @@ const groupedInputClassName =
   "h-auto min-w-0 rounded-none border-0 bg-transparent pr-px pl-0 text-right text-base shadow-none focus-visible:border-transparent focus-visible:ring-0 md:text-base"
 
 const groupedSelectTriggerClassName =
-  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right [&_svg]:hidden"
+  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right "
 
 const groupedSeparatorClassName =
   "mx-4 bg-border/70 data-horizontal:w-auto"
@@ -177,7 +178,11 @@ export function EditSpendingAccountDrawer({
                       id="spending-account-type"
                       className={groupedSelectTriggerClassName}
                     >
-                      <SelectValue />
+                      <AccountTypeIcon
+                        type={accountType}
+                        className="size-6"
+                      />
+                      <SelectValue className="min-w-0 flex-none" />
                     </SelectTrigger>
                     <SelectContent
                       align="end"
@@ -187,6 +192,7 @@ export function EditSpendingAccountDrawer({
                       <SelectGroup>
                         {accountTypes.map((item) => (
                           <SelectItem key={item.value} value={item.value}>
+                            <AccountTypeIcon type={item.value} />
                             {item.label}
                           </SelectItem>
                         ))}

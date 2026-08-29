@@ -5,6 +5,7 @@ import { useState, type SubmitEvent } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import type { Account } from "@/types/account"
 import type { ExpenseCategory } from "../_config/expense-categories"
 import type { IncomeCategory } from "../_config/income-categories"
 import type { LoanContact } from "../_config/loan-contacts"
@@ -25,7 +26,11 @@ function getCurrentTime() {
   ).padStart(2, "0")}`
 }
 
-export function TransactionEditor() {
+type TransactionEditorProps = {
+  accounts: Account[]
+}
+
+export function TransactionEditor({ accounts }: TransactionEditorProps) {
   const [transactionType, setTransactionType] =
     useState<TransactionType>("expense")
   const [amount, setAmount] = useState<number | null>(null)
@@ -45,7 +50,6 @@ export function TransactionEditor() {
   )
   const [transactionTime, setTransactionTime] = useState(getCurrentTime)
   const [note, setNote] = useState("")
-  const [attachments, setAttachments] = useState<File[]>([])
   const selectedType = getTransactionTypeOption(transactionType)
 
   const handleSubmit = (event: SubmitEvent<HTMLFormElement>) => {
@@ -130,6 +134,7 @@ export function TransactionEditor() {
       {transactionType === "transfer" ? (
         <div className="mx-auto w-full max-w-xl">
           <TransferAccountsCard
+            accounts={accounts}
             fromAccount={transferFromAccount}
             toAccount={transferToAccount}
             onFromAccountChange={setTransferFromAccount}
@@ -140,18 +145,17 @@ export function TransactionEditor() {
 
       <div className="mx-auto w-full max-w-xl">
         <TransactionDetailsCard
+          accounts={accounts}
           showAccount={transactionType !== "transfer"}
           accentIconClassName={selectedType.accentIconClassName}
           account={account}
           date={transactionDate}
           time={transactionTime}
           note={note}
-          attachments={attachments}
           onAccountChange={setAccount}
           onDateChange={setTransactionDate}
           onTimeChange={setTransactionTime}
           onNoteChange={setNote}
-          onAttachmentsChange={setAttachments}
         />
       </div>
 

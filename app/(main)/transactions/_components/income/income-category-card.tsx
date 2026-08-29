@@ -29,7 +29,7 @@ export function IncomeCategoryCard({
             }
           }}
           aria-label="Chọn hạng mục thu tiền"
-          className="grid w-full grid-cols-4 gap-2 sm:gap-3"
+          className="grid w-full grid-cols-4 gap-4"
         >
           {incomeCategories.map((category) => {
             const Icon = category.icon

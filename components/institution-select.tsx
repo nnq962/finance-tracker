@@ -11,6 +11,8 @@ import {
   ComboboxInput,
   ComboboxItem,
   ComboboxList,
+  ComboboxTrigger,
+  ComboboxValue,
 } from "@/components/ui/combobox"
 import {
   getInstitutionsByType,
@@ -134,6 +136,9 @@ export function InstitutionSelect({
   const [search, setSearch] = useState("")
   const generatedId = useId()
   const typeLabel = type === "bank" ? "ngân hàng" : "ví điện tử"
+  const resolvedPlaceholder = placeholder ?? `Chọn ${typeLabel}`
+  const resolvedSearchPlaceholder =
+    searchPlaceholder ?? `Tìm ${typeLabel}`
   const institutions = useMemo(() => {
     const sortedInstitutions = [...getInstitutionsByType(type)].sort(
       (first, second) =>
@@ -197,20 +202,43 @@ export function InstitutionSelect({
       required={required}
       disabled={disabled}
     >
-      <ComboboxInput
+      <ComboboxTrigger
         id={id ?? generatedId}
-        placeholder={
-          searchPlaceholder ?? placeholder ?? `Tìm và chọn ${typeLabel}`
-        }
-        aria-label={id ? undefined : placeholder ?? `Chọn ${typeLabel}`}
-        showTrigger={variant !== "inline"}
+        aria-label={id ? undefined : resolvedPlaceholder}
         className={cn(
-          "w-full",
-          variant === "inline" &&
-            "h-auto min-w-0 border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0 [&_[data-slot=input-group-control]]:pr-px [&_[data-slot=input-group-control]]:pl-0 [&_[data-slot=input-group-control]]:text-right [&_[data-slot=input-group-control]]:text-base md:[&_[data-slot=input-group-control]]:text-base",
+          "flex w-full min-w-0 items-center gap-1.5 text-base font-normal outline-none disabled:pointer-events-none disabled:opacity-50",
+          variant === "inline"
+            ? "h-auto justify-end rounded-none border-0 bg-transparent p-0 text-right shadow-none focus-visible:ring-0"
+            : "h-9 justify-between rounded-3xl border border-transparent bg-input/50 px-3 py-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/30",
           className
         )}
-      />
+      >
+        <ComboboxValue>
+          {(institution: FinancialInstitution | null) =>
+            institution ? (
+              <span className="flex min-w-0 items-center gap-1.5">
+                {institution.id === CUSTOM_INSTITUTION_VALUE ? (
+                  <span className="flex size-6 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-muted">
+                    <Plus className="size-3.5" aria-hidden="true" />
+                  </span>
+                ) : (
+                  <InstitutionLogo
+                    institution={institution}
+                    className="size-6 rounded-lg border border-border/70 bg-white/60 p-1 dark:bg-white/90"
+                  />
+                )}
+                <span className="truncate">
+                  {institution.shortName ?? institution.name}
+                </span>
+              </span>
+            ) : (
+              <span className="truncate text-muted-foreground">
+                {resolvedPlaceholder}
+              </span>
+            )
+          }
+        </ComboboxValue>
+      </ComboboxTrigger>
       <ComboboxContent
         align={popoverAlign ?? (variant === "inline" ? "end" : "start")}
         className={cn(
@@ -218,16 +246,25 @@ export function InstitutionSelect({
           popoverClassName
         )}
       >
+        <ComboboxInput
+          placeholder={resolvedSearchPlaceholder}
+          aria-label={resolvedSearchPlaceholder}
+          showTrigger={false}
+          className="w-auto"
+        />
         <ComboboxEmpty>Không tìm thấy {typeLabel}.</ComboboxEmpty>
         <ComboboxList>
           {(institution: FinancialInstitution) => (
             <ComboboxItem key={institution.id} value={institution}>
               {institution.id === CUSTOM_INSTITUTION_VALUE ? (
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-lg border border-border/70 bg-muted">
                   <Plus className="size-4" aria-hidden="true" />
                 </span>
               ) : (
-                <InstitutionLogo institution={institution} />
+                <InstitutionLogo
+                  institution={institution}
+                  className="rounded-lg border border-border/70 bg-white/60 p-1 dark:bg-white/90"
+                />
               )}
               <span className="min-w-0 flex-1">
                 <span className="block truncate">

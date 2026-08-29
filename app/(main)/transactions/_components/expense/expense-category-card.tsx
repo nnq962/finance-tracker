@@ -29,7 +29,7 @@ export function ExpenseCategoryCard({
             }
           }}
           aria-label="Chọn hạng mục chi tiêu"
-          className="grid w-full grid-cols-4 gap-2 sm:gap-3"
+          className="grid w-full grid-cols-4 gap-4"
         >
           {expenseCategories.map((category) => {
             const Icon = category.icon

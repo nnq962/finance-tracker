@@ -3,6 +3,7 @@
 import { useState, type SubmitEvent } from "react"
 
 import { InstitutionSelect } from "@/components/institution-select"
+import { AccountTypeIcon } from "@/components/account-type-icon"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -54,7 +55,7 @@ const groupedInputGroupClassName =
   "h-auto min-w-0 rounded-none border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0"
 
 const groupedSelectTriggerClassName =
-  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right [&_svg]:hidden"
+  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right "
 
 const groupedSeparatorClassName =
   "mx-4 bg-border/70 data-horizontal:w-auto"
@@ -184,7 +185,18 @@ export function AddSpendingAccountDrawer({
                       id="new-spending-account-type"
                       className={groupedSelectTriggerClassName}
                     >
-                      <SelectValue placeholder="Chọn loại" />
+                      {accountType ? (
+                        <AccountTypeIcon
+                          type={accountType}
+                          className="size-6"
+                        />
+                      ) : null}
+                      <SelectValue
+                        placeholder="Chọn loại"
+                        className={
+                          accountType ? "min-w-0 flex-none" : undefined
+                        }
+                      />
                     </SelectTrigger>
                     <SelectContent
                       align="end"
@@ -194,6 +206,7 @@ export function AddSpendingAccountDrawer({
                       <SelectGroup>
                         {accountTypes.map((item) => (
                           <SelectItem key={item.value} value={item.value}>
+                            <AccountTypeIcon type={item.value} />
                             {item.label}
                           </SelectItem>
                         ))}

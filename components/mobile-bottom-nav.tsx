@@ -101,7 +101,7 @@ export function MobileBottomNav() {
     >
       <div
         ref={navRef}
-        className="pointer-events-auto relative mx-auto grid w-full max-w-md grid-cols-5 gap-1 rounded-[1.75rem] border border-border/70 bg-background/90 p-1.5 shadow-[0_-4px_30px_rgba(0,0,0,0.10)] backdrop-blur-xl supports-[backdrop-filter]:bg-background/75 dark:shadow-[0_-4px_30px_rgba(0,0,0,0.35)]"
+        className="pointer-events-auto relative mx-auto grid w-full max-w-md grid-cols-5 gap-1 rounded-[1.75rem] border border-white/45 bg-background/65 p-1.5 shadow-[0_-4px_30px_rgba(0,0,0,0.10)] backdrop-blur-2xl backdrop-saturate-150 supports-[backdrop-filter]:bg-background/50 dark:border-white/10 dark:shadow-[0_-4px_30px_rgba(0,0,0,0.35)]"
       >
         {activePill && (
           <motion.span
@@ -127,7 +127,7 @@ export function MobileBottomNav() {
               aria-current={isActive ? "page" : undefined}
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
-                "relative z-10 h-14 min-w-0 flex-col gap-0.5 overflow-hidden rounded-[1.25rem] px-1 text-center text-[10px] leading-none font-medium hover:bg-muted/70 focus-visible:ring-2 focus-visible:ring-ring/50",
+                "relative z-10 h-14 min-w-0 flex-col gap-0.5 overflow-hidden rounded-[1.25rem] px-1 text-center text-xs leading-4 font-medium hover:bg-muted/70 focus-visible:ring-2 focus-visible:ring-ring/50",
                 isActive
                   ? "text-primary hover:bg-transparent hover:text-primary"
                   : "text-muted-foreground hover:text-foreground"

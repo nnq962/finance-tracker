@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type SubmitEvent } from "react"
 
+import { AccountSelect } from "@/components/account-select"
 import { DatePicker } from "@/components/date-picker"
 import { InstitutionSelect } from "@/components/institution-select"
 import { ResponsiveDrawer } from "@/components/responsive-drawer"
@@ -107,7 +108,7 @@ const groupedInputGroupClassName =
   "h-auto min-w-0 rounded-none border-0 bg-transparent shadow-none has-[[data-slot=input-group-control]:focus-visible]:border-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0"
 
 const groupedSelectTriggerClassName =
-  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right [&_svg]:hidden"
+  "h-auto w-full min-w-0 justify-end rounded-none border-0 bg-transparent px-0 text-base shadow-none hover:bg-transparent focus-visible:border-transparent focus-visible:ring-0 data-[size=default]:h-auto [&_[data-slot=select-value]]:justify-end [&_[data-slot=select-value]]:text-right "
 
 const groupedSeparatorClassName =
   "mx-4 bg-border/70 data-horizontal:w-auto"
@@ -145,14 +146,12 @@ export function AddSavingsAccountDrawer({
   const [note, setNote] = useState("")
   const [excludeFromReports, setExcludeFromReports] = useState(false)
 
-  const sourceAccountOptions = useMemo(
+  const sourceAccounts = useMemo(
     () =>
-      accounts
-        .filter(
-          (account) =>
-            account.purpose === "spending" && account.status !== "inactive"
-        )
-        .map((account) => ({ label: account.name, value: account.id })),
+      accounts.filter(
+        (account) =>
+          account.purpose === "spending" && account.status !== "inactive"
+      ),
     [accounts]
   )
 
@@ -208,7 +207,6 @@ export function AddSavingsAccountDrawer({
       nonTermInterestRate &&
       sourceAccountId
   )
-
   return (
     <ResponsiveDrawer
       open={open}
@@ -335,38 +333,20 @@ export function AddSavingsAccountDrawer({
                   >
                     Tài khoản nguồn
                   </FieldLabel>
-                  <Select
-                    items={sourceAccountOptions}
+                  <AccountSelect
+                    id="new-savings-source-account"
+                    accounts={sourceAccounts}
                     value={sourceAccountId}
                     onValueChange={setSourceAccountId}
-                  >
-                    <SelectTrigger
-                      id="new-savings-source-account"
-                      className={groupedSelectTriggerClassName}
-                      disabled={sourceAccountOptions.length === 0}
-                    >
-                      <SelectValue
-                        placeholder={
-                          sourceAccountOptions.length > 0
-                            ? "Chọn tài khoản"
-                            : "Không có tài khoản"
-                        }
-                      />
-                    </SelectTrigger>
-                    <SelectContent
-                      align="end"
-                      alignItemWithTrigger={false}
-                      className="min-w-64"
-                    >
-                      <SelectGroup>
-                        {sourceAccountOptions.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
-                            {option.label}
-                          </SelectItem>
-                        ))}
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
+                    placeholder={
+                      sourceAccounts.length > 0
+                        ? "Chọn tài khoản"
+                        : "Không có tài khoản"
+                    }
+                    disabled={sourceAccounts.length === 0}
+                    variant="inline"
+                    popoverAlign="end"
+                  />
                 </Field>
               </FieldGroup>
             </CardContent>
