@@ -18,6 +18,7 @@ import {
   LayoutDashboardIcon,
   SettingsIcon,
   WalletCardsIcon,
+  PackageIcon,
 } from "lucide-react"
 
 const data = {
@@ -57,7 +58,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link href="/overview" />}>
               <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <WalletCardsIcon className="size-4" />
+                <PackageIcon className="size-4" />
               </div>
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">Finance Tracker</span>

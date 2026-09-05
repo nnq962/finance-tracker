@@ -1,4 +1,5 @@
 import { AppSidebar } from "@/components/app-sidebar"
+import { ModeToggle } from "@/components/mode-toggle"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -18,6 +19,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
               orientation="vertical"
               className="mr-2 data-vertical:h-4 data-vertical:self-auto"
             />
+          </div>
+          <div className="ml-auto px-4">
+            <ModeToggle />
           </div>
         </header>
         <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
