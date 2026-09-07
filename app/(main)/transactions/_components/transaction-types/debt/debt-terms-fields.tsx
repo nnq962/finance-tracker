@@ -1,22 +1,27 @@
 "use client"
 
 import { useState } from "react"
+import { addDays, addMonths, format, parseISO } from "date-fns"
+import { vi } from "date-fns/locale"
+import type { DateRange } from "react-day-picker"
+import { CalendarIcon } from "lucide-react"
+
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 import {
   Field,
   FieldGroup,
   FieldLabel,
-  FieldLegend,
-  FieldSet,
 } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
   InputGroupText,
 } from "@/components/ui/input-group"
-import { Item, ItemGroup, ItemHeader, ItemTitle } from "@/components/ui/item"
 import {
   Select,
   SelectContent,
@@ -25,7 +30,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { formatCurrencyInput } from "@/lib/currency"
 
 import type { DebtType } from "./debt-type-options"
@@ -96,162 +100,137 @@ export function DebtTermsFields({ debtType }: DebtTermsFieldsProps) {
     onStartDateChange: setStartDate,
   }
 
-  return (
-    <Tabs defaultValue="grouped">
-      <TabsList className="grid w-full grid-cols-3">
-        <TabsTrigger value="grouped">Mẫu 1</TabsTrigger>
-        <TabsTrigger value="rows">Mẫu 2</TabsTrigger>
-        <TabsTrigger value="cards">Mẫu 3</TabsTrigger>
-      </TabsList>
-
-      <TabsContent value="grouped">
-        <GroupedLayout {...layoutProps} />
-      </TabsContent>
-      <TabsContent value="rows">
-        <RowsLayout {...layoutProps} />
-      </TabsContent>
-      <TabsContent value="cards">
-        <CardsLayout {...layoutProps} />
-      </TabsContent>
-    </Tabs>
-  )
+  return <DebtTermsLayout {...layoutProps} />
 }
 
-function GroupedLayout(props: LayoutProps) {
+function DebtTermsLayout(props: LayoutProps) {
   return (
-    <FieldGroup>
-      <FieldSet>
-        <FieldLegend variant="label">Lịch trình</FieldLegend>
-        <div className="grid grid-cols-2 gap-3">
-          <StartDateField {...props} idSuffix="grouped" />
-          <DueDateField {...props} idSuffix="grouped" />
+    <div className="min-w-0 space-y-4">
+      <DebtDateRangeField {...props} />
+      <QuickDueDates {...props} />
+      <FieldGroup>
+        <div className="grid min-w-0 grid-cols-2 gap-3">
+          <ReminderField {...props} idSuffix="rows" />
+          <InterestTypeField {...props} idSuffix="rows" />
         </div>
-      </FieldSet>
-
-      <FieldSet>
-        <FieldLegend variant="label">Điều khoản</FieldLegend>
-        <FieldGroup>
-          <ReminderField {...props} idSuffix="grouped" />
-          <InterestTypeField {...props} idSuffix="grouped" />
-          <InterestValueField {...props} idSuffix="grouped" />
-        </FieldGroup>
-      </FieldSet>
-    </FieldGroup>
+        <InterestValueField {...props} idSuffix="rows" />
+      </FieldGroup>
+    </div>
   )
 }
 
-function RowsLayout(props: LayoutProps) {
-  return (
-    <FieldGroup>
-      <StartDateField {...props} idSuffix="rows" orientation="horizontal" />
-      <DueDateField {...props} idSuffix="rows" orientation="horizontal" />
-      <ReminderField {...props} idSuffix="rows" orientation="horizontal" />
-      <InterestTypeField
-        {...props}
-        idSuffix="rows"
-        orientation="horizontal"
-      />
-      <InterestValueField
-        {...props}
-        idSuffix="rows"
-        orientation="horizontal"
-      />
-    </FieldGroup>
-  )
-}
-
-function CardsLayout(props: LayoutProps) {
-  return (
-    <ItemGroup>
-      <Item variant="muted">
-        <ItemHeader>
-          <ItemTitle>Lịch trình</ItemTitle>
-        </ItemHeader>
-        <div className="grid w-full gap-3 sm:grid-cols-2">
-          <StartDateField {...props} idSuffix="cards" />
-          <DueDateField {...props} idSuffix="cards" />
-        </div>
-      </Item>
-
-      <Item variant="muted">
-        <ReminderField {...props} idSuffix="cards" />
-      </Item>
-
-      <Item variant="muted">
-        <FieldGroup>
-          <InterestTypeField {...props} idSuffix="cards" />
-          <InterestValueField {...props} idSuffix="cards" />
-        </FieldGroup>
-      </Item>
-    </ItemGroup>
-  )
-}
-
-function StartDateField({
+function DebtDateRangeField({
   debtType,
-  idSuffix,
-  orientation,
   startDate,
+  dueDate,
   onStartDateChange,
-}: LayoutProps & {
-  idSuffix: string
-  orientation?: "horizontal"
-}) {
-  const input = (
-    <Input
-      id={`debt-start-date-${idSuffix}`}
-      name="debt-start-date"
-      type="date"
-      value={startDate}
-      onChange={(event) => onStartDateChange(event.target.value)}
-    />
-  )
+  onDueDateChange,
+}: LayoutProps) {
+  const isMobile = useIsMobile()
+  const range: DateRange = {
+    from: startDate ? parseISO(startDate) : undefined,
+    to: dueDate ? parseISO(dueDate) : undefined,
+  }
+
+  function selectRange(nextRange: DateRange | undefined) {
+    onStartDateChange(nextRange?.from ? format(nextRange.from, "yyyy-MM-dd") : "")
+    onDueDateChange(nextRange?.to ? format(nextRange.to, "yyyy-MM-dd") : "")
+  }
 
   return (
-    <Field orientation={orientation}>
-      <FieldLabel htmlFor={`debt-start-date-${idSuffix}`}>
-        {debtType === "lend" ? "Ngày cho vay" : "Ngày đi vay"}
+    <Field className="w-full min-w-0">
+      <FieldLabel htmlFor="debt-date-range">
+        {debtType === "lend" ? "Ngày cho vay" : "Ngày đi vay"} – Hạn trả
       </FieldLabel>
-      {orientation ? <div className="w-1/2 shrink-0">{input}</div> : input}
+      <Popover>
+        <PopoverTrigger
+          render={
+            <Button
+              id="debt-date-range"
+              type="button"
+              variant="outline"
+              className="w-full min-w-0 justify-start px-2.5 font-normal"
+            >
+              <CalendarIcon data-icon="inline-start" aria-hidden="true" />
+              {range.from ? (
+                range.to ? (
+                  <>
+                    {format(range.from, "dd/MM/yyyy")} -{" "}
+                    {format(range.to, "dd/MM/yyyy")}
+                  </>
+                ) : (
+                  format(range.from, "dd/MM/yyyy")
+                )
+              ) : (
+                <span>Chọn khoảng ngày</span>
+              )}
+            </Button>
+          }
+        />
+        <PopoverContent align="start" className="w-auto p-0" aria-label="Chọn ngày bắt đầu và hạn trả">
+          <Calendar
+            autoFocus
+            mode="range"
+            defaultMonth={range.from}
+            selected={range}
+            onSelect={selectRange}
+            numberOfMonths={isMobile ? 1 : 2}
+            locale={vi}
+          />
+        </PopoverContent>
+      </Popover>
     </Field>
   )
 }
 
-function DueDateField({
-  dueDate,
-  idSuffix,
-  orientation,
-  onDueDateChange,
-}: LayoutProps & {
-  idSuffix: string
-  orientation?: "horizontal"
-}) {
-  const input = (
-    <Input
-      id={`debt-due-date-${idSuffix}`}
-      name="debt-due-date"
-      type="date"
-      value={dueDate}
-      onChange={(event) => onDueDateChange(event.target.value)}
-    />
-  )
+function QuickDueDates({ startDate, dueDate, onDueDateChange }: LayoutProps) {
+  const presets = [
+    { label: "7 ngày", days: 7 },
+    { label: "14 ngày", days: 14 },
+    { label: "30 ngày", days: 30 },
+    { label: "2 tháng", months: 2 },
+    { label: "3 tháng", months: 3 },
+    { label: "6 tháng", months: 6 },
+  ]
+
+  function dateAfter(preset: (typeof presets)[number]) {
+    if (!startDate) return ""
+    const date = parseISO(startDate)
+    if (Number.isNaN(date.getTime())) return ""
+    const due = preset.months
+      ? addMonths(date, preset.months)
+      : addDays(date, preset.days ?? 0)
+    return format(due, "yyyy-MM-dd")
+  }
 
   return (
-    <Field orientation={orientation}>
-      <FieldLabel htmlFor={`debt-due-date-${idSuffix}`}>Hạn trả</FieldLabel>
-      {orientation ? <div className="w-1/2 shrink-0">{input}</div> : input}
-    </Field>
+    <div className="space-y-2">
+      <div className="flex flex-wrap gap-2" role="group" aria-label="Chọn nhanh hạn trả">
+        {presets.map((preset) => {
+          const date = dateAfter(preset)
+          const selected = Boolean(date) && dueDate === date
+          return (
+            <Button key={preset.label} type="button" variant={selected ? "secondary" : "outline"}
+              disabled={!date} aria-pressed={selected} onClick={() => onDueDateChange(date)}>
+              {preset.label}
+            </Button>
+          )
+        })}
+        <Button type="button" variant={!dueDate ? "secondary" : "outline"}
+          aria-pressed={!dueDate} onClick={() => onDueDateChange("")}>
+          Chưa hẹn
+        </Button>
+      </div>
+    </div>
   )
 }
 
 function ReminderField({
   idSuffix,
-  orientation,
   reminder,
   onReminderChange,
 }: LayoutProps & {
   idSuffix: string
-  orientation?: "horizontal"
 }) {
   const select = (
     <Select
@@ -278,11 +257,11 @@ function ReminderField({
   )
 
   return (
-    <Field orientation={orientation}>
+    <Field className="min-w-0">
       <FieldLabel htmlFor={`debt-reminder-${idSuffix}`}>
         Nhắc trước
       </FieldLabel>
-      {orientation ? <div className="w-1/2 shrink-0">{select}</div> : select}
+      {select}
     </Field>
   )
 }
@@ -290,11 +269,9 @@ function ReminderField({
 function InterestTypeField({
   idSuffix,
   interestType,
-  orientation,
   onInterestTypeChange,
 }: LayoutProps & {
   idSuffix: string
-  orientation?: "horizontal"
 }) {
   const select = (
     <Select
@@ -323,11 +300,11 @@ function InterestTypeField({
   )
 
   return (
-    <Field orientation={orientation}>
+    <Field className="min-w-0">
       <FieldLabel htmlFor={`debt-interest-type-${idSuffix}`}>
         Lãi suất
       </FieldLabel>
-      {orientation ? <div className="w-1/2 shrink-0">{select}</div> : select}
+      {select}
     </Field>
   )
 }
@@ -336,11 +313,9 @@ function InterestValueField({
   idSuffix,
   interestType,
   interestValue,
-  orientation,
   onInterestValueChange,
 }: LayoutProps & {
   idSuffix: string
-  orientation?: "horizontal"
 }) {
   if (interestType === "none") return null
 
@@ -368,11 +343,11 @@ function InterestValueField({
   )
 
   return (
-    <Field orientation={orientation}>
+    <Field className="min-w-0">
       <FieldLabel htmlFor={`debt-interest-value-${idSuffix}`}>
         {isPercentage ? "Lãi suất theo năm" : "Tiền lãi cố định"}
       </FieldLabel>
-      {orientation ? <div className="w-1/2 shrink-0">{input}</div> : input}
+      {input}
     </Field>
   )
 }

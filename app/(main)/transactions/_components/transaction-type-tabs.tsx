@@ -1,15 +1,15 @@
 import {
+  ArrowDownLeftIcon,
   ArrowLeftRightIcon,
-  CircleDollarSignIcon,
+  ArrowUpRightIcon,
   HandshakeIcon,
-  ShoppingBasketIcon,
 } from "lucide-react"
 
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 const transactionTypes = [
-  { value: "expense", label: "Chi tiêu", icon: ShoppingBasketIcon },
-  { value: "income", label: "Thu tiền", icon: CircleDollarSignIcon },
+  { value: "expense", label: "Chi tiền", icon: ArrowUpRightIcon },
+  { value: "income", label: "Thu tiền", icon: ArrowDownLeftIcon },
   { value: "transfer", label: "Chuyển", icon: ArrowLeftRightIcon },
   { value: "debt", label: "Vay nợ", icon: HandshakeIcon },
 ] as const

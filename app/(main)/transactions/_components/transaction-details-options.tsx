@@ -28,6 +28,9 @@ type SelectedImage = {
   state: "uploading" | "done"
 }
 
+const dateTimeInputClassName =
+  "block box-border h-8 min-h-8 max-h-8 w-full min-w-0 max-w-full appearance-none [&::-webkit-date-and-time-value]:min-w-0 [&::-webkit-datetime-edit]:p-0"
+
 function formatFileSize(size: number) {
   if (size < 1024 * 1024) {
     return `${Math.ceil(size / 1024)} KB`
@@ -145,24 +148,25 @@ export function TransactionDetailsOptions({
             {children}
 
             {!hideDateTime && (
-              <div className="grid grid-cols-2 gap-3">
-                <Field>
+              <div className="grid min-w-0 grid-cols-2 gap-3">
+                <Field className="min-w-0">
                   <FieldLabel htmlFor="transaction-date">Ngày</FieldLabel>
                   <Input
                     ref={dateInputRef}
                     id="transaction-date"
                     name="transaction-date"
                     type="date"
-                    className="block h-8 w-full appearance-none"
+                    className={dateTimeInputClassName}
                   />
                 </Field>
-                <Field>
+                <Field className="min-w-0">
                   <FieldLabel htmlFor="transaction-time">Giờ</FieldLabel>
                   <Input
                     ref={timeInputRef}
                     id="transaction-time"
                     name="transaction-time"
                     type="time"
+                    className={dateTimeInputClassName}
                   />
                 </Field>
               </div>
