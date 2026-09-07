@@ -1,6 +1,7 @@
 "use client"
 
-import { Pie, PieChart } from "recharts"
+import { useState } from "react"
+import { Label, Pie, PieChart } from "recharts"
 
 import { Badge } from "@/components/ui/badge"
 import {
@@ -10,27 +11,56 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { ChartContainer, type ChartConfig } from "@/components/ui/chart"
-import { Separator } from "@/components/ui/separator"
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart"
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemGroup,
+  ItemTitle,
+} from "@/components/ui/item"
 import { formatCurrency } from "@/lib/currency"
 
 import { getAccountGroupBalance, type AccountGroup } from "./mock-accounts"
 
 const chartConfig = {
-  spending: {
-    label: "Chi tiêu",
-    color: "var(--chart-1)",
-  },
-  savings: {
-    label: "Tiết kiệm",
-    color: "var(--chart-2)",
-  },
+  spending: { label: "Chi tiêu", color: "var(--chart-1)" },
+  savings: { label: "Tiết kiệm", color: "var(--chart-2)" },
 } satisfies ChartConfig
 
+const compactNumberFormatter = new Intl.NumberFormat("vi-VN", {
+  maximumFractionDigits: 1,
+})
+
+function formatCompactCurrency(value: number) {
+  const absoluteValue = Math.abs(value)
+
+  if (absoluteValue >= 1_000_000_000) {
+    return `${compactNumberFormatter.format(value / 1_000_000_000)}tỷ`
+  }
+
+  if (absoluteValue >= 1_000_000) {
+    return `${compactNumberFormatter.format(value / 1_000_000)}tr`
+  }
+
+  if (absoluteValue >= 1_000) {
+    return `${compactNumberFormatter.format(value / 1_000)}k`
+  }
+
+  return formatCurrency(value)
+}
+
 export function AccountSummaryCard({ groups }: { groups: AccountGroup[] }) {
-  const groupBalances = groups.map((group) => ({
+  const [selectedSlice, setSelectedSlice] = useState<number | null>(null)
+  const groupBalances = groups.map((group, index) => ({
     ...group,
     balance: getAccountGroupBalance(group),
+    fill: `var(--chart-${index + 1})`,
   }))
   const totalBalance = groupBalances.reduce(
     (total, group) => total + group.balance,
@@ -40,73 +70,111 @@ export function AccountSummaryCard({ groups }: { groups: AccountGroup[] }) {
     (total, group) => total + group.accounts.length,
     0
   )
-  const chartData = groupBalances.map((group) => ({
-    accountType: group.id,
-    balance: group.balance,
-    fill: `var(--color-${group.id})`,
-  }))
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Tổng số dư</CardTitle>
+        <CardTitle>Tổng tài sản</CardTitle>
         <CardAction>
           <Badge variant="secondary">{accountCount} tài khoản</Badge>
         </CardAction>
       </CardHeader>
-      <CardContent className="space-y-5">
-        <div className="grid grid-cols-[1fr_auto] items-center gap-4">
-          <p className="font-heading text-2xl font-semibold tracking-tight tabular-nums sm:text-4xl">
-            {formatCurrency(totalBalance)}
-          </p>
+      <CardContent>
+        <div className="grid grid-cols-[auto_1fr] items-center gap-5">
           <ChartContainer
             config={chartConfig}
-            className="aspect-square size-28"
-            initialDimension={{ width: 112, height: 112 }}
+            className="aspect-square size-32 shrink-0 cursor-pointer"
+            initialDimension={{ width: 128, height: 128 }}
           >
             <PieChart accessibilityLayer>
-              <Pie
-                data={chartData}
-                dataKey="balance"
-                nameKey="accountType"
-                innerRadius={32}
-                outerRadius={50}
-                strokeWidth={4}
+              <ChartTooltip
+                key={selectedSlice ?? "hover"}
+                active={selectedSlice === null ? undefined : true}
+                defaultIndex={selectedSlice ?? undefined}
+                content={
+                  <ChartTooltipContent
+                    hideLabel
+                    formatter={(value, _name, item) => (
+                      <div className="flex min-w-36 items-center gap-2">
+                        <span
+                          aria-hidden="true"
+                          className="size-2.5 shrink-0 rounded-sm"
+                          style={{ backgroundColor: item.payload.fill }}
+                        />
+                        <span className="whitespace-nowrap text-muted-foreground">
+                          {item.payload.name}
+                        </span>
+                        <span className="ml-auto whitespace-nowrap font-mono font-medium tabular-nums">
+                          {formatCurrency(Number(value))}
+                        </span>
+                      </div>
+                    )}
+                  />
+                }
               />
+              <Pie
+                data={groupBalances}
+                dataKey="balance"
+                nameKey="id"
+                innerRadius={40}
+                outerRadius={58}
+                strokeWidth={4}
+                onClick={(_data, index) => {
+                  setSelectedSlice((current) => current === index ? null : index)
+                }}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (!viewBox || !("cx" in viewBox) || !("cy" in viewBox)) {
+                      return null
+                    }
+
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        className="fill-foreground"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          dy="0.35em"
+                          className="text-lg font-semibold tabular-nums"
+                        >
+                          {formatCompactCurrency(totalBalance)}
+                        </tspan>
+                      </text>
+                    )
+                  }}
+                />
+              </Pie>
             </PieChart>
           </ChartContainer>
-        </div>
 
-        <Separator />
-
-        <div className="grid grid-cols-2 gap-4">
-          {groupBalances.map((group) => {
-            const percentage = totalBalance
-              ? Math.round((group.balance / totalBalance) * 100)
-              : 0
-            const color =
-              group.id === "spending" ? "var(--chart-1)" : "var(--chart-2)"
-
-            return (
-              <div key={group.id} className="space-y-2">
-                <div className="flex items-center gap-2">
-                  <span
-                    className="size-2 rounded-full"
-                    style={{ backgroundColor: color }}
-                  />
-                  <span className="text-sm text-muted-foreground">
-                    {group.name}
-                  </span>
-                  <div className="ml-auto">
-                    <Badge variant="outline">{percentage}%</Badge>
-                  </div>
-                </div>
-                <p className="font-medium tabular-nums">
-                  {formatCurrency(group.balance)}
-                </p>
-              </div>
-            )
-          })}
+          <div className="min-w-0">
+            <ItemGroup>
+              {groupBalances.map((group) => {
+                return (
+                  <Item key={group.id} variant="muted" size="xs">
+                    <span
+                      aria-hidden="true"
+                      className="size-2 shrink-0 rounded-full"
+                      style={{ backgroundColor: group.fill }}
+                    />
+                    <ItemContent className="min-w-0">
+                      <ItemTitle>{group.name}</ItemTitle>
+                    </ItemContent>
+                    <ItemActions>
+                      <span className="whitespace-nowrap text-sm font-medium tabular-nums">
+                        {formatCompactCurrency(group.balance)}
+                      </span>
+                    </ItemActions>
+                  </Item>
+                )
+              })}
+            </ItemGroup>
+          </div>
         </div>
       </CardContent>
     </Card>

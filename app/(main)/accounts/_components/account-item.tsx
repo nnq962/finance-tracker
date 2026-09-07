@@ -1,14 +1,26 @@
+"use client";
+
+import type { ReactNode } from "react";
 import {
+  BanIcon,
   BadgePercentIcon,
   CalendarClockIcon,
   ChevronRightIcon,
+  CircleDollarSignIcon,
   CreditCardIcon,
   LandmarkIcon,
+  MinusIcon,
+  PencilIcon,
+  PlusIcon,
+  SlidersHorizontalIcon,
+  Trash2Icon,
   VaultIcon,
   WalletIcon,
   type LucideIcon,
-} from "lucide-react"
+} from "lucide-react";
 
+import { AppDrawer } from "@/components/app-drawer";
+import { Button } from "@/components/ui/button";
 import {
   Item,
   ItemActions,
@@ -16,14 +28,10 @@ import {
   ItemFooter,
   ItemMedia,
   ItemTitle,
-} from "@/components/ui/item"
-import { formatCurrency } from "@/lib/currency"
+} from "@/components/ui/item";
+import { formatCurrency } from "@/lib/currency";
 
-import type {
-  Account,
-  SavingsAccount,
-  SpendingAccount,
-} from "./mock-accounts"
+import type { Account, SavingsAccount, SpendingAccount } from "./mock-accounts";
 
 const accountIcons = {
   wallet: WalletIcon,
@@ -32,10 +40,25 @@ const accountIcons = {
   vault: VaultIcon,
   "calendar-clock": CalendarClockIcon,
   "badge-percent": BadgePercentIcon,
-} satisfies Record<Account["icon"], LucideIcon>
+} satisfies Record<Account["icon"], LucideIcon>;
+
+const spendingAccountActions = [
+  { label: "Điều chỉnh số dư", icon: SlidersHorizontalIcon },
+  { label: "Chỉnh sửa", icon: PencilIcon },
+  { label: "Ngừng sử dụng", icon: BanIcon },
+  { label: "Xóa", icon: Trash2Icon, destructive: true },
+];
+
+const savingsAccountActions = [
+  { label: "Gửi thêm", icon: PlusIcon },
+  { label: "Rút một phần", icon: MinusIcon },
+  { label: "Tất toán", icon: CircleDollarSignIcon },
+  { label: "Chỉnh sửa", icon: PencilIcon },
+  { label: "Xóa", icon: Trash2Icon, destructive: true },
+];
 
 function AccountLeading({ account }: { account: Account }) {
-  const AccountIcon = accountIcons[account.icon]
+  const AccountIcon = accountIcons[account.icon];
 
   return (
     <>
@@ -43,16 +66,58 @@ function AccountLeading({ account }: { account: Account }) {
         <AccountIcon />
       </ItemMedia>
     </>
-  )
+  );
 }
 
-export function SpendingAccountItem({
+function AccountDetailsDrawer({
   account,
+  children,
 }: {
-  account: SpendingAccount
+  account: Account;
+  children: ReactNode;
 }) {
+  const isSavings = account.type === "savings";
+  const actions = isSavings ? savingsAccountActions : spendingAccountActions;
+
   return (
-    <Item variant="muted">
+    <AppDrawer
+      trigger={
+        <Item
+          render={<button type="button" />}
+          variant="muted"
+          className="text-left"
+        >
+          {children}
+        </Item>
+      }
+      title={account.name}
+      description="Chọn thao tác bạn muốn thực hiện"
+    >
+      <div className="flex flex-col gap-2">
+        {actions.map(({ label, icon: ActionIcon, destructive }) => (
+          <Button
+            key={label}
+            type="button"
+            variant="ghost"
+            size="lg"
+            className={
+              destructive
+                ? "w-full justify-start text-destructive hover:bg-destructive/10 hover:text-destructive focus-visible:border-destructive/40 focus-visible:ring-destructive/20"
+                : "w-full justify-start"
+            }
+          >
+            <ActionIcon data-icon="inline-start" />
+            {label}
+          </Button>
+        ))}
+      </div>
+    </AppDrawer>
+  );
+}
+
+export function SpendingAccountItem({ account }: { account: SpendingAccount }) {
+  return (
+    <AccountDetailsDrawer account={account}>
       <AccountLeading account={account} />
       <ItemContent>
         <ItemTitle>{account.name}</ItemTitle>
@@ -63,17 +128,13 @@ export function SpendingAccountItem({
         </span>
         <ChevronRightIcon className="size-4 text-muted-foreground" />
       </ItemActions>
-    </Item>
-  )
+    </AccountDetailsDrawer>
+  );
 }
 
-export function SavingsAccountItem({
-  account,
-}: {
-  account: SavingsAccount
-}) {
+export function SavingsAccountItem({ account }: { account: SavingsAccount }) {
   return (
-    <Item variant="muted">
+    <AccountDetailsDrawer account={account}>
       <AccountLeading account={account} />
       <ItemContent>
         <ItemTitle>{account.name}</ItemTitle>
@@ -90,6 +151,6 @@ export function SavingsAccountItem({
           {account.interestRate.toLocaleString("vi-VN")}%/năm
         </p>
       </ItemFooter>
-    </Item>
-  )
+    </AccountDetailsDrawer>
+  );
 }

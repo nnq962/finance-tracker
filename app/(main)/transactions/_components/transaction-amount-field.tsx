@@ -84,7 +84,7 @@ export function TransactionAmountField({
           <Button
             key={quickAmount}
             type="button"
-            variant="secondary"
+            variant="default"
             size="sm"
             onClick={() => addQuickAmount(quickAmount)}
           >
