@@ -1,5 +1,6 @@
 import { AppSidebar } from "@/components/app-sidebar"
 import { ModeToggle } from "@/components/mode-toggle"
+import { MobileBottomNav } from "@/components/mobile-bottom-nav"
 import { Separator } from "@/components/ui/separator"
 import {
   SidebarInset,
@@ -24,10 +25,11 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <ModeToggle />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 bg-muted p-4 pt-0 dark:bg-background">
+        <div className="flex flex-1 flex-col gap-4 bg-muted p-4 pt-0 pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-4 dark:bg-background">
           {children}
         </div>
       </SidebarInset>
+      <MobileBottomNav />
     </SidebarProvider>
   )
 }

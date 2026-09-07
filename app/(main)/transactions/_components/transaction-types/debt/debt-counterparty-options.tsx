@@ -329,7 +329,7 @@ export function DebtCounterpartyOptions({
         <h2 className="font-heading text-base font-medium">
           {content.question}
         </h2>
-        {/* <p className="text-sm text-muted-foreground">{content.description}</p> */}
+        <p className="text-sm text-muted-foreground">{content.description}</p>
       </div>
 
       <Sheet open={open} onOpenChange={handleOpenChange}>
