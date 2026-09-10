@@ -17,7 +17,6 @@ import {
   ChartNoAxesCombinedIcon,
   LayoutDashboardIcon,
   SettingsIcon,
-  WalletCardsIcon,
   PackageIcon,
 } from "lucide-react"
 
@@ -27,11 +26,6 @@ const data = {
       title: "Tổng quan",
       url: "/overview",
       icon: <LayoutDashboardIcon />,
-    },
-    {
-      title: "Tài khoản",
-      url: "/accounts",
-      icon: <WalletCardsIcon />,
     },
     {
       title: "Giao dịch",

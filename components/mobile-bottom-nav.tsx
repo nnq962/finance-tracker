@@ -8,12 +8,10 @@ import {
   ChartNoAxesCombinedIcon,
   LayoutDashboardIcon,
   SettingsIcon,
-  WalletCardsIcon,
 } from "lucide-react"
 
 const items = [
   { href: "/overview", label: "Tổng quan", icon: LayoutDashboardIcon },
-  { href: "/accounts", label: "Tài khoản", icon: WalletCardsIcon },
   { href: "/transactions", label: "Giao dịch", icon: ArrowLeftRightIcon },
   { href: "/tracking", label: "Theo dõi", icon: ChartNoAxesCombinedIcon },
   { href: "/settings", label: "Cài đặt", icon: SettingsIcon },
@@ -190,7 +188,7 @@ export function MobileBottomNav() {
           />
         )}
         <ul
-          className="relative grid grid-cols-5"
+          className="relative grid grid-cols-4"
           onPointerDown={handlePointerDown}
           onPointerMove={handlePointerMove}
           onPointerUp={handlePointerUp}

@@ -13,7 +13,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     <SidebarProvider>
       <AppSidebar />
       <SidebarInset>
-        <header className="flex h-16 shrink-0 items-center gap-2 bg-muted dark:bg-background">
+        <header className="hidden h-16 shrink-0 items-center gap-2 bg-background md:flex">
           <div className="flex items-center gap-2 px-4">
             <SidebarTrigger className="-ml-1" />
             <Separator
@@ -25,7 +25,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <ModeToggle />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 bg-muted p-4 pt-0 pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-4 dark:bg-background">
+        <div className="flex flex-1 flex-col gap-4 bg-background p-4 pt-0 pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-4">
           {children}
         </div>
       </SidebarInset>
