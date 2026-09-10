@@ -35,10 +35,12 @@ export function TransactionEntryForm() {
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <TransactionTypeTabs
-        value={transactionType}
-        onValueChange={handleTransactionTypeChange}
-      />
+      <div className="sticky top-[env(safe-area-inset-top)] z-20 -mx-4 bg-background px-4 py-1 md:top-0 md:mx-0 md:px-0">
+        <TransactionTypeTabs
+          value={transactionType}
+          onValueChange={handleTransactionTypeChange}
+        />
+      </div>
       <TransactionAmountField value={amount} onValueChange={setAmount} />
       {transactionType === "expense" && <ExpenseTransactionFields />}
       {transactionType === "income" && <IncomeTransactionFields />}

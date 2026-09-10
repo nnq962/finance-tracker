@@ -1,7 +1,9 @@
 import {
   BusFrontIcon,
   CoffeeIcon,
+  HeartPulseIcon,
   MoonStarIcon,
+  ReceiptTextIcon,
   ShoppingBagIcon,
   SoupIcon,
   UtensilsIcon,
@@ -20,6 +22,8 @@ const expenseCategories = [
   { value: "coffee", label: "Cà phê", icon: UtensilsIcon },
   { value: "transport", label: "Di chuyển", icon: BusFrontIcon },
   { value: "shopping", label: "Mua sắm", icon: ShoppingBagIcon },
+  { value: "bills", label: "Hóa đơn", icon: ReceiptTextIcon },
+  { value: "health", label: "Sức khỏe", icon: HeartPulseIcon },
 ] as const satisfies readonly TransactionCategory[]
 
 export function ExpenseTransactionFields() {

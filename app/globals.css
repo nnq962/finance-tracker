@@ -232,3 +232,19 @@
   .mobile-bottom-nav-glass { background: rgb(250 250 250); }
   .dark .mobile-bottom-nav-glass { background: rgb(28 28 30); }
 }
+
+@keyframes transfer-flow-down {
+  to { background-position-y: 8px; }
+}
+
+.transfer-flow-line {
+  width: 2px;
+  background-image: linear-gradient(to bottom, currentColor 50%, transparent 50%);
+  background-position-y: 0;
+  background-size: 2px 8px;
+  animation: transfer-flow-down 600ms linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .transfer-flow-line { animation: none; }
+}

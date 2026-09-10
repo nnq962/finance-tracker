@@ -16,7 +16,7 @@ export function SettingsSection({
 }) {
   return (
     <PageSection>
-      <h2 className="px-1 text-sm font-medium tracking-wide text-muted-foreground uppercase">
+      <h2 className="text-sm font-medium tracking-wide text-muted-foreground uppercase">
         {title}
       </h2>
       {children}

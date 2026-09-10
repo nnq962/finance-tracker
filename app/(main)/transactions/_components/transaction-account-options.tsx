@@ -3,23 +3,16 @@
 import { useState } from "react"
 import {
   BanknoteIcon,
+  CheckIcon,
   CreditCardIcon,
   LandmarkIcon,
   SmartphoneIcon,
 } from "lucide-react"
 
 import { PageSection } from "@/components/page-shell"
-import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  Item,
-  ItemContent,
-  ItemDescription,
-  ItemMedia,
-  ItemTitle,
-} from "@/components/ui/item"
-import { Separator } from "@/components/ui/separator"
 import { formatCurrency } from "@/lib/currency"
+import { cn } from "@/lib/utils"
 
 const accounts = [
   {
@@ -52,55 +45,69 @@ type AccountId = (typeof accounts)[number]["value"]
 
 export function TransactionAccountOptions() {
   const [selectedAccount, setSelectedAccount] = useState<AccountId>("cash")
-  const activeAccount =
-    accounts.find((account) => account.value === selectedAccount) ?? accounts[0]
-  const ActiveIcon = activeAccount.icon
 
   return (
     <PageSection>
-      <h2 className="font-heading text-base font-medium">Tài khoản</h2>
+      <h2 className="text-sm font-medium tracking-wide text-muted-foreground uppercase">
+        Tài khoản
+      </h2>
 
-      <Card size="sm">
-        <CardContent className="space-y-4">
-          <Item className="flex-nowrap border-transparent p-0">
-            <ItemMedia
-              variant="icon"
-              className="rounded-2xl bg-primary p-3 text-primary-foreground"
+      <div
+        role="radiogroup"
+        aria-label="Chọn tài khoản"
+        className="flex min-w-0 snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pr-4 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {accounts.map((account) => {
+          const Icon = account.icon
+          const isSelected = selectedAccount === account.value
+
+          return (
+            <Card
+              key={account.value}
+              size="sm"
+              className={cn(
+                "w-44 shrink-0 snap-start gap-0 border-2 border-transparent py-0 shadow-none transition-[border-color,background-color] dark:border-transparent",
+                isSelected && "border-primary dark:border-primary"
+              )}
             >
-              <ActiveIcon />
-            </ItemMedia>
-            <ItemContent className="min-w-0">
-              <ItemTitle>{activeAccount.name}</ItemTitle>
-              <ItemDescription className="tabular-nums">
-                {formatCurrency(activeAccount.balance)}
-              </ItemDescription>
-            </ItemContent>
-          </Item>
-
-          <Separator />
-
-          <div className="flex gap-2 overscroll-x-contain overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-            {accounts.map((account) => {
-              const Icon = account.icon
-              const isSelected = selectedAccount === account.value
-
-              return (
-                <Button
-                  key={account.value}
+              <CardContent className="p-0">
+                <button
                   type="button"
-                  variant={isSelected ? "default" : "secondary"}
-                  size="sm"
-                  aria-pressed={isSelected}
+                  role="radio"
+                  aria-checked={isSelected}
+                  className="flex min-h-28 w-full flex-col items-stretch p-4 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:ring-inset"
                   onClick={() => setSelectedAccount(account.value)}
                 >
-                  <Icon data-icon="inline-start" />
-                  {account.name}
-                </Button>
-              )
-            })}
-          </div>
-        </CardContent>
-      </Card>
+                  <span className="flex items-start justify-between gap-3">
+                    <span
+                      className={cn(
+                        "flex size-9 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-colors",
+                        isSelected && "bg-primary text-primary-foreground"
+                      )}
+                    >
+                      <Icon className="size-4" aria-hidden="true" />
+                    </span>
+                    {isSelected && (
+                      <span className="flex size-6 items-center justify-center rounded-full bg-primary text-primary-foreground">
+                        <CheckIcon className="size-3.5" aria-hidden="true" />
+                      </span>
+                    )}
+                  </span>
+
+                  <span className="mt-3 block min-w-0">
+                    <span className="block truncate text-sm font-medium">
+                      {account.name}
+                    </span>
+                    <span className="mt-1 block truncate text-sm tabular-nums text-muted-foreground">
+                      {formatCurrency(account.balance)}
+                    </span>
+                  </span>
+                </button>
+              </CardContent>
+            </Card>
+          )
+        })}
+      </div>
     </PageSection>
   )
 }

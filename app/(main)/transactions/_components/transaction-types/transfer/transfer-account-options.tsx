@@ -1,11 +1,11 @@
 "use client"
 
 import { useState } from "react"
-import { ArrowRightIcon } from "lucide-react"
-import { cn } from "cn"
+import { ArrowDownUpIcon } from "lucide-react"
 
 import { PageSection } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/currency"
 
 import { TransferAccountMenu } from "./transfer-account-menu"
@@ -21,33 +21,37 @@ function AccountSummary({
   value,
   excludedValue,
   onValueChange,
-  className,
+  directionLabel,
 }: {
   account: TransferAccount
   value: TransferAccountId
   excludedValue: TransferAccountId
   onValueChange: (value: TransferAccountId) => void
-  className?: string
+  directionLabel: string
 }) {
   const Icon = account.icon
 
   return (
     <TransferAccountMenu
-      label="Chọn tài khoản"
+      label={`Chọn ${directionLabel.toLowerCase()}`}
       value={value}
       excludedValue={excludedValue}
       onValueChange={onValueChange}
-      triggerClassName={cn("text-left [&>svg]:hidden", className)}
+      triggerClassName="rounded-xl border-0 bg-transparent px-0 py-2 text-left data-[size=sm]:h-auto [&>svg]:hidden"
     >
-      <div className="flex min-w-0 flex-1 items-center gap-2">
-        <Icon className="size-4 shrink-0" />
-        <div className="min-w-0 flex-1 text-left">
-          <p className="truncate text-sm font-medium">{account.name}</p>
-          <p className="truncate text-sm tabular-nums text-muted-foreground">
+      <span className="flex min-w-0 flex-1 items-center gap-3">
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
+          <Icon className="size-5" aria-hidden="true" />
+        </span>
+        <span className="min-w-0 flex-1 pl-1 text-left">
+          <span className="block truncate text-sm font-semibold">
+            {account.name}
+          </span>
+          <span className="block truncate text-sm tabular-nums text-muted-foreground">
             {formatCurrency(account.balance)}
-          </p>
-        </div>
-      </div>
+          </span>
+        </span>
+      </span>
     </TransferAccountMenu>
   )
 }
@@ -67,33 +71,46 @@ export function TransferAccountOptions() {
 
   return (
     <PageSection>
-      <h2 className="font-heading text-base font-medium">Tài khoản</h2>
+      <h2 className="text-sm font-medium tracking-wide text-muted-foreground uppercase">
+        Tài khoản
+      </h2>
 
-      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
-        <AccountSummary
-          account={fromAccount}
-          value={fromAccountId}
-          excludedValue={toAccountId}
-          onValueChange={setFromAccountId}
-          className="rounded-2xl bg-card p-3 shadow-sm ring-1 ring-foreground/5"
-        />
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon-sm"
-          aria-label="Đảo chiều tài khoản"
-          onClick={swapAccounts}
-        >
-          <ArrowRightIcon />
-        </Button>
-        <AccountSummary
-          account={toAccount}
-          value={toAccountId}
-          excludedValue={fromAccountId}
-          onValueChange={setToAccountId}
-          className="rounded-2xl bg-card p-3 shadow-sm ring-1 ring-foreground/5"
-        />
-      </div>
+      <Card size="sm">
+        <CardContent>
+          <AccountSummary
+            account={fromAccount}
+            value={fromAccountId}
+            excludedValue={toAccountId}
+            onValueChange={setFromAccountId}
+            directionLabel="Từ tài khoản"
+          />
+
+          <div className="flex h-10 items-center justify-between">
+            <span
+              className="flex h-full w-10 items-center justify-center overflow-hidden text-foreground"
+              aria-hidden="true"
+            >
+              <span className="transfer-flow-line h-full" />
+            </span>
+            <Button
+              type="button"
+              size="icon-sm"
+              aria-label={`Đảo chiều: ${fromAccount.name} sang ${toAccount.name}`}
+              onClick={swapAccounts}
+            >
+              <ArrowDownUpIcon data-icon="inline-start" />
+            </Button>
+          </div>
+
+          <AccountSummary
+            account={toAccount}
+            value={toAccountId}
+            excludedValue={fromAccountId}
+            onValueChange={setToAccountId}
+            directionLabel="Đến tài khoản"
+          />
+        </CardContent>
+      </Card>
     </PageSection>
   )
 }

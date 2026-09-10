@@ -139,7 +139,7 @@ export function TransactionDetailsOptions({
 
   return (
     <PageSection>
-      <h2 className="font-heading text-base font-medium">
+      <h2 className="text-sm font-medium tracking-wide text-muted-foreground uppercase">
         Thông tin giao dịch
       </h2>
 

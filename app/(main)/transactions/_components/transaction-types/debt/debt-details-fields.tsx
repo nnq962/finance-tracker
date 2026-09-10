@@ -110,7 +110,7 @@ function SettlementSummary({
   const StatusIcon = status.icon
 
   return (
-    <section className="min-w-0 space-y-5" aria-label="Khoản nợ sau giao dịch">
+    <section className="min-w-0 space-y-2" aria-label="Khoản nợ sau giao dịch">
       <h3 className="font-heading text-sm font-medium">
         Khoản nợ sau giao dịch
       </h3>
@@ -147,7 +147,7 @@ function SettlementSummary({
               </dd>
             </div>
           </dl>
-          <ItemSeparator className="my-5" />
+          <ItemSeparator className="my-4" />
           <dl>
             <div className="flex items-start justify-between gap-4 text-sm">
               <dt className="shrink-0 text-muted-foreground">Còn lại</dt>

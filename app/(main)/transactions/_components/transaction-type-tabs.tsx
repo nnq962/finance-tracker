@@ -1,57 +1,43 @@
+"use client"
+
+import { useCallback, useEffect, useRef } from "react"
 import {
   ArrowDownLeftIcon,
   ArrowLeftRightIcon,
   ArrowUpRightIcon,
-  CheckIcon,
   HandshakeIcon,
 } from "lucide-react"
 
-import {
-  ToggleGroup,
-  ToggleGroupItem,
-} from "@/components/ui/toggle-group"
 import { cn } from "@/lib/utils"
 
 const transactionTypes = [
   {
     value: "expense",
     label: "Chi tiền",
-    description: "Ghi nhận khoản chi",
+    shortLabel: "Chi",
     icon: ArrowUpRightIcon,
-    itemClassName:
-      "data-[state=on]:border-rose-500/30 data-[state=on]:bg-rose-500/5 data-[state=on]:text-rose-700 dark:data-[state=on]:text-rose-300",
-    iconClassName:
-      "bg-rose-500/10 text-rose-600 group-aria-pressed/toggle:bg-rose-500 group-aria-pressed/toggle:text-white dark:text-rose-400",
+    iconClassName: "text-rose-500",
   },
   {
     value: "income",
     label: "Thu tiền",
-    description: "Ghi nhận khoản thu",
+    shortLabel: "Thu",
     icon: ArrowDownLeftIcon,
-    itemClassName:
-      "data-[state=on]:border-emerald-500/30 data-[state=on]:bg-emerald-500/5 data-[state=on]:text-emerald-700 dark:data-[state=on]:text-emerald-300",
-    iconClassName:
-      "bg-emerald-500/10 text-emerald-600 group-aria-pressed/toggle:bg-emerald-500 group-aria-pressed/toggle:text-white dark:text-emerald-400",
+    iconClassName: "text-emerald-500",
   },
   {
     value: "transfer",
     label: "Chuyển tiền",
-    description: "Giữa các tài khoản",
+    shortLabel: "Chuyển",
     icon: ArrowLeftRightIcon,
-    itemClassName:
-      "data-[state=on]:border-blue-500/30 data-[state=on]:bg-blue-500/5 data-[state=on]:text-blue-700 dark:data-[state=on]:text-blue-300",
-    iconClassName:
-      "bg-blue-500/10 text-blue-600 group-aria-pressed/toggle:bg-blue-500 group-aria-pressed/toggle:text-white dark:text-blue-400",
+    iconClassName: "text-blue-500",
   },
   {
     value: "debt",
     label: "Vay nợ",
-    description: "Vay, cho vay và trả nợ",
+    shortLabel: "Vay nợ",
     icon: HandshakeIcon,
-    itemClassName:
-      "data-[state=on]:border-amber-500/30 data-[state=on]:bg-amber-500/5 data-[state=on]:text-amber-700 dark:data-[state=on]:text-amber-300",
-    iconClassName:
-      "bg-amber-500/10 text-amber-600 group-aria-pressed/toggle:bg-amber-500 group-aria-pressed/toggle:text-white dark:text-amber-400",
+    iconClassName: "text-amber-500",
   },
 ] as const
 
@@ -66,56 +52,93 @@ export function TransactionTypeTabs({
   value,
   onValueChange,
 }: TransactionTypeTabsProps) {
-  return (
-    <ToggleGroup
-      value={[value]}
-      spacing={0}
-      aria-label="Loại giao dịch"
-      className="grid w-full grid-cols-2 gap-2"
-      onValueChange={(nextValues) => {
-        const nextValue = nextValues[0] as TransactionType | undefined
+  const pillRef = useRef<HTMLSpanElement>(null)
+  const tabRefs = useRef<(HTMLButtonElement | null)[]>([])
+  const initializedRef = useRef(false)
+  const activeIndex = transactionTypes.findIndex((type) => type.value === value)
 
-        if (nextValue) onValueChange(nextValue)
-      }}
+  const movePill = useCallback((index: number, animate: boolean) => {
+    const tab = tabRefs.current[index]
+    const pill = pillRef.current
+
+    if (!tab || !pill) return
+
+    const move = () => {
+      pill.style.transform = `translate3d(${tab.offsetLeft}px, 0, 0)`
+      pill.style.width = `${tab.offsetWidth}px`
+      pill.style.opacity = "1"
+    }
+
+    if (animate) {
+      move()
+      return
+    }
+
+    const previousTransition = pill.style.transition
+    pill.style.transition = "none"
+    move()
+    void pill.offsetWidth
+    pill.style.transition = previousTransition
+  }, [])
+
+  useEffect(() => {
+    const frame = window.requestAnimationFrame(() => {
+      movePill(activeIndex, initializedRef.current)
+      initializedRef.current = true
+    })
+    const handleResize = () => movePill(activeIndex, false)
+
+    window.addEventListener("resize", handleResize)
+
+    return () => {
+      window.cancelAnimationFrame(frame)
+      window.removeEventListener("resize", handleResize)
+    }
+  }, [activeIndex, movePill])
+
+  return (
+    <div
+      role="group"
+      aria-label="Loại giao dịch"
+      className="relative grid w-full grid-cols-4 rounded-full bg-muted p-1 md:max-w-md"
     >
-      {transactionTypes.map((type) => {
+      <span
+        ref={pillRef}
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-1 left-0 w-0 rounded-full bg-foreground opacity-0 shadow-sm transition-[transform,width,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform motion-reduce:transition-none"
+      />
+
+      {transactionTypes.map((type, index) => {
         const Icon = type.icon
+        const isSelected = value === type.value
 
         return (
-          <ToggleGroupItem
+          <button
             key={type.value}
-            value={type.value}
+            ref={(element) => {
+              tabRefs.current[index] = element
+            }}
+            type="button"
+            aria-pressed={isSelected}
             aria-label={type.label}
-            className={cn(
-              "h-[76px] w-full min-w-0 justify-start gap-3 rounded-2xl border bg-card px-3 py-2 text-left text-foreground shadow-xs transition-[color,background-color,border-color,box-shadow,transform] duration-200 hover:bg-muted/50 active:scale-[0.98] data-[state=on]:shadow-sm",
-              type.itemClassName
-            )}
+            className="group relative z-10 inline-flex h-11 min-w-0 items-center justify-center gap-1 rounded-full px-1 text-xs font-medium text-muted-foreground transition-[color,transform] duration-200 outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring/40 focus-visible:ring-offset-1 active:scale-95 aria-pressed:text-background"
+            onClick={() => {
+              movePill(index, true)
+              onValueChange(type.value)
+            }}
           >
-            <span
+            <Icon
+              aria-hidden="true"
+              strokeWidth={2.25}
               className={cn(
-                "flex size-9 shrink-0 items-center justify-center rounded-xl transition-colors duration-200",
+                "size-3.5 shrink-0 transition-colors duration-200 group-aria-pressed:text-background",
                 type.iconClassName
               )}
-            >
-              <Icon className="size-[18px]" aria-hidden="true" />
-            </span>
-
-            <span className="min-w-0 flex-1">
-              <span className="block truncate text-sm font-semibold">
-                {type.label}
-              </span>
-              <span className="mt-0.5 block truncate text-xs font-normal text-muted-foreground">
-                {type.description}
-              </span>
-            </span>
-
-            <CheckIcon
-              className="size-4 shrink-0 opacity-0 transition-opacity group-aria-pressed/toggle:opacity-100"
-              aria-hidden="true"
             />
-          </ToggleGroupItem>
+            <span className="truncate">{type.shortLabel}</span>
+          </button>
         )
       })}
-    </ToggleGroup>
+    </div>
   )
 }

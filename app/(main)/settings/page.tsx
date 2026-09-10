@@ -14,7 +14,7 @@ import { UserAccountSettings } from "./_components/user-account-settings"
 
 export default function SettingsPage() {
   return (
-    <PageShell width="narrow">
+    <PageShell>
       <PageHeader>
         <PageTitle>Cài đặt</PageTitle>
         <PageDescription>

@@ -1,4 +1,4 @@
-import { XIcon } from "lucide-react"
+import { PlusIcon, XIcon } from "lucide-react"
 
 import { PageSection } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
@@ -37,7 +37,6 @@ export function TransactionAmountField({
   value,
   onValueChange,
 }: TransactionAmountFieldProps) {
-
   function handleAmountChange(nextValue: string) {
     onValueChange(formatCurrencyInput(nextValue))
   }
@@ -50,11 +49,14 @@ export function TransactionAmountField({
 
   return (
     <PageSection>
-      <Field>
-        <FieldLabel className="text-base" htmlFor="transaction-amount">
+      <Field className="gap-2">
+        <FieldLabel
+          className="text-sm font-medium tracking-wide text-muted-foreground uppercase"
+          htmlFor="transaction-amount"
+        >
           Số tiền giao dịch
         </FieldLabel>
-        <InputGroup className="h-16 rounded-none border-x-0 border-t-0 bg-transparent has-[[data-slot=input-group-control]:focus-visible]:ring-0">
+        <InputGroup className="h-20 rounded-3xl border-border/70 bg-card px-2 shadow-none has-[>[data-align=inline-end]]:[&>input]:pr-0">
           <InputGroupInput
             id="transaction-amount"
             name="amount"
@@ -62,13 +64,16 @@ export function TransactionAmountField({
             autoComplete="off"
             placeholder="0"
             value={value}
-            className="text-right text-4xl font-semibold tabular-nums"
+            className="px-2 text-right text-4xl font-semibold tracking-tight tabular-nums placeholder:text-muted-foreground/60"
             onChange={(event) => handleAmountChange(event.target.value)}
           />
-          <InputGroupAddon align="inline-end">
-            <InputGroupText className="text-xl">đ</InputGroupText>
+          <InputGroupAddon align="inline-end" className="gap-2 pr-2">
+            <InputGroupText className="text-4xl leading-none font-semibold tracking-tight text-foreground">
+              đ
+            </InputGroupText>
             <InputGroupButton
               size="icon-xs"
+              variant="secondary"
               aria-label="Xóa số tiền"
               aria-hidden={!value}
               tabIndex={value ? 0 : -1}
@@ -80,16 +85,17 @@ export function TransactionAmountField({
           </InputGroupAddon>
         </InputGroup>
       </Field>
-      <div className="flex gap-2 overscroll-x-contain overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+
+      <div className="flex min-w-0 snap-x snap-mandatory gap-2 overscroll-x-contain overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {quickAmounts.map((quickAmount) => (
           <Button
             key={quickAmount}
             type="button"
-            variant="default"
             size="sm"
             onClick={() => addQuickAmount(quickAmount)}
           >
-            +{formatCurrency(quickAmount)}
+            <PlusIcon data-icon="inline-start" />
+            {formatCurrency(quickAmount)}
           </Button>
         ))}
       </div>
