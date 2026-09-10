@@ -8,6 +8,7 @@ import {
   SmartphoneIcon,
 } from "lucide-react"
 
+import { PageSection } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -56,7 +57,7 @@ export function TransactionAccountOptions() {
   const ActiveIcon = activeAccount.icon
 
   return (
-    <section className="space-y-3">
+    <PageSection>
       <h2 className="font-heading text-base font-medium">Tài khoản</h2>
 
       <Card size="sm">
@@ -78,7 +79,7 @@ export function TransactionAccountOptions() {
 
           <Separator />
 
-          <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex gap-2 overscroll-x-contain overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
             {accounts.map((account) => {
               const Icon = account.icon
               const isSelected = selectedAccount === account.value
@@ -100,6 +101,6 @@ export function TransactionAccountOptions() {
           </div>
         </CardContent>
       </Card>
-    </section>
+    </PageSection>
   )
 }

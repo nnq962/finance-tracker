@@ -6,6 +6,7 @@ import {
   Undo2Icon,
 } from "lucide-react"
 
+import { PageSection } from "@/components/page-shell"
 import {
   Item,
   ItemActions,
@@ -34,7 +35,7 @@ export function DebtTypeOptions({
   onValueChange,
 }: DebtTypeOptionsProps) {
   return (
-    <section className="space-y-3">
+    <PageSection>
       <h2 className="font-heading text-base font-medium">Loại giao dịch</h2>
 
       <ItemGroup className="grid grid-cols-2 gap-2">
@@ -68,6 +69,6 @@ export function DebtTypeOptions({
           )
         })}
       </ItemGroup>
-    </section>
+    </PageSection>
   )
 }

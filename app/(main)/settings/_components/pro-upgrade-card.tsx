@@ -12,10 +12,10 @@ import { Card, CardContent } from "@/components/ui/card"
 
 export function ProUpgradeCard() {
   return (
-    <Card className="relative isolate gap-0 overflow-hidden border border-transparent bg-linear-to-br from-slate-950 via-indigo-950 to-violet-950 bg-clip-padding py-0 text-white shadow-lg shadow-black/10 ring-1 ring-white/10 ring-inset dark:shadow-black/30">
+    <Card className="relative isolate gap-0 overflow-hidden border border-transparent bg-linear-to-br from-slate-950 via-blue-950 to-sky-900 bg-clip-padding py-0 text-white shadow-lg shadow-black/10 ring-1 ring-white/10 ring-inset dark:shadow-black/30">
       <div
         aria-hidden="true"
-        className="absolute -top-20 -right-16 size-48 rounded-full bg-violet-400/25 blur-3xl"
+        className="absolute -top-20 -right-16 size-48 rounded-full bg-sky-400/25 blur-3xl"
       />
       <div
         aria-hidden="true"
@@ -32,7 +32,7 @@ export function ProUpgradeCard() {
               Nâng cấp Pro để trải nghiệm sớm các tính năng AI.
             </p>
           </div>
-          <Badge className="border border-violet-200/20 bg-violet-300/15 text-violet-100">
+          <Badge className="border border-sky-200/20 bg-sky-300/15 text-sky-100">
             <CrownIcon data-icon="inline-start" className="fill-current" />
             PRO
           </Badge>
@@ -40,13 +40,13 @@ export function ProUpgradeCard() {
 
         <ul className="grid gap-2 text-sm text-slate-200 sm:grid-cols-2">
           <li className="flex items-center gap-2">
-            <span className="flex size-6 items-center justify-center rounded-full bg-white/10 text-violet-200">
+            <span className="flex size-6 items-center justify-center rounded-full bg-white/10 text-sky-200">
               <ChartNoAxesCombinedIcon className="size-3.5" aria-hidden="true" />
             </span>
             Báo cáo chuyên sâu
           </li>
           <li className="flex items-center gap-2">
-            <span className="flex size-6 items-center justify-center rounded-full bg-white/10 text-violet-200">
+            <span className="flex size-6 items-center justify-center rounded-full bg-white/10 text-sky-200">
               <ImagesIcon className="size-3.5" aria-hidden="true" />
             </span>
             Đính kèm không giới hạn

@@ -1,5 +1,7 @@
 import type { ReactNode } from "react"
 
+import { PageSection } from "@/components/page-shell"
+
 export const settingsItemClassName = "h-12 flex-nowrap py-0"
 export const settingsGroupClassName = "gap-0 has-data-[size=sm]:gap-0"
 export const settingsSeparatorClassName =
@@ -13,11 +15,11 @@ export function SettingsSection({
   children: ReactNode
 }) {
   return (
-    <section className="space-y-2">
+    <PageSection>
       <h2 className="px-1 text-sm font-medium tracking-wide text-muted-foreground uppercase">
         {title}
       </h2>
       {children}
-    </section>
+    </PageSection>
   )
 }

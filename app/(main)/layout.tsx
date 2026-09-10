@@ -25,7 +25,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
             <ModeToggle />
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 bg-background p-4 pt-0 pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pb-4">
+        <div className="flex min-w-0 flex-1 flex-col bg-background px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-[calc(6.5rem+env(safe-area-inset-bottom))] md:pt-4 md:pb-4">
           {children}
         </div>
       </SidebarInset>

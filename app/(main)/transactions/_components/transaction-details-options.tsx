@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import { ImagePlusIcon, XIcon } from "lucide-react"
 
+import { PageSection } from "@/components/page-shell"
 import {
   Attachment,
   AttachmentAction,
@@ -137,7 +138,7 @@ export function TransactionDetailsOptions({
   }
 
   return (
-    <section className="space-y-3">
+    <PageSection>
       <h2 className="font-heading text-base font-medium">
         Thông tin giao dịch
       </h2>
@@ -267,6 +268,6 @@ export function TransactionDetailsOptions({
           </FieldGroup>
         </CardContent>
       </Card>
-    </section>
+    </PageSection>
   )
 }

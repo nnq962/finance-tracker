@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChevronRightIcon, type LucideIcon } from "lucide-react"
 
+import { PageSection } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -29,7 +30,7 @@ export function TransactionCategoryOptions({
   )
 
   return (
-    <section className="space-y-3">
+    <PageSection>
       <div className="flex items-center justify-between gap-3">
         <h2 className="font-heading text-base font-medium">Hạng mục</h2>
         <Button type="button" variant="ghost" size="sm">
@@ -67,6 +68,6 @@ export function TransactionCategoryOptions({
           </ItemGroup>
         </CardContent>
       </Card>
-    </section>
+    </PageSection>
   )
 }

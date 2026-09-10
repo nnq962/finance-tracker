@@ -1,3 +1,11 @@
+import { PageHeader, PageShell, PageTitle } from "@/components/page-shell"
+
 export default function TheoDoiPage() {
-  return <h1>Theo dõi</h1>
+  return (
+    <PageShell>
+      <PageHeader>
+        <PageTitle>Theo dõi</PageTitle>
+      </PageHeader>
+    </PageShell>
+  )
 }

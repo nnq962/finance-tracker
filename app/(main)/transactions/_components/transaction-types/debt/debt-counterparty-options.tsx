@@ -10,6 +10,7 @@ import {
   UsersIcon,
 } from "lucide-react"
 
+import { PageSection } from "@/components/page-shell"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
@@ -324,7 +325,7 @@ export function DebtCounterpartyOptions({
   }
 
   return (
-    <section className="space-y-3">
+    <PageSection>
       <div className="space-y-1">
         <h2 className="font-heading text-base font-medium">
           {content.question}
@@ -467,6 +468,6 @@ export function DebtCounterpartyOptions({
           </div>
         </SheetContent>
       </Sheet>
-    </section>
+    </PageSection>
   )
 }

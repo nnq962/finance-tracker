@@ -4,6 +4,7 @@ import { useState } from "react"
 import { ArrowRightIcon } from "lucide-react"
 import { cn } from "cn"
 
+import { PageSection } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
 import { formatCurrency } from "@/lib/currency"
 
@@ -65,7 +66,7 @@ export function TransferAccountOptions() {
   }
 
   return (
-    <section className="space-y-3">
+    <PageSection>
       <h2 className="font-heading text-base font-medium">Tài khoản</h2>
 
       <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
@@ -93,6 +94,6 @@ export function TransferAccountOptions() {
           className="rounded-2xl bg-card p-3 shadow-sm ring-1 ring-foreground/5"
         />
       </div>
-    </section>
+    </PageSection>
   )
 }

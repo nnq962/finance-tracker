@@ -1,3 +1,10 @@
+import {
+  PageDescription,
+  PageHeader,
+  PageShell,
+  PageTitle,
+} from "@/components/page-shell"
+
 import { AccountSettings } from "./_components/account-settings"
 import { CategorySettings } from "./_components/category-settings"
 import { NotificationSettings } from "./_components/notification-settings"
@@ -7,15 +14,13 @@ import { UserAccountSettings } from "./_components/user-account-settings"
 
 export default function SettingsPage() {
   return (
-    <main className="mx-auto flex w-full max-w-2xl flex-col gap-5">
-      <header className="space-y-1 px-1 pt-1">
-        <h1 className="font-heading text-[28px] leading-tight font-semibold tracking-tight">
-          Cài đặt
-        </h1>
-        <p className="text-sm text-muted-foreground">
+    <PageShell width="narrow">
+      <PageHeader>
+        <PageTitle>Cài đặt</PageTitle>
+        <PageDescription>
           Cá nhân hóa trải nghiệm của bạn
-        </p>
-      </header>
+        </PageDescription>
+      </PageHeader>
 
       <UserAccountSettings />
       <ProUpgradeCard />
@@ -24,9 +29,9 @@ export default function SettingsPage() {
       <AccountSettings />
       <NotificationSettings />
 
-      <footer className="pt-1 text-center text-sm text-muted-foreground">
+      <footer className="pt-2 text-center text-sm text-muted-foreground">
         Finance Tracker · Phiên bản v1.0.0
       </footer>
-    </main>
+    </PageShell>
   )
 }

@@ -1,5 +1,6 @@
 import { XIcon } from "lucide-react"
 
+import { PageSection } from "@/components/page-shell"
 import { Button } from "@/components/ui/button"
 import { Field, FieldLabel } from "@/components/ui/field"
 import {
@@ -48,7 +49,7 @@ export function TransactionAmountField({
   }
 
   return (
-    <section className="space-y-3">
+    <PageSection>
       <Field>
         <FieldLabel className="text-base" htmlFor="transaction-amount">
           Số tiền giao dịch
@@ -79,7 +80,7 @@ export function TransactionAmountField({
           </InputGroupAddon>
         </InputGroup>
       </Field>
-      <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+      <div className="flex gap-2 overscroll-x-contain overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {quickAmounts.map((quickAmount) => (
           <Button
             key={quickAmount}
@@ -92,6 +93,6 @@ export function TransactionAmountField({
           </Button>
         ))}
       </div>
-    </section>
+    </PageSection>
   )
 }

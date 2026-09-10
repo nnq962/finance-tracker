@@ -132,6 +132,9 @@
   }
   html,
   body {
+    max-width: 100%;
+    overflow-x: clip;
+    overscroll-behavior-x: none;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
@@ -148,7 +151,7 @@
   right: max(12px, env(safe-area-inset-right));
   bottom: calc(12px + env(safe-area-inset-bottom));
   left: max(12px, env(safe-area-inset-left));
-  max-width: 340px;
+  max-width: 380px;
   margin-inline: auto;
 }
 
@@ -162,9 +165,9 @@
   padding: 6px;
   border: 1px solid rgb(255 255 255 / 28%);
   border-radius: 9999px;
-  background: rgb(255 255 255 / 28%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  backdrop-filter: blur(16px) saturate(180%);
+  background: rgb(255 255 255 / 16%);
+  -webkit-backdrop-filter: blur(10px) saturate(180%);
+  backdrop-filter: blur(1.5px) saturate(180%);
   box-shadow: 0 8px 32px rgb(0 0 0 / 9%);
 }
 
@@ -177,7 +180,7 @@
   transform: translate3d(0, 0, 0);
   border: 1px solid rgb(255 255 255 / 65%);
   border-radius: 9999px;
-  background: linear-gradient(145deg, rgb(255 255 255 / 48%), rgb(255 255 255 / 16%));
+  background: linear-gradient(145deg, rgb(255 255 255 / 30%), rgb(255 255 255 / 8%));
   box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
   will-change: transform;
   pointer-events: none;
@@ -202,14 +205,14 @@
 
 .dark .mobile-bottom-nav-glass {
   border-color: rgb(255 255 255 / 9%);
-  background: rgb(25 25 28 / 34%);
+  background: rgb(25 25 28 / 20%);
   box-shadow: 0 8px 32px rgb(0 0 0 / 24%);
 }
 
 .dark .mobile-bottom-nav-indicator {
-  border-color: rgb(255 255 255 / 14%);
-  background: linear-gradient(145deg, rgb(255 255 255 / 12%), rgb(255 255 255 / 3%));
-  box-shadow: 0 2px 8px rgb(0 0 0 / 10%);
+  border-color: rgb(255 255 255 / 8%);
+  background: linear-gradient(145deg, rgb(255 255 255 / 4%), rgb(255 255 255 / 1%));
+  box-shadow: 0 2px 8px rgb(0 0 0 / 5%);
 }
 
 .dark .mobile-bottom-nav-link { color: oklch(0.76 0 0); }
