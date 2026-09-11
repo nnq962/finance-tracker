@@ -1,5 +1,6 @@
 import { ChevronRightIcon, WalletCardsIcon } from "lucide-react"
 
+import { AppSheet } from "@/components/app-sheet"
 import { Card, CardContent } from "@/components/ui/card"
 import {
   Item,
@@ -19,23 +20,34 @@ export function AccountSettings() {
     <SettingsSection title="Tài khoản tài chính">
       <Card className="gap-0 py-0">
         <CardContent className="px-1">
-          <Item size="sm" className={settingsItemClassName}>
-            <ItemMedia variant="icon">
-              <WalletCardsIcon aria-hidden="true" />
-            </ItemMedia>
-            <ItemContent>
-              <ItemTitle>Tài khoản chi tiêu</ItemTitle>
-            </ItemContent>
-            <ItemActions>
-              <span className="text-sm text-muted-foreground">
-                3 tài khoản
-              </span>
-              <ChevronRightIcon
-                className="size-4 text-muted-foreground"
-                aria-hidden="true"
-              />
-            </ItemActions>
-          </Item>
+          <AppSheet
+            title="Tài khoản chi tiêu"
+            description="Quản lý các tài khoản dùng để ghi nhận thu, chi và chuyển tiền."
+            backLabel="Quay lại Cài đặt"
+            trigger={
+              <Item
+                render={<button type="button" />}
+                size="sm"
+                className={settingsItemClassName}
+              >
+                <ItemMedia variant="icon">
+                  <WalletCardsIcon aria-hidden="true" />
+                </ItemMedia>
+                <ItemContent>
+                  <ItemTitle>Tài khoản chi tiêu</ItemTitle>
+                </ItemContent>
+                <ItemActions>
+                  <span className="text-sm text-muted-foreground">
+                    3 tài khoản
+                  </span>
+                  <ChevronRightIcon
+                    className="size-4 text-muted-foreground"
+                    aria-hidden="true"
+                  />
+                </ItemActions>
+              </Item>
+            }
+          />
         </CardContent>
       </Card>
     </SettingsSection>
