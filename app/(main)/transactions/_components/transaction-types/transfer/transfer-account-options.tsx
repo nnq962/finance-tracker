@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { formatCurrency } from "@/lib/currency"
 
-import { TransferAccountMenu } from "./transfer-account-menu"
 import {
   getTransferAccount,
   type TransferAccountId,
@@ -18,27 +17,13 @@ type TransferAccount = ReturnType<typeof getTransferAccount>
 
 function AccountSummary({
   account,
-  value,
-  excludedValue,
-  onValueChange,
-  directionLabel,
 }: {
   account: TransferAccount
-  value: TransferAccountId
-  excludedValue: TransferAccountId
-  onValueChange: (value: TransferAccountId) => void
-  directionLabel: string
 }) {
   const Icon = account.icon
 
   return (
-    <TransferAccountMenu
-      label={`Chọn ${directionLabel.toLowerCase()}`}
-      value={value}
-      excludedValue={excludedValue}
-      onValueChange={onValueChange}
-      triggerClassName="rounded-xl border-0 bg-transparent px-0 py-2 text-left data-[size=sm]:h-auto [&>svg]:hidden"
-    >
+    <div className="flex min-w-0 items-center py-2">
       <span className="flex min-w-0 flex-1 items-center gap-3">
         <span className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground">
           <Icon className="size-5" aria-hidden="true" />
@@ -52,7 +37,7 @@ function AccountSummary({
           </span>
         </span>
       </span>
-    </TransferAccountMenu>
+    </div>
   )
 }
 
@@ -77,13 +62,7 @@ export function TransferAccountOptions() {
 
       <Card size="sm">
         <CardContent>
-          <AccountSummary
-            account={fromAccount}
-            value={fromAccountId}
-            excludedValue={toAccountId}
-            onValueChange={setFromAccountId}
-            directionLabel="Từ tài khoản"
-          />
+          <AccountSummary account={fromAccount} />
 
           <div className="flex h-10 items-center justify-between">
             <span
@@ -102,13 +81,7 @@ export function TransferAccountOptions() {
             </Button>
           </div>
 
-          <AccountSummary
-            account={toAccount}
-            value={toAccountId}
-            excludedValue={fromAccountId}
-            onValueChange={setToAccountId}
-            directionLabel="Đến tài khoản"
-          />
+          <AccountSummary account={toAccount} />
         </CardContent>
       </Card>
     </PageSection>

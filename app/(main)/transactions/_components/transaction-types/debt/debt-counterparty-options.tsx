@@ -327,7 +327,7 @@ export function DebtCounterpartyOptions({
   return (
     <PageSection>
       <div className="space-y-1">
-        <h2 className="font-heading text-base font-medium">
+        <h2 className="text-sm font-medium tracking-wide text-muted-foreground uppercase">
           {content.question}
         </h2>
         <p className="text-sm text-muted-foreground">{content.description}</p>

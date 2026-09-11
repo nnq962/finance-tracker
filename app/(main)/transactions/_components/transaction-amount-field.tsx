@@ -64,7 +64,7 @@ export function TransactionAmountField({
             autoComplete="off"
             placeholder="0"
             value={value}
-            className="px-2 text-right text-4xl font-semibold tracking-tight tabular-nums placeholder:text-muted-foreground/60"
+            className="px-2 text-right text-4xl font-semibold tracking-tight tabular-nums placeholder:text-muted-foreground/60 md:text-4xl"
             onChange={(event) => handleAmountChange(event.target.value)}
           />
           <InputGroupAddon align="inline-end" className="gap-2 pr-2">
@@ -91,7 +91,7 @@ export function TransactionAmountField({
           <Button
             key={quickAmount}
             type="button"
-            size="sm"
+            size="xs"
             onClick={() => addQuickAmount(quickAmount)}
           >
             <PlusIcon data-icon="inline-start" />

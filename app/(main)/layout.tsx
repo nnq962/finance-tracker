@@ -12,7 +12,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="overflow-hidden">
+      <SidebarInset className="min-w-0 overflow-x-clip">
         <header className="hidden h-16 shrink-0 items-center gap-2 bg-background px-6 md:flex">
           <div className="flex items-center gap-2">
             <SidebarTrigger className="-ml-1" />

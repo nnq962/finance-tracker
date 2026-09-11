@@ -66,8 +66,8 @@ export function TransactionAccountOptions() {
               key={account.value}
               size="sm"
               className={cn(
-                "w-44 shrink-0 snap-start gap-0 border-2 border-transparent py-0 shadow-none transition-[border-color,background-color] dark:border-transparent",
-                isSelected && "border-primary dark:border-primary"
+                "w-44 shrink-0 snap-start gap-0 py-0 transition-colors",
+                isSelected && "border-2 border-primary dark:border-primary"
               )}
             >
               <CardContent className="p-0">
@@ -75,7 +75,7 @@ export function TransactionAccountOptions() {
                   type="button"
                   role="radio"
                   aria-checked={isSelected}
-                  className="flex min-h-28 w-full flex-col items-stretch p-4 text-left outline-none focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:ring-inset"
+                  className="flex min-h-28 w-full flex-col items-stretch p-4 text-left transition-colors duration-200 outline-none hover:bg-muted focus-visible:ring-[3px] focus-visible:ring-ring/40 focus-visible:ring-inset"
                   onClick={() => setSelectedAccount(account.value)}
                 >
                   <span className="flex items-start justify-between gap-3">

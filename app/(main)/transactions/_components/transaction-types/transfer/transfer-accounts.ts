@@ -16,7 +16,7 @@ export const transferAccounts = [
   {
     value: "mb-bank",
     name: "MB Bank",
-    type: "Tài khoản thanh toán",
+    type: "Tài khoản chi tiêu",
     balance: 12_500_000,
     icon: LandmarkIcon,
   },
@@ -30,7 +30,7 @@ export const transferAccounts = [
   {
     value: "techcombank",
     name: "Techcombank",
-    type: "Tài khoản thanh toán",
+    type: "Tài khoản chi tiêu",
     balance: 24_000_000,
     icon: CreditCardIcon,
   },
